@@ -3,6 +3,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = (env, options) => {
   const isProduction = options.mode === 'production';
@@ -53,6 +54,9 @@ module.exports = (env, options) => {
       new HtmlWebpackPlugin({
         template: 'src/index.html',
       }),
+      new CopyPlugin([
+        { from: 'public' },
+      ]),
     ],
   };
 
