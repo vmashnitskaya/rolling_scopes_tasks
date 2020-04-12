@@ -1,7 +1,7 @@
-const Switch = (data) => `
+const Switch = () => `
     <div class="switch">
-        <input type="checkbox" id="checkbox" ${data.checked ? 'checked' : ''} />
-        <label class="">${data.label}</label>
+        <input type="checkbox" id="checkbox" checked="true" />
+        <label class=""></label>
     </div>
 `;
 

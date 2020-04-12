@@ -1,9 +1,11 @@
-import MainPage from './templates/MainPage';
+import MainPageModel from './components/MainPageModel';
+import MainPageView from './components/MainPageView';
+import MainPageController from './components/MainPageController';
 
-document.addEventListener('DOMContentLoaded', () => { // Аналог $(document).ready(function(){
-  document.querySelector('body').innerHTML = MainPage({
-    menuOpen: false,
-    isTrain: false,
-    categories: [{ name: 'Category 1', image: 'img/dance.jpg' }, { name: 'Category 2', image: 'img/dance.jpg' }],
-  });
-});
+export default class App {
+  init() {
+    this.model = new MainPageModel(true);
+    this.view = new MainPageView();
+    this.controller = new MainPageController(this.model, this.view);
+  }
+}

@@ -21,22 +21,9 @@
 // layout.createCardsLayout();
 // layout.createSwitcher();
 
-import MainPage from './templates/MainPage';
+import App from './App';
 
+const app = new App();
 document.addEventListener('DOMContentLoaded', () => {
-  let open = false;
-  const body = document.querySelector('body');
-  body.innerHTML = MainPage({
-    menuOpen: open,
-    isTrain: true,
-    categories: [{ name: 'Category 1', image: 'img/dance.jpg' }, { name: 'Category 2', image: 'img/dance.jpg' }],
-  });
-  body.addEventListener('click', () => {
-    open = !open;
-    body.innerHTML = MainPage({
-      menuOpen: open,
-      isTrain: true,
-      categories: [{ name: 'Category 1', image: 'img/dance.jpg' }, { name: 'Category 2', image: 'img/dance.jpg' }],
-    });
-  });
+  app.init();
 });

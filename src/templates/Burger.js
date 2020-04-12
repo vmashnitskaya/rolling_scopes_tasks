@@ -1,5 +1,5 @@
-const Burger = (data) => `
-<div class="burger ${data.active ? 'active' : ''}">
+const Burger = () => `
+<div class="burger">
     <span class="burger-line"></span>
     <span class="burger-line"></span>
     <span class="burger-line"></span>

@@ -1,11 +1,11 @@
 import Burger from './Burger';
 import Switch from './Switch';
 
-const Header = (data) => `
+const Header = () => `
 <header class="header">
     <div class="wrapper header-wrapper">
-        ${Burger({ active: data.menuOpen })}
-        ${Switch(data.isTrain ? { label: 'Train', checked: false } : { label: 'Game', checked: false })}
+        ${Burger()}
+        ${Switch()}
     </div>
 </header>
 `;
