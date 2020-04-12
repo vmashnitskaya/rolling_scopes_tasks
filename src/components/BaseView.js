@@ -15,7 +15,7 @@ export default class BaseView {
     const switchInput = this.switch.querySelector('input');
     switchInput.checked = !isTrain;
     const switchLabel = this.switch.querySelector('label');
-    switchLabel.innerText = isTrain ? 'Train' : 'Game';
+    switchLabel.innerText = isTrain ? 'Train' : 'Play';
     if (isTrain) {
       this.menu.classList.remove('game');
       this.menu.classList.add('train');

@@ -150,7 +150,7 @@ body {
                 &-item {
                     border-radius: 3px;
                     border: 1px solid black;
-                    &:hover {
+                    &.animated {
                         animation: transform;
                         animation-duration: 1.5s;
                         animation-timing-function: ease-in;
@@ -174,18 +174,22 @@ body {
                     &.game:hover {
                         animation: none;
                     }
+                }
+                &-front {
+                    height: 210px;
+                    display: grid;
+                    border: 1px solid black;
                     &.hidden {
                         display: none;
                     }
                 }
-                &-front {
-                    background: url("../../public/img/bird.jpg");
+                &-back {
                     height: 210px;
                     display: grid;
                     border: 1px solid black;
-                }
-                &-back {
-                    display: none;
+                    &.hidden {
+                        display: none;
+                    }
                 }
                 &-header {
                     display: flex;
