@@ -52,7 +52,7 @@ module.exports = (env, options) => {
         filename: 'style.css',
       }),
       new HtmlWebpackPlugin({
-        template: 'src/index.html',
+        template: 'public/index.html',
       }),
       new CopyPlugin([
         { from: 'public' },
