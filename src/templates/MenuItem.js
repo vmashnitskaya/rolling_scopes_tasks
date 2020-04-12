@@ -1,6 +1,6 @@
 const MenuItem = (data) => `
 <li class="menu__items-item">
-    <a class="menu__items-link" href="#" data-category="${data.category}">${data.name}</a>
+    <a class="menu__items-link" href="#${data.hash}">${data.name}</a>
 </li>
 `;
 

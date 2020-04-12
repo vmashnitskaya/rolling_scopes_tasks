@@ -1,6 +1,6 @@
 const Switch = () => `
     <div class="switch">
-        <input type="checkbox" id="checkbox" checked="true" />
+        <input type="checkbox" id="checkbox"/>
         <label class=""></label>
     </div>
 `;

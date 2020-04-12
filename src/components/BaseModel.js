@@ -1,10 +1,10 @@
 import cards from '../cards';
 
 export default class BaseModel {
-  constructor(currentMenuItem, isTrain) {
-    this.menuItems = [{ name: 'Main', category: null }, ...cards[0].map((name) => ({ name, category: name }))];
+  constructor(currentMenuItem) {
+    this.menuItems = [{ name: 'Main', hash: 'main' }, ...cards[0].map((name) => ({ name, hash: `category/${name}` }))];
     this.currentMenuItem = currentMenuItem;
-    this._isTrain = isTrain;
+    this._isTrain = localStorage.getItem('isTrain') ? localStorage.getItem('isTrain') === 'true' : false;
     this._isMenuOpen = false;
   }
 
@@ -14,6 +14,7 @@ export default class BaseModel {
 
   set isTrain(isTrain) {
     this._isTrain = isTrain;
+    localStorage.setItem('isTrain', isTrain);
     this.onTrainChange();
   }
 

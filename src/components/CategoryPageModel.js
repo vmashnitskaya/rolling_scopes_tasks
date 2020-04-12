@@ -2,8 +2,8 @@ import BaseModel from './BaseModel';
 import cards from '../cards';
 
 export default class CategoryPageModel extends BaseModel {
-  constructor(currentMenuItem, isTrain) {
-    super(currentMenuItem, isTrain);
+  constructor(currentMenuItem) {
+    super(currentMenuItem);
     this.cards = cards[cards[0].indexOf(currentMenuItem) + 1];
     this._animatedCard = null;
     this._selectedCard = null;
