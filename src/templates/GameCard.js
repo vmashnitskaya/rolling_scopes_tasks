@@ -1,6 +1,7 @@
-const GameCard = () => `
-<div class="card__container-item">
-    <div class="card__container-front"></div>
+const GameCard = (data) => `
+<div class="card__container-item game" data-word="${data.word}"  style="background: url(${data.image}) no-repeat 0 -15px; background-size: 312px 270px;">
+    <audio  data-word="audio" class="${data.word}" src="${data.audioSrc}" type="audio/mpeg"></audio>
+    </div>
 </div>
 `;
 

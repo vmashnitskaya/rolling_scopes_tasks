@@ -19,12 +19,12 @@ export default class BaseController {
     this.view.setTrain(this.model.isTrain);
   }
 
-  onMenuOpenChange = () => {
-    this.view.setMenuOpen(this.model.isMenuOpen);
-  }
-
   handleChangeTrain = () => {
     this.model.isTrain = !this.model.isTrain;
+  }
+
+  onMenuOpenChange = () => {
+    this.view.setMenuOpen(this.model.isMenuOpen);
   }
 
   handleChangeMenuOpen = () => {

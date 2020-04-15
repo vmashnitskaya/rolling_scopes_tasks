@@ -1,5 +1,5 @@
 const cards = [
-  ['Action (set A)', 'Action (set B)', 'Animal (set A)', 'Animal (set B)', 'Clothes', 'Emotions'],
+  ['Action (set A)', 'Action (set B)', 'Animal (set A)', 'Animal (set B)', 'Clothes', 'Emotions', 'Summer', 'Toys'],
   [
     {
       word: 'cry',
@@ -298,6 +298,106 @@ const cards = [
       translation: 'смех',
       image: 'img/laugh.jpg',
       audioSrc: 'audio/laugh.mp3',
+    },
+  ],
+  [
+    {
+      word: 'summer',
+      translation: 'лето',
+      image: 'img/summer.jpg',
+      audioSrc: 'audio/summer.mp3',
+    },
+    {
+      word: 'beach',
+      translation: 'пляж',
+      image: 'img/beach.jpg',
+      audioSrc: 'audio/beach.mp3',
+    },
+    {
+      word: 'sun',
+      translation: 'солнце',
+      image: 'img/sun.jpg',
+      audioSrc: 'audio/sun.mp3',
+    },
+    {
+      word: 'water',
+      translation: 'вода',
+      image: 'img/water.jpg',
+      audioSrc: 'audio/water.mp3',
+    },
+    {
+      word: 'sandcastle',
+      translation: 'замок из песка',
+      image: 'img/sandcastle.jpg',
+      audioSrc: 'audio/sandcastle.mp3',
+    },
+    {
+      word: 'umbrella',
+      translation: 'зонт',
+      image: 'img/umbrella.jpg',
+      audioSrc: 'audio/umbrella.mp3',
+    },
+    {
+      word: 'pool',
+      translation: 'бассейн',
+      image: 'img/pool.jpg',
+      audioSrc: 'audio/pool.mp3',
+    },
+    {
+      word: 'vacation',
+      translation: 'каникулы',
+      image: 'img/vacation.jpg',
+      audioSrc: 'audio/vacation.mp3',
+    },
+  ],
+  [
+    {
+      word: 'doll',
+      translation: 'кукла',
+      image: 'img/doll.jpg',
+      audioSrc: 'audio/doll.mp3',
+    },
+    {
+      word: 'balloons',
+      translation: 'шары',
+      image: 'img/balloons.jpg',
+      audioSrc: 'audio/balloons.mp3',
+    },
+    {
+      word: 'bear',
+      translation: 'мишка',
+      image: 'img/bear.jpg',
+      audioSrc: 'audio/bear.mp3',
+    },
+    {
+      word: 'puzzle',
+      translation: 'мозаика',
+      image: 'img/puzzle.jpg',
+      audioSrc: 'audio/puzzle.mp3',
+    },
+    {
+      word: 'ball',
+      translation: 'мяч',
+      image: 'img/ball.jpg',
+      audioSrc: 'audio/ball.mp3',
+    },
+    {
+      word: 'robot',
+      translation: 'робот',
+      image: 'img/robot.jpg',
+      audioSrc: 'audio/robot.mp3',
+    },
+    {
+      word: 'blocks',
+      translation: 'кубики',
+      image: 'img/blocks.jpg',
+      audioSrc: 'audio/blocks.mp3',
+    },
+    {
+      word: 'duck',
+      translation: 'уточка',
+      image: 'img/duck.jpg',
+      audioSrc: 'audio/duck.mp3',
     },
   ],
 ];

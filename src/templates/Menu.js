@@ -1,5 +1,5 @@
 const Menu = () => `
-<nav class="menu hidden" tabindex="-1">
+<nav class="menu hidden">
     <ol class="menu__items">
     </ol>
 </nav>

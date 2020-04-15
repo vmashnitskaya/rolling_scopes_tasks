@@ -5,6 +5,7 @@ export default class BaseView {
   constructor() {
     this.body = document.querySelector('body');
     this.body.innerHTML = Page();
+    this.header = document.querySelector('header');
     this.main = document.querySelector('main');
     this.switch = document.querySelector('.switch');
     this.burger = document.querySelector('.burger');
@@ -43,6 +44,12 @@ export default class BaseView {
 
   bindChangeMenuOpen(handler) {
     this.burger.addEventListener('click', () => handler());
+  }
+
+  setMenuClose() {
+    this.menu.classList.add('hidden');
+    this.burger.classList.remove('active');
+    this.burger.querySelectorAll('.burger-line').forEach((element) => element.classList.remove('active'));
   }
 
   setMenuItems(menuItems) {
