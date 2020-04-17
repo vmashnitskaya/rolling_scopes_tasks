@@ -42,14 +42,15 @@ export default class BaseView {
     }
   }
 
-  bindChangeMenuOpen(handler) {
-    this.burger.addEventListener('click', () => handler());
-  }
 
-  setMenuClose() {
-    this.menu.classList.add('hidden');
-    this.burger.classList.remove('active');
-    this.burger.querySelectorAll('.burger-line').forEach((element) => element.classList.remove('active'));
+  bindChangeMenuOpen(handler) {
+    this.body.addEventListener('click', (event) => {
+      if (!event.target.classList.contains('menu') && !this.menu.classList.contains('hidden')) {
+        handler();
+      } else if (event.target.classList.contains('burger')) {
+        handler();
+      }
+    });
   }
 
   setMenuItems(menuItems) {

@@ -134,6 +134,7 @@ export default class CategoryPageView extends BaseView {
     });
   }
 
+
   handleCorrectAnswer(word) {
     const starLine = this.wrapper.querySelector('.star-line');
     starLine.innerHTML += StarCorrect;

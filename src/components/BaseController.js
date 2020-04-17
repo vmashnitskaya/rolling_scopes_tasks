@@ -8,6 +8,7 @@ export default class BaseController {
 
     this.view.bindChangeTrain(this.handleChangeTrain);
     this.view.bindChangeMenuOpen(this.handleChangeMenuOpen);
+    // this.view.bindChangeMenuOpenViaBody(this.handlechangeMenuOpenViaBody);
 
     this.view.setMenuItems(this.model.menuItems);
     this.view.setCurrentMenuItem(this.model.currentMenuItem);

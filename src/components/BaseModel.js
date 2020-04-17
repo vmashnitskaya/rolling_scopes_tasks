@@ -4,7 +4,7 @@ export default class BaseModel {
   constructor(currentMenuItem) {
     this.menuItems = [{ name: 'Main', hash: 'main' }, ...cards[0].map((name) => ({ name, hash: `category/${name}` }))];
     this.currentMenuItem = currentMenuItem;
-    this._isTrain = localStorage.getItem('isTrain') ? localStorage.getItem('isTrain') === true : false;
+    this._isTrain = localStorage.getItem('isTrain') ? JSON.parse(localStorage.getItem('isTrain')) : true;
     this._isMenuOpen = false;
   }
 
@@ -32,10 +32,6 @@ export default class BaseModel {
   }
 
   bindMenuOpenChange(callback) {
-    this.onMenuOpenChange = callback;
-  }
-
-  bindMenuCloseByBodyClick(callback) {
     this.onMenuOpenChange = callback;
   }
 }
