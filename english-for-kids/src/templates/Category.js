@@ -1,9 +1,9 @@
-const Category = (data, isTrain) => `
-<div class="card__main ${isTrain ? 'train' : 'game'}">
+const Category = (data) => `
+<div class="card__main ${data.isTrain ? 'train' : 'game'}">
 <a href="#${data.hash}">
     <div class="card__main-item">
         <div class="card__main-image" 
-            style="background:url(${data.image}) no-repeat -45px; background-size: 230px 160px;"></div>
+            style="background-image:url(${data.image}); background-repeat: no-repeat;"></div>
         <a class="card__main-name" href="#${data.hash}">${data.name}</a>
     </div>
 </a>

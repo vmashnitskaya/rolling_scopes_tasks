@@ -4,6 +4,9 @@ import CategoryPageController from './components/CategoryPageController';
 import MainPageModel from './components/MainPageModel';
 import MainPageView from './components/MainPageView';
 import MainPageController from './components/MainPageController';
+import HackerSpaceController from './components/HackerSpaceController';
+import HackerSpaceView from './components/HackerSpaceView';
+import HackerSpaceModel from './components/HackerSpaceModel';
 
 
 export default class App {
@@ -19,6 +22,11 @@ export default class App {
         this.model = new CategoryPageModel(decodeURI(path[1]).replace(/\+/g, ' '));
         this.view = new CategoryPageView();
         this.controller = new CategoryPageController(this.model, this.view);
+        break;
+      case 'hacker':
+        this.model = new HackerSpaceModel();
+        this.view = new HackerSpaceView();
+        this.controller = new HackerSpaceController(this.model, this.view);
         break;
       default:
         this.model = new MainPageModel();

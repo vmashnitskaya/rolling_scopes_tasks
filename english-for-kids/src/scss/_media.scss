@@ -1,0 +1,13 @@
+@media screen and (max-width: 760px) {
+    .main {
+        .main-wrapper {
+            justify-content: center;
+        }
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .wrapper {
+        width: 320px;
+    }
+}

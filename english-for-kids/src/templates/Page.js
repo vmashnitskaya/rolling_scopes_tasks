@@ -5,7 +5,8 @@ import Footer from './Footer';
 const Page = () => `
     ${Menu()}
     ${Header()}
-    <main class="main"></main>
+    <main class="main wrapper">
+    </main>
     ${Footer()}
 `;
 

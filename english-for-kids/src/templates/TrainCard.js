@@ -1,5 +1,5 @@
 const TrainCard = (data) => `
-<div class="card__container-item train" data-word="${data.word}"  style="background: url(${data.image}) no-repeat; background-size: 312px 210px;">
+<div class="card__container-item train" data-word="${data.word}"  style="background: url(${data.image}) no-repeat;  background-size: 100% 200px;">
     <div class="card__container-back hidden">
         <div class="card-header">
             <div class="text">${data.translation}</div>

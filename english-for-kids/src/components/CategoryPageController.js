@@ -8,7 +8,7 @@ export default class CategoryPageController extends BaseController {
     this.model.bindAnimatedCardChange(this.onAnimatedCardChange);
     this.model.bindCardsGorGameChange(this.onCardsForGameChange);
 
-    this.view.bindChangeMode(this.handleChangeMode);
+    this.view.bindChangeMode(this.initLayout);
     this.view.bindAnimatedCardChange(this.handleAnimatedCardChange);
     this.view.bindSelectedCardChange(this.handleSelectedCardPlay);
     this.view.bindNewGameStarted(this.handleNewGameStarted);
@@ -23,7 +23,7 @@ export default class CategoryPageController extends BaseController {
     this.initLayout();
   }
 
-  initLayout() {
+  initLayout = () => {
     if (this.model.isTrain) {
       this.view.setTrainingCards(this.model.cards);
     } else {
@@ -31,11 +31,27 @@ export default class CategoryPageController extends BaseController {
     }
   }
 
-  handleChangeMode = () => {
-    this.initLayout();
-  }
-
   onSelectedCardChange = () => {
+    const numberOfClicks = this.model.cards.find((element) => element.word === this.model.selectedCard.word).trainClicks || 0;
+    this.model.cards.find((element) => element.word === this.model.selectedCard.word).trainClicks = Number(numberOfClicks) + 1;
+
+    const localStorageState = JSON.parse(localStorage.getItem('trainClicks'));
+
+    const objectArray = [this.model.selectedCard.word, numberOfClicks + 1];
+    console.log(numberOfClicks);
+
+    localStorage.setItem('trainClicks', JSON.stringify(objectArray));
+    /* {
+       const existingArray = localStorageState.find((element) => {
+        console.log(`element  ${element}`);
+        console.log(`this.model.selectedCard.word ${this.model.selectedCard.word}`);
+        element[0] === this.model.selectedCard.word;
+      });
+      console.log(`existingArray ${existingArray}`);
+      if (existingArray) {
+        localStorageState.splice(localStorageState.indexOf(existingArray) - 1, 1, [this.model.selectedCard.word, this.model.selectedCard.trainClicks]);
+      } */
+
     this.view.setSelectedCardChange(this.model.selectedCard);
   }
 

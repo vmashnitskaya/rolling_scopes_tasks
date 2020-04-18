@@ -2,7 +2,7 @@ import cards from '../cards';
 
 export default class BaseModel {
   constructor(currentMenuItem) {
-    this.menuItems = [{ name: 'Main', hash: 'main' }, ...cards[0].map((name) => ({ name, hash: `category/${name}` }))];
+    this.menuItems = [{ name: 'Main', hash: 'main' }, ...cards[0].map((name) => ({ name, hash: `category/${name}` })), { name: 'Hacker Space', hash: 'hacker' }];
     this.currentMenuItem = currentMenuItem;
     this._isTrain = localStorage.getItem('isTrain') ? JSON.parse(localStorage.getItem('isTrain')) : true;
     this._isMenuOpen = false;

@@ -4,7 +4,7 @@ import TrainCard from '../templates/TrainCard';
 import GameCard from '../templates/GameCard';
 import NewGameButton from '../templates/NewGameButton';
 import RepeatButton from '../templates/RepeatButton';
-import StarLine from './StarLine';
+import StarLine from '../templates/StarLine';
 import StarCorrect from '../templates/StarCorrect';
 import StarIncorrect from '../templates/StarIncorrect';
 import GameSound from '../templates/GameSound';
@@ -21,6 +21,14 @@ export default class CategoryPageView extends BaseView {
 
   bindChangeMode(handler) {
     this.switch.addEventListener('click', () => handler());
+  }
+
+  setTrainingCards(cards) {
+    this.wrapper.innerHTML = StarLine() + cards.map(TrainCard).join('');
+  }
+
+  setGameLayout(cards) {
+    this.wrapper.innerHTML = StarLine() + cards.map(GameCard).join('') + NewGameButton() + GameSound;
   }
 
 
@@ -77,14 +85,6 @@ export default class CategoryPageView extends BaseView {
     });
   }
 
-  setTrainingCards(cards) {
-    this.wrapper.innerHTML = StarLine() + cards.map(TrainCard).join('');
-  }
-
-  setGameLayout(cards) {
-    this.wrapper.innerHTML = StarLine() + cards.map(GameCard).join('') + NewGameButton() + GameSound;
-  }
-
   bindNewGameStarted(handler) {
     this.wrapper.addEventListener('click', (event) => {
       if (event.target.classList.contains('new-game')) {
@@ -128,7 +128,7 @@ export default class CategoryPageView extends BaseView {
 
   bindWordSelected(handler) {
     this.wrapper.addEventListener('click', (event) => {
-      if (this.gameInProcess === true && event.target.classList.contains('card__container-item')) {
+      if (this.gameInProcess === true && event.target.classList.contains('card__container-item') && !event.target.classList.contains('grey-out')) {
         handler(event.target.dataset.word);
       }
     });

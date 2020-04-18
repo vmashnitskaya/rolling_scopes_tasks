@@ -1,5 +1,5 @@
 const MainWrapper = () => `
-<div class="wrapper main-wrapper"></div>
+<div class="main-wrapper"></div>
 `;
 
 export default MainWrapper;

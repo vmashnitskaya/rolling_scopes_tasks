@@ -1,18 +1,25 @@
 import Page from '../templates/Page';
 import MenuItem from '../templates/MenuItem';
+import Switch from '../templates/Switch';
 
 export default class BaseView {
   constructor() {
     this.body = document.querySelector('body');
     this.body.innerHTML = Page();
     this.header = document.querySelector('header');
+    this.headerWrapper = document.querySelector('.header-wrapper');
     this.main = document.querySelector('main');
-    this.switch = document.querySelector('.switch');
     this.burger = document.querySelector('.burger');
     this.menu = document.querySelector('.menu');
+    this.switch = null;
   }
 
   setTrain(isTrain) {
+    if (!this.switch) {
+      this.headerWrapper.insertAdjacentHTML('beforeEnd', `${Switch(isTrain)}`);
+      localStorage.setItem('isTrain', isTrain);
+      this.switch = document.querySelector('.switch');
+    }
     const switchInput = this.switch.querySelector('input');
     switchInput.checked = !isTrain;
     const switchLabel = this.switch.querySelector('label');
@@ -27,7 +34,11 @@ export default class BaseView {
   }
 
   bindChangeTrain(handler) {
-    this.switch.addEventListener('click', () => handler());
+    this.body.addEventListener('click', (event) => {
+      if (event.target.classList.contains('switch')) {
+        handler();
+      }
+    });
   }
 
   setMenuOpen(isMenuOpen) {
@@ -47,7 +58,7 @@ export default class BaseView {
     this.body.addEventListener('click', (event) => {
       if (!event.target.classList.contains('menu') && !this.menu.classList.contains('hidden')) {
         handler();
-      } else if (event.target.classList.contains('burger')) {
+      } else if (event.target.classList.contains('burger') || event.target.classList.contains('burger-line')) {
         handler();
       }
     });

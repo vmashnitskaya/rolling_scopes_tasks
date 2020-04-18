@@ -89,7 +89,7 @@ const cards = [
     },
     {
       word: 'skip',
-      translation: 'пропускать, прыгать',
+      translation: 'прыгать',
       image: 'img/skip.jpg',
       audioSrc: 'audio/skip.mp3',
     },
@@ -327,7 +327,7 @@ const cards = [
     },
     {
       word: 'sandcastle',
-      translation: 'замок из песка',
+      translation: 'песочный замок',
       image: 'img/sandcastle.jpg',
       audioSrc: 'audio/sandcastle.mp3',
     },
