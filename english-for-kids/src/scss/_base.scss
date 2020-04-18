@@ -368,47 +368,6 @@ body {
                 }
             }
         }
-        button {
-            display: block;
-            margin: 0 auto;
-            background: linear-gradient(180deg, #fd6a63, #feb46b);
-            outline: none;
-            border: none;
-            &.new-game {
-                width: 500px;
-                height: 60px;
-                color: white;
-                border-radius: 10px;
-                font-size: 2.5rem;
-                text-align: center;
-            }
-            &.repeat {
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                img {
-                    margin: 10px 15px;
-                }
-            }
-            &:hover {
-                cursor: pointer;
-                border: 1px solid darken($color: #fd6a63, $amount: 10);
-                background: linear-gradient(
-                    180deg,
-                    darken($color: #fd6a63, $amount: 1),
-                    darken($color: #feb46b, $amount: 1)
-                );
-            }
-            &:active {
-                cursor: pointer;
-                border: 1px solid darken($color: #fd6a63, $amount: 50);
-                background: linear-gradient(
-                    180deg,
-                    darken($color: #fd6a63, $amount: 5),
-                    darken($color: #feb46b, $amount: 5)
-                );
-            }
-        }
     }
     .layer {
         display: flex;
@@ -445,6 +404,47 @@ body {
                 text-align: center;
                 padding: 10px 0;
             }
+        }
+    }
+    button {
+        display: block;
+        margin: 0 auto;
+        background: linear-gradient(180deg, #fd6a63, #feb46b);
+        outline: none;
+        border: none;
+        &.new-game {
+            width: 500px;
+            height: 60px;
+            color: white;
+            border-radius: 10px;
+            font-size: 2.5rem;
+            text-align: center;
+        }
+        &.repeat {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            img {
+                margin: 10px 15px;
+            }
+        }
+        &:hover {
+            cursor: pointer;
+            border: 1px solid darken($color: #fd6a63, $amount: 10);
+            background: linear-gradient(
+                180deg,
+                darken($color: #fd6a63, $amount: 1),
+                darken($color: #feb46b, $amount: 1)
+            );
+        }
+        &:active {
+            cursor: pointer;
+            border: 1px solid darken($color: #fd6a63, $amount: 50);
+            background: linear-gradient(
+                180deg,
+                darken($color: #fd6a63, $amount: 5),
+                darken($color: #feb46b, $amount: 5)
+            );
         }
     }
 }

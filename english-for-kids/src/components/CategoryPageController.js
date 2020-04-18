@@ -8,7 +8,7 @@ export default class CategoryPageController extends BaseController {
     this.model.bindAnimatedCardChange(this.onAnimatedCardChange);
     this.model.bindCardsGorGameChange(this.onCardsForGameChange);
 
-    this.view.bindChangeMode(this.initLayout);
+    this.view.bindChangeTrain(this.onTrainChange);
     this.view.bindAnimatedCardChange(this.handleAnimatedCardChange);
     this.view.bindSelectedCardChange(this.handleSelectedCardPlay);
     this.view.bindNewGameStarted(this.handleNewGameStarted);
@@ -20,10 +20,11 @@ export default class CategoryPageController extends BaseController {
     this.view.bindInCorrectAnswerRecieved(this.handleInCorrectAnswerRecieved);
     this.view.bindNewGameAfterFailure(this.handleNewGameAfterFailure);
 
-    this.initLayout();
+    this.onTrainChange();
   }
 
-  initLayout = () => {
+  onTrainChange = () => {
+    this.view.setTrain(this.model.isTrain);
     if (this.model.isTrain) {
       this.view.setTrainingCards(this.model.cards);
     } else {

@@ -17,7 +17,6 @@ export default class BaseView {
   setTrain(isTrain) {
     if (!this.switch) {
       this.headerWrapper.insertAdjacentHTML('beforeEnd', `${Switch(isTrain)}`);
-      localStorage.setItem('isTrain', isTrain);
       this.switch = document.querySelector('.switch');
     }
     const switchInput = this.switch.querySelector('input');

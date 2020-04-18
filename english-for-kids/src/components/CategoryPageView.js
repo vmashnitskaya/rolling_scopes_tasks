@@ -19,10 +19,6 @@ export default class CategoryPageView extends BaseView {
     this.gameInProcess = false;
   }
 
-  bindChangeMode(handler) {
-    this.switch.addEventListener('click', () => handler());
-  }
-
   setTrainingCards(cards) {
     this.wrapper.innerHTML = StarLine() + cards.map(TrainCard).join('');
   }
