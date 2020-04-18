@@ -4,7 +4,6 @@ import TrainCard from '../templates/TrainCard';
 import GameCard from '../templates/GameCard';
 import NewGameButton from '../templates/NewGameButton';
 import RepeatButton from '../templates/RepeatButton';
-import StarLine from '../templates/StarLine';
 import StarCorrect from '../templates/StarCorrect';
 import StarIncorrect from '../templates/StarIncorrect';
 import GameSound from '../templates/GameSound';
@@ -16,15 +15,20 @@ export default class CategoryPageView extends BaseView {
     super();
     this.main.innerHTML = MainWrapper();
     this.wrapper = this.main.querySelector('.main-wrapper');
+    this.starLine = this.main.querySelector('.star-line');
+    this.buttonWrapper = this.main.querySelector('.button-wrapper');
     this.gameInProcess = false;
   }
 
   setTrainingCards(cards) {
-    this.wrapper.innerHTML = StarLine() + cards.map(TrainCard).join('');
+    this.starLine.innerHTML = '';
+    this.wrapper.innerHTML = cards.map(TrainCard).join('');
   }
 
   setGameLayout(cards) {
-    this.wrapper.innerHTML = StarLine() + cards.map(GameCard).join('') + NewGameButton() + GameSound;
+    this.starLine.innerHTML = '';
+    this.wrapper.innerHTML = cards.map(GameCard).join('') + GameSound;
+    this.buttonWrapper.innerHTML = NewGameButton();
   }
 
 
@@ -82,7 +86,7 @@ export default class CategoryPageView extends BaseView {
   }
 
   bindNewGameStarted(handler) {
-    this.wrapper.addEventListener('click', (event) => {
+    this.buttonWrapper.addEventListener('click', (event) => {
       if (event.target.classList.contains('new-game')) {
         handler();
       }
@@ -98,7 +102,9 @@ export default class CategoryPageView extends BaseView {
   }
 
   setNewGameStart(cards) {
-    this.wrapper.innerHTML = StarLine() + cards.map(GameCard).join('') + RepeatButton() + GameSound;
+    this.starLine.innerHTML = '';
+    this.wrapper.innerHTML = cards.map(GameCard).join('') + GameSound;
+    this.buttonWrapper.innerHTML = RepeatButton();
 
     this.gameInProcess = true;
 
@@ -109,7 +115,7 @@ export default class CategoryPageView extends BaseView {
   }
 
   bindRepeatButtonClicked(handler) {
-    this.wrapper.addEventListener('click', (event) => {
+    this.buttonWrapper.addEventListener('click', (event) => {
       if (event.target.classList.contains('repeat')) {
         handler();
       }
@@ -132,8 +138,7 @@ export default class CategoryPageView extends BaseView {
 
 
   handleCorrectAnswer(word) {
-    const starLine = this.wrapper.querySelector('.star-line');
-    starLine.innerHTML += StarCorrect;
+    this.starLine.innerHTML += StarCorrect;
 
     const success = this.wrapper.querySelector('.correct-sound');
     success.play();
@@ -153,9 +158,7 @@ export default class CategoryPageView extends BaseView {
   }
 
   handleIncorrectAnswer() {
-    const starLine = this.wrapper.querySelector('.star-line');
-
-    starLine.innerHTML += StarIncorrect;
+    this.starLine.innerHTML += StarIncorrect;
 
     const incorrect = this.wrapper.querySelector('.incorrect-sound');
     incorrect.play();
