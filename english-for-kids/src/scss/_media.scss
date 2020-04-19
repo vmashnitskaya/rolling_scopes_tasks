@@ -19,6 +19,14 @@
             }
         }
     }
+    .statistics {
+        &__category {
+            font-size: 1.6rem;
+        }
+        &__category-item {
+            font-size: 1rem;
+        }
+    }
 }
 
 @media screen and (max-width: 320px) {
@@ -29,14 +37,6 @@
         .main-wrapper {
             .card__main-name {
                 font-size: 2rem;
-            }
-        }
-        .statistics {
-            &__category {
-                font-size: 1.4rem;
-            }
-            &__category-item {
-                font-size: 0.8rem;
             }
         }
     }
