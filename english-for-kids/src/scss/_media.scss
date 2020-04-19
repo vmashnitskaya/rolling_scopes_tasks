@@ -4,16 +4,14 @@
         .main-wrapper {
             justify-content: center;
         }
+        .statistics {
+            margin: 0 -10px;
+            width: calc(100% + 20px);
+        }
     }
 }
 
 @media screen and (max-width: 550px) {
-    .main {
-        .statistics {
-            margin: 0 -50px;
-            width: calc(100% + 100px);
-        }
-    }
     .button-wrapper {
         button {
             &.new-game {
@@ -24,6 +22,9 @@
 }
 
 @media screen and (max-width: 320px) {
+    .wrapper {
+        min-width: 320px;
+    }
     .main {
         .main-wrapper {
             .card__main-name {
@@ -32,17 +33,11 @@
         }
         .statistics {
             &__category {
-                font-size: 1.6rem;
+                font-size: 1.4rem;
             }
             &__category-item {
-                font-size: 1rem;
+                font-size: 0.8rem;
             }
         }
-    }
-}
-
-@media screen and (max-width: 320px) {
-    .wrapper {
-        width: 320px;
     }
 }

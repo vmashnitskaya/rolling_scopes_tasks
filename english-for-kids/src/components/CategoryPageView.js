@@ -23,6 +23,7 @@ export default class CategoryPageView extends BaseView {
   setTrainingCards(cards) {
     this.starLine.innerHTML = '';
     this.wrapper.innerHTML = cards.map(TrainCard).join('');
+    this.buttonWrapper.innerHTML = '';
   }
 
   setGameLayout(cards) {
