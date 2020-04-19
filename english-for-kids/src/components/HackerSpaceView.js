@@ -8,9 +8,8 @@ import HackerSpaceCategory from '../templates/HackerSpaceCategory';
 export default class HackerSpaceView extends BaseView {
   constructor() {
     super();
-    this.main.innerHTML = MainWrapper();
-    this.wrapper = this.main.querySelector('.main-wrapper');
-    this.statisticsWrapper = null;
+    this.main.innerHTML = HackerSpaceWrapper();
+    this.statisticsWrapper = this.main.querySelector('.statistics');
   }
 
   setTrain(isTrain) {
@@ -24,10 +23,6 @@ export default class HackerSpaceView extends BaseView {
   }
 
   setTable(categories, cards) {
-    this.wrapper.innerHTML = HackerSpaceWrapper();
-
-    this.statisticsWrapper = this.wrapper.querySelector('.statistics');
-
     this.statisticsWrapper.innerHTML += HackerSpaceHeaders();
 
     for (let i = 0; i < categories.length; i += 1) {

@@ -141,7 +141,6 @@ body {
     }
 }
 .main {
-    height: 600px;
     .star-line {
         display: flex;
         justify-content: flex-end;
@@ -210,6 +209,7 @@ body {
                     transform-style: preserve-3d;
                     border-radius: 10px;
                     width: 310px;
+                    min-width: 310px;
                     height: 260px;
                     margin-bottom: 15px;
                     margin-right: 10px;
@@ -223,6 +223,7 @@ body {
                     }
                     &.game {
                         width: 310px;
+                        min-width: 310px;
                         height: 230px;
                         border: 1px solid rgba(0, 0, 0, 0.4);
                         &:hover {
@@ -310,6 +311,7 @@ body {
                 &.train,
                 &.game {
                     width: 300px;
+                    min-width: 300px;
                     margin: 20px 10px 0 10px;
                     height: 290px;
                     padding: 30px;
@@ -373,23 +375,25 @@ body {
     }
     .layer {
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        margin-left: 50px;
+        margin: 0 auto;
         h2 {
             text-align: center;
             color: #feb46b;
             font-size: 4rem;
         }
         img {
-            display: inline-block;
+            display: block;
+            width: 500px;
+            min-width: 300px;
         }
     }
     .statistics {
+        width: 100%;
         display: grid;
         grid-column: 1 / span 4;
-        border: 1px solid darken($color: #fd6a63, $amount: 50);
         grid-template-columns: repeat(6, 1fr);
-        font-size: 2rem;
         &__category {
             border: 1px solid darken($color: #fd6a63, $amount: 50);
             grid-column: 1 / span 6;
@@ -419,7 +423,7 @@ body {
         outline: none;
         border: none;
         &.new-game {
-            width: 500px;
+            width: 450px;
             height: 60px;
             color: white;
             border-radius: 10px;
@@ -456,6 +460,9 @@ body {
 }
 
 .footer {
-    height: 70px;
-    padding: 0 40px;
+    padding: 40px;
+    .footer-wrapper {
+        font-size: 1.6rem;
+        text-align: center;
+    }
 }

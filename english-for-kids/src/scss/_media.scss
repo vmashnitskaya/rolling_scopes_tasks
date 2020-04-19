@@ -1,7 +1,42 @@
 @media screen and (max-width: 760px) {
     .main {
+        padding: 0 10px;
         .main-wrapper {
             justify-content: center;
+        }
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .main {
+        .statistics {
+            margin: 0 -50px;
+            width: calc(100% + 100px);
+        }
+    }
+    .button-wrapper {
+        button {
+            &.new-game {
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .main {
+        .main-wrapper {
+            .card__main-name {
+                font-size: 2rem;
+            }
+        }
+        .statistics {
+            &__category {
+                font-size: 1.6rem;
+            }
+            &__category-item {
+                font-size: 1rem;
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 import BaseView from './BaseView';
-import MainWrapper from '../templates/MainWrapper';
+import CategoryWrapper from '../templates/CategoryWrapper';
 import TrainCard from '../templates/TrainCard';
 import GameCard from '../templates/GameCard';
 import NewGameButton from '../templates/NewGameButton';
@@ -13,7 +13,7 @@ import FailureGameOver from '../templates/FailureGameOver';
 export default class CategoryPageView extends BaseView {
   constructor() {
     super();
-    this.main.innerHTML = MainWrapper();
+    this.main.innerHTML = CategoryWrapper();
     this.wrapper = this.main.querySelector('.main-wrapper');
     this.starLine = this.main.querySelector('.star-line');
     this.buttonWrapper = this.main.querySelector('.button-wrapper');

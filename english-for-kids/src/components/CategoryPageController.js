@@ -1,8 +1,10 @@
 import BaseController from './BaseController';
+import AnaliticsCounter from './AnaliticsCounter';
 
 export default class CategoryPageController extends BaseController {
   constructor(model, view) {
     super(model, view);
+    this.analiticsCounter = new AnaliticsCounter(this.model.currentMenuItem);
 
     this.model.bindSelectedCardChange(this.onSelectedCardChange);
     this.model.bindAnimatedCardChange(this.onAnimatedCardChange);
@@ -33,26 +35,7 @@ export default class CategoryPageController extends BaseController {
   }
 
   onSelectedCardChange = () => {
-    const numberOfClicks = this.model.cards.find((element) => element.word === this.model.selectedCard.word).trainClicks || 0;
-    this.model.cards.find((element) => element.word === this.model.selectedCard.word).trainClicks = Number(numberOfClicks) + 1;
-
-    const localStorageState = JSON.parse(localStorage.getItem('trainClicks'));
-
-    const objectArray = [this.model.selectedCard.word, numberOfClicks + 1];
-    console.log(numberOfClicks);
-
-    localStorage.setItem('trainClicks', JSON.stringify(objectArray));
-    /* {
-       const existingArray = localStorageState.find((element) => {
-        console.log(`element  ${element}`);
-        console.log(`this.model.selectedCard.word ${this.model.selectedCard.word}`);
-        element[0] === this.model.selectedCard.word;
-      });
-      console.log(`existingArray ${existingArray}`);
-      if (existingArray) {
-        localStorageState.splice(localStorageState.indexOf(existingArray) - 1, 1, [this.model.selectedCard.word, this.model.selectedCard.trainClicks]);
-      } */
-
+    this.analiticsCounter.incrementTrainClick(this.model.selectedCard.word);
     this.view.setSelectedCardChange(this.model.selectedCard);
   }
 
@@ -61,6 +44,9 @@ export default class CategoryPageController extends BaseController {
   }
 
   onAnimatedCardChange = () => {
+    if (this.model.animatedCard) {
+      this.analiticsCounter.incrementTrainClick(this.model.animatedCard.word);
+    }
     this.view.setAnimatedCard(this.model.animatedCard);
   }
 
@@ -110,6 +96,7 @@ export default class CategoryPageController extends BaseController {
   }
 
   handleCorrectAnswerRecieved = () => {
+    this.analiticsCounter.incrementGameClick(this.model.playedCard.word);
     if (this.model.cardsForGameRemaining.length !== 0) {
       this.view.playNext(this.model.cardsForGameRemaining);
     } else if (this.model.cardsForGameRemaining.length === 0 && this.model.gameErrors === 0) {
@@ -120,6 +107,7 @@ export default class CategoryPageController extends BaseController {
   }
 
   handleInCorrectAnswerRecieved = () => {
+    this.analiticsCounter.incrementErrorCount(this.model.playedCard.word);
     this.model.gameErrors += 1;
   }
 
