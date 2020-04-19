@@ -184,6 +184,7 @@ export default class CategoryPageView extends BaseView {
 
   victoryGameOver() {
     this.wrapper.innerHTML = VictoryGameOver + GameSound;
+    this.buttonWrapper.innerHTML = '';
 
     const audio = this.wrapper.querySelector('.success-sound');
     audio.play();
@@ -201,6 +202,7 @@ export default class CategoryPageView extends BaseView {
 
   failureGameOver(count) {
     this.wrapper.innerHTML = FailureGameOver(count) + GameSound;
+    this.buttonWrapper.innerHTML = '';
 
     const audio = this.wrapper.querySelector('.failure-sound');
     audio.play();

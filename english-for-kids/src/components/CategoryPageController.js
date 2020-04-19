@@ -101,10 +101,10 @@ export default class CategoryPageController extends BaseController {
   }
 
   handleNewGameAfterVictory = () => {
-    this.view.setGameLayout(this.model.cards);
+    window.location.href = '/';
   }
 
   handleNewGameAfterFailure = () => {
-    this.view.setGameLayout(this.model.cards);
+    window.location.href = '/';
   }
 }
