@@ -1,6 +1,5 @@
 import BaseView from './BaseView';
 import HackerSpaceWrapper from '../templates/HackerSpaceWrapper';
-import MainWrapper from '../templates/MainWrapper';
 import HackerSpaceRow from '../templates/HackerSpaceRow';
 import HackerSpaceHeaders from '../templates/HackerSpaceHeaders';
 import HackerSpaceCategory from '../templates/HackerSpaceCategory';
