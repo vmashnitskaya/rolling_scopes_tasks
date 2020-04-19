@@ -57,18 +57,7 @@ export default class CategoryPageController extends BaseController {
   handleNewGameStarted = () => {
     this.model.cardsForGameRemaining = this.model.cardsForGame.slice(0);
     this.model.gameErrors = 0;
-    this.model.cardsForGame = CategoryPageController.shuffle(this.model.cardsForGame);
-  }
-
-  static shuffle(array) {
-    for (let a = 0; a < 1000; a += 1) {
-      for (let i = array.length - 1; i > 0; i = -1) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-
-    return array;
+    this.model.cardsForGame = this.model.cardsForGame.sort(() => Math.random() - 0.5);
   }
 
   onCardsForGameChange = () => {
