@@ -6,6 +6,9 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "clsx": "^1.1.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "node-sass": "^4.14.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
@@ -15,7 +18,13 @@
     "build": "react-scripts build"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "airbnb",
+      "airbnb/hooks"
+    ],
+    "env": {
+      "browser": true
+    }
   },
   "browserslist": {
     "production": [
