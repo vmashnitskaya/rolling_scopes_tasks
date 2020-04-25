@@ -69,8 +69,9 @@ main {
   height: 100%;
   margin: 0 auto;
   .points {
-    list-style: none;
     display: flex;
+    justify-content: flex-start;
+    list-style: none;
     padding: 15px 15px;
     margin: 20px auto;
     .point {
@@ -104,6 +105,20 @@ main {
       }
     }
   }
+  .image {
+    margin: 10px auto;
+    img {
+      display: inline-block;
+      width: 400px;
+      height: 270px;
+    }
+  }
+  .translation {
+    font-size: 1.6rem;
+    text-align: center;
+    margin: 10px;
+    font-weight: 700;
+  }
   .cards {
     display: flex;
     flex-wrap: wrap;
@@ -116,13 +131,13 @@ main {
       padding: 8px;
       font-size: 1.2rem;
       margin: 10px 0;
+      cursor: pointer;
       &__sound {
         display: inline-block;
         transform: translateY(25%);
         width: 35px;
         height: 35px;
         filter: invert(58%) sepia(9%) saturate(1432%) hue-rotate(47deg) brightness(90%) contrast(95%);
-        cursor: pointer;
       }
       .card__description {
         width: 165px;
@@ -136,6 +151,12 @@ main {
             letter-spacing: 0.5px;
           }
         }
+      }
+      &.selected {
+        background-color: darken($color: $base-color, $amount: 5);
+      }
+      &.disabled {
+        background-color: lighten($color: $base-color, $amount: 10);
       }
     }
   }
