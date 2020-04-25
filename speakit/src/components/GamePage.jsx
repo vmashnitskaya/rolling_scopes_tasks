@@ -9,6 +9,7 @@ const GamePage = () => {
     const [complexity, setComplexity] = useState(0);
     const [cards, setCards] = useState([]);
     const [selectedCard, setSelectedCard] = useState();
+    const [currentCardTranslation, setCurrentCardTranslation] = useState();
 
     useEffect(() => {
         const page = Math.round(Math.random() * 29);
@@ -17,6 +18,14 @@ const GamePage = () => {
             setSelectedCard(null);
         });
     }, [complexity]);
+
+    useEffect(() => {
+        if (selectedCard) {
+            api.getTranslation(selectedCard.word).then(setCurrentCardTranslation);
+        } else {
+            setCurrentCardTranslation(undefined);
+        }
+    }, [selectedCard]);
 
     const handleComplexityChange = (newComplexity) => {
         setComplexity(newComplexity);
@@ -34,9 +43,13 @@ const GamePage = () => {
                 complexityArray={[0, 1, 2, 3, 4, 5]}
             />
             {selectedCard ? (
-                <SelectedCard image={selectedCard.image} word={selectedCard.word} />
+                <SelectedCard
+                    image={selectedCard.image}
+                    word={selectedCard.word}
+                    translation={currentCardTranslation}
+                />
             ) : (
-                <SelectedCard image={startImage} word={'\u00a0'} />
+                <SelectedCard image={startImage} />
             )}
             <CardsList
                 cards={cards}

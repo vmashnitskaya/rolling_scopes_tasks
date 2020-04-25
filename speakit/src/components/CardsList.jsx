@@ -10,7 +10,7 @@ const CardsList = ({ cards, selectedCard, onCardSelected }) => {
                     key={card.word}
                     card={card}
                     onCardSelected={onCardSelected}
-                    isSelected={selectedCard && card.word === selectedCard.word}
+                    isSelected={selectedCard ? card.word === selectedCard.word : false}
                 />
             ))}
         </div>
