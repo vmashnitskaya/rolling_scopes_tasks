@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ComplexityPoints from './ComplexityPoints';
 import CardsList from './CardsList';
 import SelectedCard from './SelectedCard';
+import Button from './Button';
+import Loading from './Loading';
 import startImage from '../img/start-image.jpg';
 import api from '../api';
 
@@ -10,12 +12,15 @@ const GamePage = () => {
     const [cards, setCards] = useState([]);
     const [selectedCard, setSelectedCard] = useState();
     const [currentCardTranslation, setCurrentCardTranslation] = useState();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const page = Math.round(Math.random() * 29);
+        setLoading(true);
         api.getCards(page, complexity).then((cards) => {
             setCards(cards.sort(() => Math.random() - 0.5).slice(0, 10));
             setSelectedCard(null);
+            setLoading(false);
         });
     }, [complexity]);
 
@@ -51,11 +56,21 @@ const GamePage = () => {
             ) : (
                 <SelectedCard image={startImage} />
             )}
-            <CardsList
-                cards={cards}
-                selectedCard={selectedCard}
-                onCardSelected={handleCardSelected}
-            />
+            {loading ? (
+                <Loading />
+            ) : (
+                <CardsList
+                    cards={cards}
+                    selectedCard={selectedCard}
+                    onCardSelected={handleCardSelected}
+                />
+            )}
+
+            <div className="buttons">
+                <Button className="restart" text="Restart" />
+                <Button className="speak" text="Start game" />
+                <Button className="finish" text="Results" />
+            </div>
         </div>
     );
 };
