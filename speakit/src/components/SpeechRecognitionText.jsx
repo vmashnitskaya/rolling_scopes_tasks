@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ReactComponent as Microfon } from '../img/microfon.svg';
 
 const SpeechRecognitionText = ({ text }) => {
-    return <div className="text">{text}</div>;
+    return <div className="recognition">
+        <Microfon className="microfon"/>
+        <div className="text">{text}</div>
+        </div>;
 };
 
 SpeechRecognitionText.propTypes = {

@@ -2,15 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Card from './Card';
 
-const CardsList = ({ cards, selectedCard, onCardSelected }) => {
+const CardsList = ({ cards, selectedCard, gameStarted, onCardSelected, guessedWords }) => {
+    const handeCardSelected = (card) => {
+        !gameStarted && onCardSelected(card);
+    }
     return (
         <div className="cards">
             {cards.map((card) => (
                 <Card
                     key={card.word}
                     card={card}
-                    onCardSelected={onCardSelected}
-                    isSelected={selectedCard ? card.word === selectedCard.word : false}
+                    onCardSelected={handeCardSelected}
+                    isSelected={!gameStarted && selectedCard ? card.word === selectedCard.word : false}
+                    isGuessed={guessedWords.includes(card.word)}
                 />
             ))}
         </div>
@@ -30,6 +34,8 @@ CardsList.propTypes = {
         transcription: PropTypes.string.isRequired,
         audio: PropTypes.string.isRequired,
     }),
+    gameStarted: PropTypes.bool.isRequired,
+    guessedWords: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default CardsList;

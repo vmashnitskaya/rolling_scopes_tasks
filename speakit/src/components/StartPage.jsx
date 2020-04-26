@@ -8,7 +8,7 @@ const StartPage = ({ onStart }) => (
         <p>
             Click on the words to hear them sound.
             <br />
-            Click on the button and speak the words into the microphone.
+            Click on the start game button and speak the words into the microphone.
         </p>
         <Button className="start-page__button" text="Start" onClick={onStart} />
     </div>

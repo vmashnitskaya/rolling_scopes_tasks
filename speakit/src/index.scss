@@ -113,12 +113,29 @@ main {
       height: 270px;
     }
   }
-  .translation,
-  .text {
+  .translation {
     font-size: 1.6rem;
     text-align: center;
     margin: 10px;
     font-weight: 700;
+  }
+  .recognition {
+    display: flex;
+    justify-content: center;
+    .microfon {
+      display: inline-block;
+      margin-top: 3px;
+      width: 35px;
+      height: 40px;
+      filter: invert(58%) sepia(9%) saturate(1432%) hue-rotate(47deg) brightness(90%) contrast(95%);
+    }
+    .text {
+      width: 360px;
+      font-size: 1.6rem;
+      text-align: center;
+      margin: 10px;
+      font-weight: 700;
+    }
   }
   .cards {
     display: flex;
@@ -156,7 +173,7 @@ main {
       &.selected {
         background-color: darken($color: $base-color, $amount: 5);
       }
-      &.disabled {
+      &.guessed {
         background-color: lighten($color: $base-color, $amount: 10);
       }
     }

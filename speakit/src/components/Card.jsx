@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ReactComponent as SoundIcon } from '../img/sound.svg';
 import clsx from 'clsx';
 
-const Card = ({ card, isSelected, onCardSelected }) => {
+const Card = ({ card, isSelected, onCardSelected, isGuessed }) => {
     const audioRef = useRef();
     const handleClick = () => {
         audioRef.current.play();
@@ -11,7 +11,7 @@ const Card = ({ card, isSelected, onCardSelected }) => {
     };
 
     return (
-        <div className={clsx('card', isSelected && 'selected')} onClick={handleClick}>
+        <div className={clsx('card', isSelected && 'selected', isGuessed && 'guessed')} onClick={handleClick}>
             <SoundIcon className="card__sound" />
             <div className="card__description">
                 <p className="card__description-word">{card.word}</p>

@@ -6,7 +6,7 @@ const getCards = async (page, group) => {
     const res = await window.fetch(url, { method: 'GET' });
     const json = await res.json();
     const cards = json.map(({ word, image, audio, transcription }) => ({
-        word,
+        word: word.toLowerCase(),
         image: formatUrl(image),
         audio: formatUrl(audio),
         transcription,
@@ -21,27 +21,8 @@ const getTranslation = async (word) => {
     return data.text.map((translation) => translation.toLowerCase())[0];
 };
 
-const recognizeSpeech = (onResult) => {
-    const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;
-    let recognition = new SpeechRecognition();
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
-
-    recognition.addEventListener('result', (e) => {
-        const transcript = Array.from(e.results)
-            .map((result) => result[0])
-            .map((result) => result.transcript)
-            .join('');
-        onResult(transcript);
-    });
-
-    recognition.addEventListener('end', recognition.start);
-
-    recognition.start();
-};
 
 export default {
     getCards,
     getTranslation,
-    recognizeSpeech,
 };
