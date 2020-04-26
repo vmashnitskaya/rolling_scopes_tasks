@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ComplexityPoints from './ComplexityPoints';
 import CardsList from './CardsList';
-import SelectedCard from './SelectedCard';
+import Image from './Image';
+import Translation from './Translation';
+import SpeechRecognitionText from './SpeechRecognitionText';
 import Button from './Button';
 import Loading from './Loading';
 import startImage from '../img/start-image.jpg';
@@ -13,6 +15,8 @@ const GamePage = () => {
     const [selectedCard, setSelectedCard] = useState();
     const [currentCardTranslation, setCurrentCardTranslation] = useState();
     const [loading, setLoading] = useState(false);
+    const [gameStarted, setGameStarted] = useState(false);
+    const [speechText, setSpeechText] = useState();
 
     useEffect(() => {
         const page = Math.round(Math.random() * 29);
@@ -40,6 +44,12 @@ const GamePage = () => {
         setSelectedCard(card);
     };
 
+    const handleGameStart = () => {
+        setGameStarted(true);
+        setSelectedCard(null);
+        api.recognizeSpeech(setSpeechText);
+    };
+
     return (
         <div className="game-page">
             <ComplexityPoints
@@ -48,14 +58,16 @@ const GamePage = () => {
                 complexityArray={[0, 1, 2, 3, 4, 5]}
             />
             {selectedCard ? (
-                <SelectedCard
-                    image={selectedCard.image}
-                    word={selectedCard.word}
-                    translation={currentCardTranslation}
-                />
+                <Image image={selectedCard.image} word={selectedCard.word} />
             ) : (
-                <SelectedCard image={startImage} />
+                <Image image={startImage} />
             )}
+            {gameStarted ? (
+                <SpeechRecognitionText text={speechText} />
+            ) : (
+                <Translation translation={currentCardTranslation} />
+            )}
+
             {loading ? (
                 <Loading />
             ) : (
@@ -68,7 +80,7 @@ const GamePage = () => {
 
             <div className="buttons">
                 <Button className="restart" text="Restart" />
-                <Button className="speak" text="Start game" />
+                <Button className="speak" text="Start game" onClick={handleGameStart} />
                 <Button className="finish" text="Results" />
             </div>
         </div>
