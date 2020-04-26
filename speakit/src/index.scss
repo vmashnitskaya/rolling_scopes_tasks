@@ -109,8 +109,8 @@ main {
     margin: 10px auto;
     img {
       display: inline-block;
-      width: 400px;
-      height: 270px;
+      max-width: 400px;
+      max-height: 270px;
     }
   }
   .translation {
@@ -242,7 +242,7 @@ main {
       background-color: $base-color;
       border-radius: 3px;
       border: 3px double darken($color: $contrast-color, $amount: 10);
-      padding: 10px;
+      padding: 10px 0;
       overflow-y: auto;
       overflow-x: hidden;
       .results-title {
@@ -255,8 +255,8 @@ main {
         .result-row {
           display: flex;
           justify-content: flex-start;
-          margin: 4px;
-          padding: 2px;
+          margin: 4px 1px;
+          padding: 2px 0;
           border: 1px solid darken($color: $contrast-color, $amount: 10);
           cursor: pointer;
           .words {
@@ -285,6 +285,74 @@ main {
           margin: 10px;
           width: 150px;
           height: 40px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .game-page {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .start-page {
+    padding-top: 10px;
+    h1 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+    &__button {
+      width: 200px;
+      height: 40px;
+      margin-top: 10px;
+      font-size: 2rem;
+    }
+  }
+  .game-page {
+    .buttons {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 20px;
+      .button {
+        margin-top: 10px;
+      }
+    }
+    .cards {
+      justify-content: center;
+    }
+    .image {
+      margin: 10px auto;
+      img {
+        display: inline-block;
+        width: 290px;
+      }
+    }
+    .pop-up-layer {
+      .pop-up {
+        .results {
+          max-width: 280px;
+          min-width: 280px;
+          overflow-x: auto;
+          .results-title {
+            font-size: 1.2rem;
+          }
+          .results-list {
+            .result-row {
+              .words {
+                div {
+                  width: 33%;
+                  font-size: 0.8rem;
+                  font-weight: 400;
+                }
+              }
+            }
+          }
         }
       }
     }
