@@ -11,7 +11,10 @@ const Card = ({ card, isSelected, onCardSelected, isGuessed }) => {
     };
 
     return (
-        <div className={clsx('card', isSelected && 'selected', isGuessed && 'guessed')} onClick={handleClick}>
+        <div
+            className={clsx('card', isSelected && 'selected', isGuessed && 'guessed')}
+            onClick={handleClick}
+        >
             <SoundIcon className="card__sound" />
             <div className="card__description">
                 <p className="card__description-word">{card.word}</p>

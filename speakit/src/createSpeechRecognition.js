@@ -5,7 +5,7 @@ const createSpeechRecognition = (cardsWords) => {
     const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
     let recognition = new SpeechRecognition();
     let speechRecognitionList = new SpeechGrammarList();
-    const grammar = `#JSGF V1.0; grammar words; public <word> = (${cardsWords.join(" | ")}) ;`;
+    const grammar = `#JSGF V1.0; grammar words; public <word> = (${cardsWords.join(' | ')}) ;`;
     speechRecognitionList.addFromString(grammar, 1);
     recognition.grammars = speechRecognitionList;
     recognition.interimResults = false;
@@ -19,7 +19,7 @@ const createSpeechRecognition = (cardsWords) => {
 
     const onEnd = () => {
         isStarted && recognition.start();
-    }
+    };
 
     return {
         start: (onResult) => {
@@ -36,7 +36,7 @@ const createSpeechRecognition = (cardsWords) => {
             recognition.abort();
         },
         isStarted: () => isStarted,
-    }
+    };
 };
 
 export default createSpeechRecognition;
