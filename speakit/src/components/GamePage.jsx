@@ -110,7 +110,7 @@ const GamePage = () => {
     }, [cards]);
 
     useEffect(() => {
-        if (guessedWords.length === 2) {
+        if (guessedWords.length === 10) {
             handlePopUpOpened();
         }
     }, [guessedWords, handlePopUpOpened]);

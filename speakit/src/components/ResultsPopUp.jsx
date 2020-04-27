@@ -36,7 +36,7 @@ const ResultsPopUp = ({ open, cards, guessedCards, onClose, onNewGame }) => {
                         ))}
                 </div>
                 <div className="results-actions">
-                    {guessedCards.length !== 2 && (
+                    {guessedCards.length !== 10 && (
                         <Button className="resume-button" text="Resume game" onClick={onClose} />
                     )}
                     <Button className="new-game" text="New game" onClick={onNewGame} />
