@@ -1,12 +1,14 @@
-import Header from '../templates/Header';
+import M from 'materialize-css';
+import Page from '../templates/Page';
 
 export default class SearchView {
     constructor() {
         this.body = document.querySelector('body');
-        this.initHeader();
+        this.initPage();
+        M.updateTextFields();
     }
 
-    initHeader = () => {
-        this.body.innerHTML = Header();
+    initPage = () => {
+        this.body.innerHTML = Page();
     };
 }

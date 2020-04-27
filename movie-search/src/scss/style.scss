@@ -1,1 +1,54 @@
-@import '../../node_modules/materialize-css/sass/materialize.scss'
+$primary-color: #263238;
+$secondary-color: #26a69a;
+$roboto-font-path: "../../node_modules/roboto-fontface/fonts/roboto/";
+$font-stack: "Roboto", "Arial", sans-serif;
+
+@import "../../node_modules/materialize-css/sass/materialize.scss";
+
+html {
+    font-size: 10px;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+nav {
+    height: 80px;
+    .nav-wrapper {
+        .brand-logo {
+            font-weight: 700;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+        }
+    }
+}
+
+main {
+    flex: 1 0 auto;
+    .search {
+        margin-top: 20px;
+    }
+}
+
+footer {
+    .footer-copyright {
+        .footer-link {
+            display: inline-block;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #ffffff;
+            &:last-child {
+                transform: translateY(-6px);
+            }
+            &:hover {
+                color: $secondary-color;
+            }
+        }
+    }
+}
