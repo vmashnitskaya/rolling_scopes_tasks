@@ -5,13 +5,15 @@
         "es6": true
     },
     "extends": [
-        "airbnb-base"
+        "airbnb-base",
+        "plugin:prettier/recommended"
     ],
     "parser": "babel-eslint",
     "parserOptions": {
         "ecmaVersion": 6
     },
     "rules": {
-        "no-underscore-dangle": "off"
+        "no-underscore-dangle": "off",
+        "prettier/prettier": ["error", {"singleQuote": true, "printWidth": 100, "tabWidth": 4, "bracketSpacing": false }]
     }
 }
