@@ -1,14 +1,13 @@
 const Search = () => `
-<div class="search row">
-    <form class="search-form col s12">
-      <div class="row">
-        <div class="input-field col s8 offset-s2">
+    <form class="search-form">
+      <div class="search">
+        <div class="input-field">
             <i class="material-icons prefix">search</i>
-            <input placeholder="Search movie" id="search" type="text" autofocus>
+            <input placeholder="Search movie" id="search" name="search" type="text" autofocus autocomplete="off">
+            <i class="material-icons clear">clear</i>
         </div>
         <button type="submit" class="col s1 waves-effect waves-light btn">Search</button></div>
     </form>
-  </div>
 `;
 
 export default Search;

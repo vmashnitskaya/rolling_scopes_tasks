@@ -4,12 +4,15 @@ $roboto-font-path: "../../node_modules/roboto-fontface/fonts/roboto/";
 $font-stack: "Roboto", "Arial", sans-serif;
 
 @import "../../node_modules/materialize-css/sass/materialize.scss";
+@import "../../node_modules/glider-js/glider.css";
+.glider-slide {
+    text-align: center !important;
+}
 
 html {
     font-size: 10px;
     box-sizing: border-box;
 }
-
 body {
     display: flex;
     min-height: 100vh;
@@ -30,9 +33,127 @@ nav {
 }
 
 main {
-    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    .container {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+    }
     .search {
-        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        margin: 30px 40px 0 40px;
+        .input-field {
+            position: relative;
+            margin-right: 10px;
+            width: 90%;
+            i.prefix {
+                font-size: 4rem;
+            }
+            i.clear {
+                position: absolute;
+                top: 0.6rem;
+                font-size: 4rem;
+                &:hover {
+                    color: $secondary-color;
+                    cursor: pointer;
+                }
+            }
+            input {
+                width: calc(100% - 8rem);
+                margin-left: 4rem;
+                height: 45px;
+                font-size: 2rem;
+                line-height: 2rem;
+                &::placeholder {
+                    font-size: 2rem;
+                    line-height: 2rem;
+                }
+            }
+        }
+        button {
+            margin-top: 10px;
+            height: 44px;
+            border-radius: 5px;
+            font-size: 2rem;
+        }
+    }
+    .glider-contain {
+        .glider {
+            .card {
+                margin: 15px;
+                .card-title {
+                    padding: 6px;
+                    a {
+                        color: $primary-color;
+                        font-size: 2.5rem;
+                        text-decoration: underline;
+                    }
+                }
+                .card-image {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 420px;
+                    overflow: hidden;
+                    img {
+                        display: inline-block;
+                        height: 100%;
+                    }
+                    .card-image-unavailable {
+                        font-size: 3rem;
+                    }
+                }
+                .card-content {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 15px;
+                    font-size: 2rem;
+                    font-weight: 700;
+                    .year {
+                        margin-top: 4px;
+                    }
+                    .rate {
+                        img {
+                            display: inline-block;
+                            width: 25px;
+                            height: 25px;
+                            margin: 0 10px 0 0;
+                        }
+                    }
+                }
+            }
+        }
+        i {
+            font-size: 40px;
+            &:hover {
+                cursor: pointer;
+                color: $secondary-color;
+                opacity: 1;
+            }
+        }
+        .glider-prev,
+        .glider-next {
+            top: 40%;
+        }
+        .glider-dots {
+            margin-top: 20px;
+            .glider-dot {
+                &.active {
+                    background-color: $secondary-color;
+                }
+            }
+        }
+        margin-bottom: 40px;
+    }
+    .waiting-layer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1 1 auto;
     }
 }
 
