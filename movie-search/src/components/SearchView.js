@@ -14,6 +14,7 @@ export default class SearchView {
         this.body.innerHTML = Page();
         this.loader = this.body.querySelector('.waiting-layer');
         this.sliderContainer = this.body.querySelector('.glider-contain');
+        this.errorWrapper = this.body.querySelector('.error-wrapper');
         this.searchForm = this.body.querySelector('.search-form');
         this.searchInput = this.searchForm.querySelector('input#search');
         this.searchForm.querySelector('i.clear').addEventListener('click', () => {
@@ -81,6 +82,7 @@ export default class SearchView {
     showLoading() {
         this.loader.classList.remove('hide');
         this.sliderContainer.classList.add('hide');
+        this.errorWrapper.classList.add('hide');
 
         this.sliderContainer.querySelector('.glider-track').innerHTML = '';
         this.glider.refresh(true);
@@ -93,6 +95,17 @@ export default class SearchView {
 
     setData(data) {
         data.forEach(this.addCardToGlider);
+    }
+
+    setErrorMessage(text) {
+        this.sliderContainer.classList.add('hide');
+        const errorMessage = this.errorWrapper.querySelector('h2');
+        errorMessage.innerHTML = text;
+        this.errorWrapper.classList.remove('hide');
+
+        if (!this.loader.classList.contains('hide')) {
+            this.loader.classList.add('hide');
+        }
     }
 
     addCardToGlider = (cardData) => {

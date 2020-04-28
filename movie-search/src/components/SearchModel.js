@@ -29,4 +29,17 @@ export default class SearchModel {
     bindDataChange(callback) {
         this.onDataChange = callback;
     }
+
+    get error() {
+        return this._error;
+    }
+
+    set error(error) {
+        this._error = error;
+        this.onErrorRecieved();
+    }
+
+    bindErrorRecieved(callback) {
+        this.onErrorRecieved = callback;
+    }
 }

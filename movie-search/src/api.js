@@ -4,6 +4,7 @@ const getRate = async (id) => {
     const url = `https://www.omdbapi.com/?i=${id}&apikey=${apiKey}`;
 
     const res = await window.fetch(url);
+    if (!res.ok) throw new Error(res.status);
     const data = await res.json();
 
     return data.imdbRating;
@@ -15,6 +16,7 @@ const getSearchResults = async (searchValue, page) => {
     );
 
     const res = await window.fetch(url);
+    if (!res.ok) throw new Error(res.status);
     const {Search, totalResults, Response} = await res.json();
 
     if (Response === 'True') {

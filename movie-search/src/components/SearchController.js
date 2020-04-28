@@ -7,15 +7,22 @@ export default class SearchController {
 
         this.model.bindLoadingChange(this.onLoadingChange);
         this.model.bindDataChange(this.onDataChange);
+        this.model.bindErrorRecieved(this.onErrorRecieved);
 
         this.view.handleSearch(this.onSearch);
     }
 
     onSearch = async (searchValue) => {
         this.model.loading = true;
-        const searchResults = await api.getSearchResults(searchValue, 1);
-        this.model.loading = false;
-        this.model.data = searchResults.data;
+        this.model.searchValue = searchValue;
+        try {
+            const {data, totalResults} = await api.getSearchResults(searchValue, 1);
+            this.model.loading = false;
+            this.model.totalResults = totalResults;
+            this.model.data = data;
+        } catch (e) {
+            this.model.error = e.message;
+        }
     };
 
     onLoadingChange = () => {
@@ -27,6 +34,14 @@ export default class SearchController {
     };
 
     onDataChange = () => {
-        this.view.setData(this.model.data);
+        if (this.model.totalResults > 0) {
+            this.view.setData(this.model.data);
+        } else {
+            this.view.setErrorMessage(`No search result for ${this.model.searchValue}`);
+        }
+    };
+
+    onErrorRecieved = () => {
+        this.view.setErrorMessage('Failed to load results');
     };
 }
