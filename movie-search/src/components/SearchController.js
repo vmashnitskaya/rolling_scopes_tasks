@@ -13,11 +13,22 @@ export default class SearchController {
     }
 
     onSearch = async (searchValue) => {
+        this.model.translated = '';
+        let searchValueTrimmed = searchValue.trim();
+        if (/[А-Яа-я]/.test(searchValueTrimmed)) {
+            try {
+                this.model.translated = searchValueTrimmed;
+                searchValueTrimmed = await api.getSearchTranslation(searchValueTrimmed);
+            } catch (e) {
+                this.model.error = e.message;
+            }
+        }
         this.model.loading = true;
         this.view.showLoading();
-        this.model.searchValue = searchValue;
+        this.model.searchValue = searchValueTrimmed;
+        this.view.showLoading();
         try {
-            const {data, page, totalResults} = await api.getSearchResults(searchValue, 1);
+            const {data, page, totalResults} = await api.getSearchResults(searchValueTrimmed, 1);
             this.view.hideLoading();
             this.model.page = page;
             this.model.totalResults = totalResults;
@@ -31,6 +42,16 @@ export default class SearchController {
     };
 
     onDataChange = (data) => {
+        if (this.model.translated) {
+            this.searchReturn(data);
+            this.view.changeTranslationMessage(this.model.searchValue);
+        } else {
+            this.searchReturn(data);
+            this.view.changeTranslationMessage(null);
+        }
+    };
+
+    searchReturn = (data) => {
         if (this.model.totalResults > 0) {
             this.view.addData(data);
         } else {
@@ -43,12 +64,10 @@ export default class SearchController {
     };
 
     onSlideVisible = async (visibleSlideIndex) => {
-        console.log(this.model.data.length);
-        console.log(visibleSlideIndex);
         if (
             !this.model.loading &&
             this.model.data.length !== this.model.totalResults &&
-            this.model.data.length - visibleSlideIndex === 5
+            this.model.data.length - visibleSlideIndex < 5
         ) {
             this.model.loading = true;
             try {

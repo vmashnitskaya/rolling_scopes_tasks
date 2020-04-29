@@ -29,6 +29,7 @@ export default class SearchModel {
 
     set error(error) {
         this._error = error;
+        console.log(this._error);
         this.onErrorRecieved();
     }
 

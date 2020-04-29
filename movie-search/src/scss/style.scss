@@ -83,7 +83,7 @@ main {
     .glider-contain {
         .glider {
             .card {
-                margin: 15px;
+                margin: 10px;
                 .card-title {
                     padding: 6px;
                     a {
@@ -154,6 +154,20 @@ main {
         justify-content: center;
         align-items: center;
         flex: 1 1 auto;
+    }
+    .translation {
+        height: 40px;
+        width: 100%;
+        margin: 0;
+        padding: 0 20px;
+        h2 {
+            margin: 0;
+            font-size: 2.5rem;
+            span {
+                color: $secondary-color;
+                text-decoration: underline;
+            }
+        }
     }
 }
 

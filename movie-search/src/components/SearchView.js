@@ -122,4 +122,16 @@ export default class SearchView {
                 handler(event.detail.slide);
             });
     };
+
+    changeTranslationMessage = (text) => {
+        const translationMessage = this.body.querySelector('.translation');
+        const translationText = translationMessage.querySelector('h2');
+        if (text) {
+            translationMessage.classList.remove('hide');
+            translationText.innerHTML = `Showing results for: <span>${text}</span>`;
+        } else {
+            translationMessage.classList.add('hide');
+            translationText.innerHTML = '';
+        }
+    };
 }
