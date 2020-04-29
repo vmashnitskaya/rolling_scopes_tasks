@@ -10,48 +10,48 @@ export default class SearchController {
 
         this.view.handleSearch(this.onSearch);
         this.view.handleSlideVisible(this.onSlideVisible);
+
+        if (this.model.searchValue) {
+            this.onSearch(this.model.searchValue);
+        }
     }
 
     onSearch = async (searchValue) => {
-        this.model.translated = '';
-        let searchValueTrimmed = searchValue.trim();
-        if (/[А-Яа-я]/.test(searchValueTrimmed)) {
+        if (!this.model.loading) {
+            this.model.loading = true;
+            this.view.showLoading();
+            this.model.translated = '';
+            this.model.searchValue = searchValue.trim();
+            if (/[А-Яа-я]/.test(this.model.searchValue)) {
+                try {
+                    this.model.translated = await api.getSearchTranslation(this.model.searchValue);
+                } catch (e) {
+                    this.model.error = e.message;
+                }
+            }
+            this.view.setSearchValue(this.model.searchValue);
+            this.view.changeTranslationMessage(null);
             try {
-                this.model.translated = searchValueTrimmed;
-                searchValueTrimmed = await api.getSearchTranslation(searchValueTrimmed);
+                const {data, page, totalResults} = await api.getSearchResults(
+                    this.model.translated ? this.model.translated : this.model.searchValue,
+                    1
+                );
+                this.view.hideLoading();
+                this.model.page = page;
+                this.model.totalResults = totalResults;
+                this.model.data = data;
             } catch (e) {
+                this.view.hideLoading();
                 this.model.error = e.message;
             }
-        }
-        this.model.loading = true;
-        this.view.showLoading();
-        this.model.searchValue = searchValueTrimmed;
-        this.view.showLoading();
-        try {
-            const {data, page, totalResults} = await api.getSearchResults(searchValueTrimmed, 1);
-            this.view.hideLoading();
-            this.model.page = page;
-            this.model.totalResults = totalResults;
-            this.model.data = data;
-            this.model.loading = false;
-        } catch (e) {
-            this.model.error = e.message;
-            this.view.hideLoading();
             this.model.loading = false;
         }
     };
 
     onDataChange = (data) => {
-        if (this.model.translated) {
-            this.searchReturn(data);
-            this.view.changeTranslationMessage(this.model.searchValue);
-        } else {
-            this.searchReturn(data);
-            this.view.changeTranslationMessage(null);
+        if (this.model.translated && this.model.totalResults !== 0) {
+            this.view.changeTranslationMessage(this.model.translated);
         }
-    };
-
-    searchReturn = (data) => {
         if (this.model.totalResults > 0) {
             this.view.addData(data);
         } else {
@@ -72,7 +72,7 @@ export default class SearchController {
             this.model.loading = true;
             try {
                 const {data, page} = await api.getSearchResults(
-                    this.model.searchValue,
+                    this.model.translated ? this.model.translated : this.model.searchValue,
                     this.model.page + 1
                 );
                 this.model.page = page;

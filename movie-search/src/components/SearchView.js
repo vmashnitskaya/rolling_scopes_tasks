@@ -134,4 +134,8 @@ export default class SearchView {
             translationText.innerHTML = '';
         }
     };
+
+    setSearchValue(searchValue) {
+        this.searchInput.value = searchValue;
+    }
 }

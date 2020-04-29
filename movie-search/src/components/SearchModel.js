@@ -1,5 +1,6 @@
 export default class SearchModel {
-    constructor() {
+    constructor(searchValue) {
+        this.searchValue = searchValue;
         this.loading = false;
         this._data = null;
         this.page = 1;
@@ -29,7 +30,6 @@ export default class SearchModel {
 
     set error(error) {
         this._error = error;
-        console.log(this._error);
         this.onErrorRecieved();
     }
 

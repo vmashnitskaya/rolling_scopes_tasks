@@ -1,4 +1,4 @@
-const apiKey = '1adbf2cc';
+const apiKey = '1adbf2ccc';
 
 const getRate = async (id) => {
     const url = `https://www.omdbapi.com/?i=${id}&apikey=${apiKey}`;
