@@ -1,20 +1,8 @@
 export default class SearchModel {
     constructor() {
-        this._loading = false;
+        this.loading = false;
         this._data = null;
-    }
-
-    get loading() {
-        return this._loading;
-    }
-
-    set loading(loading) {
-        this._loading = loading;
-        this.onLoadingChange();
-    }
-
-    bindLoadingChange(callback) {
-        this.onLoadingChange = callback;
+        this.page = 1;
     }
 
     get data() {
@@ -23,11 +11,16 @@ export default class SearchModel {
 
     set data(data) {
         this._data = data;
-        this.onDataChange();
+        this.onDataChange(data);
     }
 
     bindDataChange(callback) {
         this.onDataChange = callback;
+    }
+
+    addData(data) {
+        this._data.push(...data);
+        this.onDataChange(data);
     }
 
     get error() {

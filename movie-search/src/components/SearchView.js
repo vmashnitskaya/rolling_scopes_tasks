@@ -93,7 +93,7 @@ export default class SearchView {
         this.sliderContainer.classList.remove('hide');
     }
 
-    setData(data) {
+    addData(data) {
         data.forEach(this.addCardToGlider);
     }
 
@@ -113,5 +113,13 @@ export default class SearchView {
         card.className = 'card';
         card.innerHTML = SliderItem(cardData);
         this.glider.addItem(card);
+    };
+
+    handleSlideVisible = (handler) => {
+        this.sliderContainer
+            .querySelector('.glider')
+            .addEventListener('glider-slide-visible', (event) => {
+                handler(event.detail.slide);
+            });
     };
 }
