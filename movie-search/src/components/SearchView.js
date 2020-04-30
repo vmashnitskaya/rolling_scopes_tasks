@@ -2,12 +2,14 @@ import M from 'materialize-css';
 import Glider from 'glider-js';
 import Page from '../templates/Page';
 import SliderItem from '../templates/SliderItem';
+import Keyboard from '../Keyboard';
 
 export default class SearchView {
     constructor() {
         this.body = document.querySelector('body');
         this.initPage();
         this.initSlider();
+        this.initModal();
     }
 
     initPage() {
@@ -21,6 +23,17 @@ export default class SearchView {
             this.searchInput.value = '';
         });
         M.updateTextFields();
+    }
+
+    initModal() {
+        const modalWrapper = document.querySelector('.modal');
+        this.modal = M.Modal.init(modalWrapper, {
+            opacity: 0,
+            inDuration: 150,
+        });
+        const keyboardWrapper = this.body.querySelector('.keyboard-wrapper');
+        const keyboard = new Keyboard(keyboardWrapper);
+        keyboard.setTextarea(this.searchInput);
     }
 
     initSlider() {
@@ -138,4 +151,16 @@ export default class SearchView {
     setSearchValue(searchValue) {
         this.searchInput.value = searchValue;
     }
+
+    handleKeyboardIconClick(handler) {
+        this.body.querySelector('i.keyboard').addEventListener('click', () => {
+            handler();
+        });
+    }
+
+    openKeyboard = () => {
+        this.modal.open();
+        this.body.querySelector('#keyboard-modal').removeAttribute('tabindex');
+        this.searchInput.focus();
+    };
 }

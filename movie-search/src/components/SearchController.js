@@ -10,6 +10,7 @@ export default class SearchController {
 
         this.view.handleSearch(this.onSearch);
         this.view.handleSlideVisible(this.onSlideVisible);
+        this.view.handleKeyboardIconClick(this.onKeyboardOpened);
 
         if (this.model.searchValue) {
             this.onSearch(this.model.searchValue);
@@ -82,5 +83,9 @@ export default class SearchController {
             }
             this.model.loading = false;
         }
+    };
+
+    onKeyboardOpened = () => {
+        this.view.openKeyboard(this.model.keyboardVisible);
     };
 }

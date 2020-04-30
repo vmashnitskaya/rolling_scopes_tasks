@@ -1,6 +1,7 @@
 import Search from './Search';
 import Slider from './Slider';
 import Loader from './Loader';
+import KeyboardModal from './KeyboardModal';
 import NoResults from './ErrorMessage';
 import TranslationMessage from './TranslationMessage';
 
@@ -12,6 +13,7 @@ const Main = () => `
         ${Slider()}
         ${NoResults()}
         ${Loader()}
+        ${KeyboardModal()}
     </div>
 </main>
 `;
