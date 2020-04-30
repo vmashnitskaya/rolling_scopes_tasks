@@ -10,6 +10,7 @@ export default class SearchView {
         this.initPage();
         this.initSlider();
         this.initModal();
+        this.handleResize();
     }
 
     initPage() {
@@ -19,6 +20,7 @@ export default class SearchView {
         this.errorWrapper = this.body.querySelector('.error-wrapper');
         this.searchForm = this.body.querySelector('.search-form');
         this.searchInput = this.searchForm.querySelector('input#search');
+        this.searchButton = this.searchForm.querySelector('button[type="submit"]');
         this.searchForm.querySelector('i.clear').addEventListener('click', () => {
             this.searchInput.value = '';
         });
@@ -34,6 +36,10 @@ export default class SearchView {
         const keyboardWrapper = this.body.querySelector('.keyboard-wrapper');
         const keyboard = new Keyboard(keyboardWrapper);
         keyboard.setTextarea(this.searchInput);
+        keyboard.bindSubmit(() => {
+            this.modal.close();
+            this.searchButton.click();
+        });
     }
 
     initSlider() {
@@ -153,7 +159,7 @@ export default class SearchView {
     }
 
     handleKeyboardIconClick(handler) {
-        this.body.querySelector('i.keyboard').addEventListener('click', () => {
+        this.body.querySelector('i.keyboard-open').addEventListener('click', () => {
             handler();
         });
     }
@@ -162,5 +168,11 @@ export default class SearchView {
         this.modal.open();
         this.body.querySelector('#keyboard-modal').removeAttribute('tabindex');
         this.searchInput.focus();
+    };
+
+    handleResize = () => {
+        window.addEventListener('resize', () => {
+            this.modal.close();
+        });
     };
 }

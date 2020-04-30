@@ -19,8 +19,7 @@ export default class Keyboard {
                 '0',
                 '-',
                 '=',
-                'Backspace',
-                'Tab',
+                'backspace',
                 'q',
                 'w',
                 'e',
@@ -34,8 +33,7 @@ export default class Keyboard {
                 '[',
                 ']',
                 '\\',
-                'Del',
-                'Caps lock',
+                'keyboard_capslock',
                 'a',
                 's',
                 'd',
@@ -47,8 +45,8 @@ export default class Keyboard {
                 'l',
                 ';',
                 "'",
-                'Enter',
-                'Shift',
+                'check',
+                'language',
                 'z',
                 'x',
                 'c',
@@ -59,9 +57,7 @@ export default class Keyboard {
                 ',',
                 '.',
                 '/',
-                'Space',
-                '&#9665',
-                '&#9655',
+                'space_bar',
             ],
             keyLayoutRu: [
                 'ё',
@@ -77,8 +73,7 @@ export default class Keyboard {
                 '0',
                 '-',
                 '=',
-                'Backspace',
-                'Tab',
+                'backspace',
                 'й',
                 'ц',
                 'у',
@@ -92,8 +87,7 @@ export default class Keyboard {
                 'х',
                 'ъ',
                 '\\',
-                'Del',
-                'Caps lock',
+                'keyboard_capslock',
                 'ф',
                 'ы',
                 'в',
@@ -105,8 +99,8 @@ export default class Keyboard {
                 'д',
                 'ж',
                 'э',
-                'Enter',
-                'Shift',
+                'check',
+                'language',
                 'я',
                 'ч',
                 'с',
@@ -117,9 +111,8 @@ export default class Keyboard {
                 'б',
                 'ю',
                 '.',
-                'Space',
-                '&#9665',
-                '&#9655',
+                '/',
+                'space_bar',
             ],
         };
         this.elements = {
@@ -160,7 +153,6 @@ export default class Keyboard {
 
         // Add listeners to keytboard container
         this.elements.keyContainer.addEventListener('mousedown', this.handleMouseDown, true);
-        this.elements.keyContainer.addEventListener('mouseup', this.handleMouseUp, true);
         // this.elements.keyContainer.addEventListener('pointerdown', this.handlePointerDown, true);
 
         this.elements.main.append(this.elements.keyContainer);
@@ -174,6 +166,10 @@ export default class Keyboard {
         this.textarea = textarea;
     }
 
+    bindSubmit(onSubmit) {
+        this.onSubmit = onSubmit;
+    }
+
     static createKeys(althabet, ...classes) {
         const fragment = document.createDocumentFragment();
         althabet.forEach((element) => {
@@ -183,55 +179,30 @@ export default class Keyboard {
             key.innerHTML = element;
 
             switch (true) {
-                case element === 'Backspace':
-                    key.classList.add('keyboard__key-wide', `${element}`);
+                case element === 'backspace':
+                    key.classList.add('keyboard__key-small', 'material-icons');
                     break;
 
-                case element === 'Del':
-                    key.classList.add('keyboard__key-small', 'Delete');
+                case element === 'keyboard_capslock':
+                    key.classList.add(
+                        'keyboard__key-medium',
+                        'material-icons',
+                        'keyboard_capslock'
+                    );
                     break;
 
-                case element === 'Caps lock':
-                    key.classList.add('keyboard__key-caps', 'CapsLock');
+                case element === 'language':
+                    key.classList.add('keyboard__key-small', 'material-icons');
                     break;
 
-                case element === 'Shift':
-                    if (!fragment.querySelector('.ShiftLeft')) {
-                        key.classList.add('keyboard__key-medium', 'ShiftLeft');
-                    } else {
-                        key.classList.add('keyboard__key-medium', 'ShiftRight');
-                    }
+                case element === 'check':
+                    key.classList.add('keyboard__key-medium', 'material-icons');
                     break;
 
-                case element === 'Enter':
-                    key.classList.add('keyboard__key-enter', `${element}`);
+                case element === 'space_bar':
+                    key.classList.add('keyboard__key-extra-wide', 'material-icons');
                     break;
 
-                case element === 'Space':
-                    key.classList.add('keyboard__key-extra-wide', `${element}`);
-                    break;
-
-                case element === 'Tab':
-                    key.classList.add('keyboard__key-small', `${element}`);
-                    break;
-
-                case element === 'Win':
-                    key.classList.add('keyboard__key-small', 'MetaLeft');
-                    break;
-
-                case element === 'Alt':
-                    key.classList.add('keyboard__key-small', 'AltLeft');
-                    break;
-
-                case element === 'Ctrl':
-                    key.classList.add('keyboard__key-small', 'ControlLeft');
-                    break;
-                case element === '&#9665':
-                    key.classList.add('ArrowLeft');
-                    break;
-                case element === '&#9655':
-                    key.classList.add('ArrowRight');
-                    break;
                 default:
                     key.classList.add(
                         `code${element.toUpperCase().charCodeAt(0)}`,
@@ -242,9 +213,9 @@ export default class Keyboard {
             fragment.append(key);
 
             if (
-                element === 'Backspace' ||
-                element === 'Del' ||
-                element === 'Enter' ||
+                element === 'backspace' ||
+                element === '\\' ||
+                element === 'check' ||
                 element === '/'
             ) {
                 const lineBreak = document.createElement('br');
@@ -323,34 +294,26 @@ export default class Keyboard {
             event.target.classList.add('animated');
 
             switch (event.target.textContent) {
-                case 'Backspace':
-                case 'Del':
+                case 'backspace':
                     this.textarea.value = this.textarea.value.substring(
                         0,
                         this.textarea.value.length - 1
                     );
                     break;
-                case 'Caps lock':
+                case 'keyboard_capslock':
                     this.changeCapsLockColor(
-                        document.querySelector(`.CapsLock.${this.properties.lang}`)
+                        document.querySelector(`.keyboard_capslock.${this.properties.lang}`)
                     );
                     this.toggleCapsLock();
                     break;
-                case 'Shift':
-                    this.toggleCapsLock();
+                case 'language':
+                    this.initAFterLangChange();
                     break;
-                case 'Enter':
-                    this.textarea.value += '\n';
+                case 'check':
+                    this.onSubmit();
                     break;
-                case 'Space':
+                case 'space_bar':
                     this.textarea.value += ' ';
-                    break;
-                case 'Tab':
-                    this.textarea.value += '    ';
-                    break;
-                case 'Alt':
-                case 'Ctrl':
-                case 'Win':
                     break;
                 default:
                     this.textarea.value += this.properties.capsLock
@@ -358,16 +321,8 @@ export default class Keyboard {
                         : event.target.textContent.toLowerCase();
                     break;
             }
-        }
-    };
 
-    handleMouseUp = (event) => {
-        if (event.target.classList.contains('animated')) {
-            event.target.classList.remove('animated');
-
-            if (event.target.textContent === 'Shift') {
-                this.toggleCapsLock();
-            }
+            setTimeout(() => event.target.classList.remove('animated'), 500);
         }
     };
 }
