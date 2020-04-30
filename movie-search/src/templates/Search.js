@@ -8,7 +8,7 @@ const Search = () => `
             <i class="material-icons keyboard-open">keyboard</i>
             <i class="material-icons keyboard-voice">keyboard_voice</i>
         </div>
-        <button type="submit" class="col s1 waves-effect waves-light btn">Search</button></div>
+        <button type="submit" class="waves-effect waves-light btn">Search</button></div>
     </form>
 `;
 

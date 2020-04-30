@@ -1,4 +1,5 @@
 import api from '../api';
+import createSpeechRecognition from '../createSpeechRecognition';
 
 export default class SearchController {
     constructor(view, model) {
@@ -11,6 +12,7 @@ export default class SearchController {
         this.view.handleSearch(this.onSearch);
         this.view.handleSlideVisible(this.onSlideVisible);
         this.view.handleKeyboardIconClick(this.onKeyboardOpened);
+        this.view.handleKeyboardSoundnClick(this.onKeyboardVoiceClick);
 
         if (this.model.searchValue) {
             this.onSearch(this.model.searchValue);
@@ -87,5 +89,18 @@ export default class SearchController {
 
     onKeyboardOpened = () => {
         this.view.openKeyboard(this.model.keyboardVisible);
+    };
+
+    onKeyboardVoiceClick = () => {
+        this.speechRecognition = createSpeechRecognition();
+        if (this.speechRecognition.isStarted) {
+            this.speechRecognition.abort();
+        }
+        this.speechRecognition.start(this.handleSpeechText);
+    };
+
+    handleSpeechText = (text) => {
+        this.view.setSpeechText(text);
+        this.speechRecognition.abort();
     };
 }

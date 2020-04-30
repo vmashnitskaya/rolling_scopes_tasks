@@ -21,6 +21,7 @@ export default class SearchView {
         this.searchForm = this.body.querySelector('.search-form');
         this.searchInput = this.searchForm.querySelector('input#search');
         this.searchButton = this.searchForm.querySelector('button[type="submit"]');
+        this.voiceIcon = this.searchForm.querySelector('.keyboard-voice');
         this.searchForm.querySelector('i.clear').addEventListener('click', () => {
             this.searchInput.value = '';
         });
@@ -175,4 +176,14 @@ export default class SearchView {
             this.modal.close();
         });
     };
+
+    handleKeyboardSoundnClick(handler) {
+        this.voiceIcon.addEventListener('click', () => {
+            handler();
+        });
+    }
+
+    setSpeechText(text) {
+        this.searchInput.value = text;
+    }
 }

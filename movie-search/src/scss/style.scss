@@ -69,6 +69,10 @@ body {
                     right: 4rem;
                     top: 0.4rem;
                 }
+                i.keyboard-voice.active {
+                    color: $secondary-color;
+                    cursor: pointer;
+                }
                 input {
                     width: calc(100% - 16rem);
                     margin-left: 4rem;
