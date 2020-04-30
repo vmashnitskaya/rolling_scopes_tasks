@@ -6,6 +6,8 @@ export default class SearchController {
         this.view = view;
         this.model = model;
 
+        this.speechRecognition = createSpeechRecognition();
+
         this.model.bindDataChange(this.onDataChange);
         this.model.bindErrorRecieved(this.onErrorRecieved);
 
@@ -21,6 +23,7 @@ export default class SearchController {
 
     onSearch = async (searchValue) => {
         if (!this.model.loading) {
+            this.speechRecognition.abort();
             this.model.loading = true;
             this.view.showLoading();
             this.model.translated = '';
@@ -92,15 +95,14 @@ export default class SearchController {
     };
 
     onKeyboardVoiceClick = () => {
-        this.speechRecognition = createSpeechRecognition();
-        if (this.speechRecognition.isStarted) {
+        if (this.speechRecognition.isStarted()) {
             this.speechRecognition.abort();
+        } else {
+            this.speechRecognition.start(this.handleSpeechText);
         }
-        this.speechRecognition.start(this.handleSpeechText);
     };
 
     handleSpeechText = (text) => {
         this.view.setSpeechText(text);
-        this.speechRecognition.abort();
     };
 }
