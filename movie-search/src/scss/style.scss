@@ -22,12 +22,20 @@ body {
         nav {
             height: 80px;
             .nav-wrapper {
-                .brand-logo {
+                display: flex;
+                justify-content: center;
+                .logo {
+                    display: inline-block;
                     font-weight: 700;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
+                    margin-top: 4px;
+                    margin-right: 10px;
                     font-size: 3.5rem;
+                }
+                img {
+                    display: inline-block;
+                    width: 80px;
+                    height: 80px;
+                    filter: invert(99%) sepia(100%) saturate(7496%) hue-rotate(7deg) brightness(107%) contrast(106%);
                 }
             }
         }
@@ -106,9 +114,6 @@ body {
                     cursor: auto;
                 }
                 .card {
-                    width: 260px;
-                    max-width: 260px;
-                    min-width: 260px;
                     margin: 15px;
                     .card-title {
                         padding: 6px;
@@ -119,14 +124,14 @@ body {
                         }
                     }
                     .card-image {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        width: 100%;
-                        height: 350px;
-                        overflow: hidden;
+                        position: relative;
+                        padding-top: calc(350 / 250 * 100%);
                         img {
+                            position: absolute;
                             display: inline-block;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
                             height: 100%;
                         }
                         .card-image-unavailable {
@@ -269,6 +274,28 @@ body {
                 }
             }
         }
+        .error-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            text-align: center;
+            h2 {
+                font-size: 2.5rem;
+                word-wrap: break-word;
+                span {
+                    color: #c10309;
+                    text-decoration: underline;
+                    word-wrap: break-word;
+                }
+            }
+            img {
+                display: inline-block;
+                margin: 20px 0;
+                width: 180px;
+                height: auto;
+            }
+        }
     }
 
     footer {
@@ -329,13 +356,6 @@ body {
                 }
             }
             .glider-contain {
-                .glider {
-                    .card {
-                        // min-width: 240px;
-                        // width: 250px;
-                        // max-width: 300px;
-                    }
-                }
                 .glider-prev,
                 .glider-next {
                     right: -25px;
@@ -376,7 +396,30 @@ body {
                 button {
                     align-self: center;
                     width: 96%;
+                    margin-top: 0;
                     margin-bottom: 10px;
+                }
+            }
+            .glider-contain {
+                .glider {
+                    .card {
+                        margin: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 400px) {
+    body {
+        main {
+            .search {
+                .input-field {
+                    input {
+                        width: 90%;
+                        padding-right: 55px;
+                        margin-left: 30px;
+                    }
                 }
             }
             .glider-contain {
@@ -388,18 +431,12 @@ body {
                 }
             }
         }
-        footer {
+        footer.page-footer {
             .footer-copyright {
+                justify-content: center;
                 .footer-link {
-                    display: inline-block;
-                    font-weight: 700;
-                    font-size: 1.8rem;
-                    color: #ffffff;
-                    &:last-child {
-                        transform: translateY(-6px);
-                    }
-                    &:hover {
-                        color: $secondary-color;
+                    &:first-child {
+                        display: none;
                     }
                 }
             }

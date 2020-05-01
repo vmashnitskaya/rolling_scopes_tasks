@@ -61,7 +61,9 @@ export default class SearchController {
         if (this.model.totalResults > 0) {
             this.view.addData(data);
         } else {
-            this.view.setErrorMessage(`No search result for ${this.model.searchValue}`);
+            this.view.setErrorMessage(
+                `No search result for <span>${this.model.searchValue}</span>`
+            );
         }
     };
 
