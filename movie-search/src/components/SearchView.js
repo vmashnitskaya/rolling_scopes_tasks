@@ -65,21 +65,21 @@ export default class SearchView {
                     },
                 },
                 {
-                    breakpoint: 500,
+                    breakpoint: 600,
                     settings: {
                         slidesToShow: 2,
                         slidesToScroll: 1,
                     },
                 },
                 {
-                    breakpoint: 768,
+                    breakpoint: 950,
                     settings: {
                         slidesToShow: 3,
                         slidesToScroll: 1,
                     },
                 },
                 {
-                    breakpoint: 1100,
+                    breakpoint: 1300,
                     settings: {
                         slidesToShow: 4,
                         slidesToScroll: 1,
@@ -172,9 +172,15 @@ export default class SearchView {
     };
 
     handleResize = () => {
-        window.addEventListener('resize', () => {
-            this.modal.close();
-        });
+        window.addEventListener(
+            'resize',
+            () => {
+                if (this.modal.isOpen) {
+                    this.modal.close();
+                }
+            },
+            false
+        );
     };
 
     handleKeyboardSoundnClick(handler) {

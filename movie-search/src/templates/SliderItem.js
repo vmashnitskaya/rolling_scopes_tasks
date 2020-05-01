@@ -6,7 +6,7 @@ const SliderItem = ({Title, Year, Poster, imdbID, rating}) => `
 }</div>  
 <div class="card-content">
     <div class="year">${Year}</div>
-    <div class="rate"><img src="/img/star.svg" alt="star">${rating}</div>
+    <div class="rate"><img src="/img/batman.png" alt="batman">${rating}</div>
 </div> 
 <div class="card-title"><a href="https://www.imdb.com/title/${imdbID}" target="_blank">${Title}</a></div>
 `;
