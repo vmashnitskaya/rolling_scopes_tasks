@@ -4,7 +4,7 @@
   "description": "Movie Search",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "lint": "eslint src/**/*.js",
     "lint:fix": "npm run lint -- --fix",
     "dev": "webpack-dev-server --open --mode development",
@@ -18,9 +18,9 @@
   "author": "Volha Mashnitskaya",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.9.0",
+    "@babel/core": "^7.9.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-env": "^7.9.6",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
@@ -32,6 +32,7 @@
     "file-loader": "^6.0.0",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.2.0",
+    "jest": "^25.5.3",
     "mini-css-extract-plugin": "^0.9.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
@@ -40,10 +41,12 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "babel-jest": "^25.5.1",
     "core-js": "^3.6.5",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
     "glider-js": "^1.7.2",
+    "jest-fetch-mock": "^3.0.3",
     "materialize-css": "^1.0.0-rc.2",
     "prettier": "^2.0.5",
     "regenerator-runtime": "^0.13.5",

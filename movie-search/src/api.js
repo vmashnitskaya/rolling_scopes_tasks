@@ -36,7 +36,9 @@ const getSearchResults = async (searchValue, page) => {
 };
 
 const getSearchTranslation = async (searchText) => {
-    const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200425T170620Z.55c8b9394267ab3a.3447d744700d3f2e8e6216551e211e2089052f54&lang=ru-en&text=${searchText}`;
+    const url = encodeURI(
+        `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200425T170620Z.55c8b9394267ab3a.3447d744700d3f2e8e6216551e211e2089052f54&lang=ru-en&text=${searchText}`
+    );
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
