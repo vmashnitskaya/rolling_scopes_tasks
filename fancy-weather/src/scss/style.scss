@@ -1,0 +1,272 @@
+$primary-color: #263238;
+$secondary-color: rgba(180, 184, 187, 0.7);
+$text-color: white;
+$font-stack: "Montserrat", "Arial", sans-serif;
+
+@import "../../node_modules/materialize-css/sass/materialize.scss";
+@import "../../node_modules/glider-js/glider.css";
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 10px;
+}
+.container {
+    max-width: 1200px;
+    width: 1200px;
+}
+
+header {
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        height: 90px;
+        .controls {
+            display: flex;
+            .image-change {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 44px;
+                height: 44px;
+                margin-right: 10px;
+                i {
+                    font-size: 2rem;
+                }
+            }
+            .dropdown {
+                width: 70px;
+                height: 44px;
+                margin-right: 10px;
+                font-weight: 700;
+                button.btn {
+                    display: flex;
+                    width: 100%;
+                    height: 100%;
+                    padding: 14px 14px;
+                    line-height: 1.6rem;
+                    .arrow-down {
+                        margin-left: 10px;
+                        font-size: 1.8rem;
+                        &.opened {
+                            transform: rotateX(180deg);
+                            transition: transform 0.4s;
+                        }
+                    }
+                    .language {
+                        font-size: 1.6rem;
+                        font-weight: 700;
+                    }
+                }
+                ul#dropdown1.dropdown-content {
+                    background-color: rgba(76, 82, 85, 0.4);
+                    min-width: 70px;
+                    li {
+                        padding-top: 8px;
+                        text-align: center;
+                        color: $text-color;
+                        font-size: 1.6rem;
+                        min-height: 30px;
+                        &:hover {
+                            background-color: rgba(180, 184, 187, 0.7);
+                        }
+                    }
+                }
+            }
+            form {
+                display: flex;
+                p {
+                    label {
+                        input {
+                            &:checked + span:after,
+                            &:checked + span:before,
+                            &:not(:checked) + span:before,
+                            &:not(:checked) + span:after {
+                                border-radius: 4px;
+                                width: 44px;
+                                height: 44px;
+                                margin: 0;
+                                transition: none;
+                                font-size: 1.6rem;
+                                color: $text-color;
+                                padding-top: 8px;
+                                text-align: center;
+                                border: none;
+                                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12),
+                                    0 1px 5px 0 rgba(0, 0, 0, 0.2);
+                                transform: none;
+                            }
+                            &:not(:checked) + span:after,
+                            &:not(:checked) + span:before {
+                                background: rgba(76, 82, 85, 0.4);
+                            }
+                            &:not(:checked) + span:hover:after,
+                            &:not(:checked) + span:hover:before {
+                                background-color: $secondary-color;
+                            }
+                            &:checked + span.celsius:after,
+                            &:not(:checked) + span.celsius:after,
+                            &:checked + span.celsius:before,
+                            &:not(:checked) + span.celsius:before {
+                                border-top-right-radius: 0;
+                                border-bottom-right-radius: 0;
+                                content: "°C";
+                                font-weight: 700;
+                            }
+
+                            &:checked + span.fahrenheit:before,
+                            &:not(:checked) + span.fahrenheit:before,
+                            &:checked + span.fahrenheit:after,
+                            &:not(:checked) + span.fahrenheit:after {
+                                border-top-left-radius: 0;
+                                border-bottom-left-radius: 0;
+                                content: "°F";
+                                font-weight: 700;
+                            }
+                            &:not(:checked) + span,
+                            &:checked + span {
+                                padding-left: 44px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        form {
+            display: flex;
+            .input-field {
+                margin: 0;
+                width: 274px;
+                height: 44px;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.2);
+                background-color: rgba(76, 82, 85, 0.4);
+                border: 1px solid rgba(228, 227, 227, 0.2);
+                border-radius: 3px;
+                input {
+                    padding: 6px 8px;
+                    color: $text-color;
+                    border: none;
+                    letter-spacing: 1px;
+                    &::placeholder {
+                        color: $text-color;
+                    }
+                    &:focus:not([readonly]) {
+                        border-bottom: none;
+                        box-shadow: none;
+                    }
+                }
+            }
+            input[type="submit"] {
+                width: 100px;
+                height: 44px;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+main {
+    min-height: calc(100vh - 120px);
+    .forecast {
+        display: flex;
+        justify-content: space-between;
+        height: 100%;
+        padding: 60px 0 96px 0;
+        .weather {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 50%;
+            max-width: 50%;
+            color: $text-color;
+            .location {
+                font-size: 4.4rem;
+                line-height: 5.4rem;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+            .time {
+                font-size: 2.4rem;
+                line-height: 3rem;
+            }
+            .day {
+                display: flex;
+                justify-content: space-between;
+                &__temperature {
+                    display: flex;
+                    width: 30opx;
+                    height: 300px;
+                    margin-top: 10px;
+                    font-size: 30.6rem;
+                    line-height: 30.6rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    text-align: center;
+                }
+                &__info {
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 2.2rem;
+                    line-height: 3rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    margin-left: 50px;
+                    &-animation {
+                        width: 205px;
+                        height: 180px;
+                        margin-top: -30px;
+                    }
+                }
+            }
+            .following-days {
+                display: flex;
+                margin-top: 20px;
+                color: $text-color;
+                .following-day {
+                    margin-right: 50px;
+                    &__day {
+                        font-size: 2.2rem;
+                        line-height: 2.7rem;
+                        text-transform: uppercase;
+                        font-weight: 700;
+                    }
+                    &__weather {
+                        display: flex;
+                        &-temperature {
+                            width: 140px;
+                            font-size: 8rem;
+                            line-height: 9.8rem;
+                            text-transform: uppercase;
+                            font-weight: 600;
+                        }
+                        &-animation {
+                            display: flex;
+                            justify-self: center;
+                            align-self: center;
+                            width: 70px;
+                        }
+                    }
+                }
+            }
+        }
+        .map {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            flex-direction: column;
+            height: 100%;
+            width: 50%;
+            max-width: 50%;
+        }
+    }
+}
+
+footer {
+    height: 30px;
+}

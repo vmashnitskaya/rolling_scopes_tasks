@@ -1,1 +1,1 @@
-export default ForecastModel{}
+export default class ForecastModel {}

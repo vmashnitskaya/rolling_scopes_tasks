@@ -1,7 +1,7 @@
 {
-  "name": "movie-search",
+  "name": "fancy-weather",
   "version": "1.0.0",
-  "description": "Movie Search",
+  "description": "Fancy Weather",
   "main": "src/index.js",
   "scripts": {
     "test": "jest",
@@ -47,9 +47,13 @@
     "eslint-plugin-prettier": "^3.1.3",
     "glider-js": "^1.7.3",
     "jest-fetch-mock": "^3.0.3",
+    "jquery": "^3.5.1",
+    "material-design-icons": "^3.0.1",
     "materialize-css": "^1.0.0-rc.2",
+    "popper.js": "^1.16.1",
     "prettier": "^2.0.5",
     "regenerator-runtime": "^0.13.5",
-    "roboto-fontface": "^0.10.0"
+    "roboto-fontface": "^0.10.0",
+    "typeface-montserrat": "0.0.75"
   }
 }
