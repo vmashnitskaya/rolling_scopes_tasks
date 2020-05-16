@@ -6,9 +6,9 @@ export default class ForecastView {
         this.body = document.querySelector('body');
     }
 
-    initLayout(data) {
+    initLayout(image, data) {
         const dateTime = ForecastView.getdateTime();
-        this.body.innerHTML = App(data, dateTime);
+        this.body.innerHTML = App(image, data, dateTime);
         const dropdownHeader = document.querySelector('.dropdown-trigger');
         this.dropdown = M.Dropdown.init(dropdownHeader, {
             coverTrigger: false,
@@ -16,6 +16,7 @@ export default class ForecastView {
             constrainWidth: true,
             closeOnClick: true,
         });
+        this.app = this.body.querySelector('.app');
         this.location = this.body.querySelector('.location');
         this.date = this.body.querySelector('.time__date');
         this.latitude = this.body.querySelector('.latitude + span');
@@ -67,5 +68,9 @@ export default class ForecastView {
         const {time} = ForecastView.getdateTime();
         this.timer = document.querySelector('.time__timer');
         this.timer.innerHTML = time;
+    }
+
+    setLoading() {
+        
     }
 }

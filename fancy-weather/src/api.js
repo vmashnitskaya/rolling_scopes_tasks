@@ -2,6 +2,7 @@ import getCountryName from './countryCodes';
 
 const keyForAPiInfo = '1242c96842c107';
 const keyForClimaCell = 'rEjTfVZQwCwAbgfBMVVNUlTNtCYeft0V';
+const keyForUnsplash = 'bCTB7zZHguyxXEXwMrWwQ5SZ2jFwQTKx-YdFmcBqUJs';
 
 const getAverage = (max, min) => {
     return Math.round((max + min) / 2);
@@ -72,6 +73,16 @@ const getLocation = async () => {
     };
 };
 
+const getBackground = async () => {
+    const url = `https://api.unsplash.com/photos/random?orientation=landscape&per_page=1&query=weather&client_id=${keyForUnsplash}`;
+    const res = await window.fetch(url);
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+
+    return data.urls.full;
+};
+
 export default {
     getLocation,
+    getBackground,
 };

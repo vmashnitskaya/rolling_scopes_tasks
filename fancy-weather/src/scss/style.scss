@@ -203,11 +203,10 @@ main {
             }
             .day {
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-start;
                 &__temperature {
-                    display: flex;
-                    width: 30opx;
-                    height: 300px;
+                    width: 310px;
+                    height: 310px;
                     margin-top: 10px;
                     font-size: 30.6rem;
                     line-height: 30.6rem;
@@ -222,7 +221,7 @@ main {
                     line-height: 3rem;
                     font-weight: 700;
                     text-transform: uppercase;
-                    margin-left: 50px;
+                    margin-left: 20px;
                     &-animation {
                         width: 205px;
                         height: 180px;
