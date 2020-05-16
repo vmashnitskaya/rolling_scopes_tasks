@@ -2,10 +2,10 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 
-const App = () => `
-    <div style="background: url('./img/bg.jpg') no-repeat; background-size: cover;">
+const App = (data, dateTime) => `
+    <div class="app" style="background: url('./img/bg.jpg'); background-repeat: no-repeat; background-size: cover;">
         ${Header()}
-        ${Main()}
+        ${Main(data, dateTime)}
         ${Footer()}
     </div>
 `;

@@ -19,6 +19,9 @@ html {
     max-width: 1200px;
     width: 1200px;
 }
+body {
+    overflow: hidden;
+}
 
 header {
     .navbar {
@@ -194,6 +197,9 @@ main {
             .time {
                 font-size: 2.4rem;
                 line-height: 3rem;
+                &__date {
+                    margin-right: 15px;
+                }
             }
             .day {
                 display: flex;
@@ -263,6 +269,9 @@ main {
             height: 100%;
             width: 50%;
             max-width: 50%;
+            font-size: 2rem;
+            color: $text-color;
+            text-align: end;
         }
     }
 }

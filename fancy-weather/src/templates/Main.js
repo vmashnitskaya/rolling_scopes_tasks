@@ -1,44 +1,57 @@
-const Main = () => `
+const Main = (
+    {city, country, latitude, longitude, weatherInfo},
+    {date, time, dayTomorrow, dayAfterTomorrow, dayAfterAfterTomorrow}
+) => `
 <main>
 <div class="container">
     <div class="forecast">
         <div class="weather">
-            <div class="location">Minsk, Belarus</div>
+            <div class="location">${city}, ${country}</div>
             <div class="time">
-                <span class="time__date">Mon 28 October</span>
-                <span class="time__timer">17:23</span>
+                <span class="time__date">${date}</span>
+                <span class="time__timer">${time}</span>
             </div>
             <div class="day">
-                <div class="day__temperature">10</div>
+                <div class="day__temperature">${weatherInfo.todayTemperature.temp}</div>
                 <div class="day__info">
                     <div class="day__info-animation"><img src="./img/animation.png" alt="weather image"></div>
                     <div class="day__info-text">
-                        <div class="overview">overcast</div>
-                        <div class="feeling">Feels like: 7°</div>
-                        <div class="wind">Wind: 2 m/s</div>
-                        <div class="humidity">Humidity: 83%</div>
+                        <div class="overview">${weatherInfo.todayTemperature.overview}</div>
+                        <div class="feeling">Feels like: ${
+                            weatherInfo.todayTemperature.feels
+                        }°</div>
+                        <div class="wind">Wind: ${weatherInfo.todayTemperature.wind}m/s</div>
+                        <div class="humidity">Humidity: ${
+                            weatherInfo.todayTemperature.humidity
+                        }%</div>
                     </div>
                 </div>
             </div>
             <div class="following-days">
                 <div class="following-day">
-                    <div class="following-day__day">Tuesday</div>
+                    <div class="following-day__day">${dayTomorrow}</div>
                     <div class="following-day__weather">
-                        <div class="following-day__weather-temperature">27°</div>
+                        <div class="following-day__weather-temperature">${
+                            weatherInfo.tomorrowTemperature
+                        }°</div>
                         <div class="following-day__weather-animation"><img src="./img/cloud.png" alt="weather image"></div>
                     </div>
                  </div>
                 <div class="following-day">
-                    <div class="following-day__day">Tuesday</div>
+                    <div class="following-day__day">${dayAfterTomorrow}</div>
                     <div class="following-day__weather">
-                        <div class="following-day__weather-temperature">27°</div>
+                        <div class="following-day__weather-temperature">${
+                            weatherInfo.afterTomorrowTemperature
+                        }°</div>
                         <div class="following-day__weather-animation"><img src="./img/cloud.png" alt="weather image"></div>
                     </div>
                 </div>
                 <div class="following-day">
-                    <div class="following-day__day">Tuesday</div>
+                    <div class="following-day__day">${dayAfterAfterTomorrow}</div>
                     <div class="following-day__weather">
-                        <div class="following-day__weather-temperature">27°</div>
+                        <div class="following-day__weather-temperature">${
+                            weatherInfo.afterAfterTomorrowTemperature
+                        }°</div>
                         <div class="following-day__weather-animation"><img src="./img/cloud.png" alt="weather image"></div>
                     </div>
                 </div>
@@ -47,6 +60,14 @@ const Main = () => `
 
         <div class="map">
             <div><img src="./img/Map.png" alt="map"></div>
+            <div class="latitude">Latitude: <span>${latitude.slice(0, 2)}°${latitude.slice(
+    3,
+    5
+)}'</span></div>
+            <div class="longitude">Longitude: <span>${longitude.slice(0, 2)}°${longitude.slice(
+    3,
+    5
+)}'</span></div>
         </div>
     </div>
 </div>
