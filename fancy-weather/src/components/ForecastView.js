@@ -134,4 +134,13 @@ export default class ForecastView {
             }
         });
     };
+
+    setErrorDisplaying(forDisplaying) {
+        const error = this.body.querySelector('.error');
+        if (forDisplaying) {
+            error.classList.remove('hide');
+        } else {
+            error.classList.add('hide');
+        }
+    }
 }

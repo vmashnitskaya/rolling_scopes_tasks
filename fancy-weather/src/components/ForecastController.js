@@ -30,11 +30,13 @@ export default class ForecastController {
     onSearch = async (searchValue) => {
         try {
             // this.model.backgroundImage = await api.getBackground();
+            this.view.setErrorDisplaying(false);
             this.model.locationWeatherData = await api.getCoordinatesWeather(searchValue);
             this.view.initMainLayout(this.model.locationWeatherData);
             this.view.setBackground('./img/bg.png');
         } catch (e) {
             this.model.error = e.message;
+            this.view.setErrorDisplaying(true);
         }
     };
 }

@@ -110,10 +110,11 @@ body {
 
 header {
     .navbar {
+        position: relative;
         display: flex;
         justify-content: space-between;
-        align-items: flex-end;
-        height: 90px;
+        align-items: center;
+        height: 150px;
         .controls {
             display: flex;
             .image-change {
@@ -256,6 +257,15 @@ header {
                 font-weight: 700;
             }
         }
+        .error {
+            position: absolute;
+            color: #ffc04c;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            right: 0;
+            bottom: 0;
+            text-align: end;
+        }
     }
 }
 
@@ -265,7 +275,7 @@ main {
         display: flex;
         justify-content: space-between;
         height: 100%;
-        padding: 60px 0 40px 0;
+        padding-bottom: 40px;
         .weather {
             display: flex;
             flex-direction: column;

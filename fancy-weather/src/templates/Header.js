@@ -36,6 +36,7 @@ const Header = () => `
                     </div>
                     <input type="submit" class="waves-effect waves-light btn" value="Search"></input>
                 </form>
+                <div class="error hide">Failed to load results</div>
             </div>
         </div>
     </header>
