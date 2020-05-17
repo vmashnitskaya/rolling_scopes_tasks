@@ -48,6 +48,7 @@ export default class ForecastView {
         app.style.background = `linear-gradient(rgba(0, 0, 0, 0.5), rgb(0, 0, 0)), url(${image}), center center`;
         app.style.backgroundRepeat = 'no-repeat';
         app.style.backgroundSize = '100% 100%';
+        this.body.querySelector('.image-change-icon').classList.remove('active');
     }
 
     setMap({latitude, longitude}) {
@@ -56,7 +57,7 @@ export default class ForecastView {
             .then((maps) => {
                 this.map = new maps.Map(document.querySelector('#map-wrapper'), {
                     center: [latitude, longitude],
-                    zoom: 11,
+                    zoom: 10,
                 });
             })
             .catch((e) => {
@@ -142,5 +143,13 @@ export default class ForecastView {
         } else {
             error.classList.add('hide');
         }
+    }
+
+    handleBackgroundChange(handler) {
+        const changeImage = this.body.querySelector('.image-change');
+        changeImage.addEventListener('click', () => {
+            this.body.querySelector('.image-change-icon').classList.add('active');
+            handler();
+        });
     }
 }

@@ -126,6 +126,10 @@ header {
                 margin-right: 10px;
                 i {
                     font-size: 2rem;
+                    &.active {
+                        transform: rotate(180deg);
+                        transition: transform 1s;
+                    }
                 }
             }
             .dropdown {
@@ -229,6 +233,8 @@ header {
         form {
             display: flex;
             .input-field {
+                display: flex;
+                justify-content: space-between;
                 margin: 0;
                 width: 350px;
                 height: 44px;
@@ -238,7 +244,7 @@ header {
                 border: 1px solid rgba(228, 227, 227, 0.2);
                 border-radius: 3px;
                 input {
-                    padding: 6px 8px;
+                    padding: 6px 8px 0 10px;
                     color: $text-color;
                     border: none;
                     letter-spacing: 1px;

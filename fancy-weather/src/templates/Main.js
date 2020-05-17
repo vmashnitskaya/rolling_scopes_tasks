@@ -6,7 +6,7 @@ const Main = (
 <div class="container">
     <div class="forecast">
         <div class="weather">
-            <div class="location">${city}, ${country}</div>
+            <div class="location">${city ? `${city}, ${country}` : `${country}`}</div>
             <div class="time">
                 <span class="time__date">${date}</span>
                 <span class="time__timer">${time}</span>
@@ -60,14 +60,8 @@ const Main = (
 
         <div class="map">
             <div class="map-wrapper" id="map-wrapper"></div>
-            <div class="latitude">Latitude: <span>${latitude.slice(0, 2)}°${latitude.slice(
-    3,
-    5
-)}'</span></div>
-            <div class="longitude">Longitude: <span>${longitude.slice(0, 2)}°${longitude.slice(
-    3,
-    5
-)}'</span></div>
+            <div class="latitude">Latitude: <span>${latitude.split('.').join("'")}°</span></div>
+            <div class="longitude">Longitude: <span>${longitude.split('.').join("'")}°</span></div>
         </div>
     </div>
 </div>

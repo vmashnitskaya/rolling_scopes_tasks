@@ -12,7 +12,7 @@ const getAverage = (max, min) => {
 };
 
 const getTemperature = async (latitude, longitude) => {
-    const url = `https://api.climacell.co/v3/weather/forecast/daily?lat=${latitude}&lon=${longitude}&unit_system=si&start_time=now&fields=feels_like%2Ctemp%2Chumidity%2Cwind_speed%2Cweather_code&apikey=rh8L0roTYDgi9hvbGsd6X3cu5rRWiV05`;
+    const url = `https://api.climacell.co/v3/weather/forecast/daily?lat=${latitude}&lon=${longitude}&unit_system=si&start_time=now&fields=feels_like%2Ctemp%2Chumidity%2Cwind_speed%2Cweather_code&apikey=rEjTfVZQwCwAbgfBMVVNUlTNtCYeft0V`;
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
@@ -90,7 +90,12 @@ const getCoordinatesWeather = async (adress) => {
     );
 
     return {
-        city: data.results[0].components.city || data.results[0].components.state,
+        city:
+            data.results[0].components.village ||
+            data.results[0].components.suburb ||
+            data.results[0].components.town ||
+            data.results[0].components.city ||
+            data.results[0].components.state,
         country: data.results[0].components.country,
         latitude: `${data.results[0].geometry.lat}`,
         longitude: `${data.results[0].geometry.lng}`,
@@ -100,7 +105,7 @@ const getCoordinatesWeather = async (adress) => {
 
 const getBackground = async () => {
     const url =
-        'https://api.unsplash.com/photos/random?orientation=landscape&per_page=1&query=nature&client_id=e2077ad31a806c894c460aec8f81bc2af4d09c4f8104ae3177bb809faf0eac17';
+        'https://api.unsplash.com/photos/random?orientation=landscape&per_page=1&query=nature&client_id=HvHyu0GsTuTeIWj_gjU1AezwwhhthBsmhLfdOroAWbA';
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();

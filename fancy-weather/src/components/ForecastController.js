@@ -6,6 +6,7 @@ export default class ForecastController {
         this.model = model;
 
         this.view.handleSearch(this.onSearch);
+        this.view.handleBackgroundChange(this.onBackgroundChange);
 
         this.onInitMainLayout();
     }
@@ -15,10 +16,9 @@ export default class ForecastController {
         //     this.view.addWaitingLayer();
         // this.view.setLoading(this.model.isLoading);
         try {
-            // this.model.backgroundImage = await api.getBackground();
             this.model.locationWeatherData = await api.getLocationWeather();
             this.view.initMainLayout(this.model.locationWeatherData);
-            this.view.setBackground('./img/bg.png');
+            this.onBackgroundChange();
         } catch (e) {
             this.model.error = e.message;
         }
@@ -29,14 +29,22 @@ export default class ForecastController {
 
     onSearch = async (searchValue) => {
         try {
-            // this.model.backgroundImage = await api.getBackground();
             this.view.setErrorDisplaying(false);
             this.model.locationWeatherData = await api.getCoordinatesWeather(searchValue);
             this.view.initMainLayout(this.model.locationWeatherData);
-            this.view.setBackground('./img/bg.png');
+            this.onBackgroundChange();
         } catch (e) {
             this.model.error = e.message;
             this.view.setErrorDisplaying(true);
+        }
+    };
+
+    onBackgroundChange = async () => {
+        try {
+            this.model.backgroundImage = await api.getBackground();
+            this.view.setBackground(this.model.backgroundImage);
+        } catch (e) {
+            this.model.error = e.message;
         }
     };
 }

@@ -3,7 +3,7 @@ const Header = () => `
         <div class="container">
             <div class="navbar">
                 <div class="controls">
-                    <button class="waves-effect waves-light btn image-change"><i class="material-icons">loop</i></button>
+                    <button class="waves-effect waves-light btn image-change"><i class="material-icons image-change-icon">loop</i></button>
                     <div class="dropdown">
                         <button class='dropdown-trigger btn' href='#' data-target='dropdown1'><span class="language">EN</span><span class="material-icons arrow-down">
                         keyboard_arrow_down
