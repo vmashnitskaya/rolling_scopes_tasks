@@ -54,6 +54,7 @@
     "prettier": "^2.0.5",
     "regenerator-runtime": "^0.13.5",
     "roboto-fontface": "^0.10.0",
-    "typeface-montserrat": "0.0.75"
+    "typeface-montserrat": "0.0.75",
+    "ymaps": "^0.2.1"
   }
 }

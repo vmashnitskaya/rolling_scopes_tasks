@@ -1,7 +1,7 @@
 export default class ForecastModel {
     constructor() {
         this._locationWeatherData = {};
-        this._loading = false;
+        this._isLoading = false;
     }
 
     get locationWeatherData() {
@@ -12,16 +12,11 @@ export default class ForecastModel {
         this._locationWeatherData = locationWeatherData;
     }
 
-    get loading() {
-        return this.loading;
+    get isLoading() {
+        return this._isLoading;
     }
 
-    set loading(loading) {
-        this._loading = loading;
-        this.onLoadingChange();
-    }
-
-    bindOnLoadingChange(callback) {
-        this.onLoadingChange = callback;
+    set isLoading(isLoading) {
+        this._isLoading = isLoading;
     }
 }

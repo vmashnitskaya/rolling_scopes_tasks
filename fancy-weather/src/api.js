@@ -3,6 +3,9 @@ import getCountryName from './countryCodes';
 const keyForAPiInfo = '1242c96842c107';
 const keyForClimaCell = 'rEjTfVZQwCwAbgfBMVVNUlTNtCYeft0V';
 const keyForUnsplash = 'bCTB7zZHguyxXEXwMrWwQ5SZ2jFwQTKx-YdFmcBqUJs';
+const keyForUnsplash1 = 'pFikN91oIsf3zqcjnQ86ZQkUiCok39F9zMz2UEtSVn0';
+const keyForYandex = 'cd6f28a6-0e73-4a3f-bb7f-3febd6b954ad';
+const keyForOpemCage = '83e064d6811247aa80e8a6f373fefec8';
 
 const getAverage = (max, min) => {
     return Math.round((max + min) / 2);
@@ -22,7 +25,7 @@ const getTemperature = async (latitude, longitude) => {
                 infoForNearestDays[0].temp[1].max.value,
                 infoForNearestDays[0].temp[0].min.value
             ),
-            overview: infoForNearestDays[0].weather_code.value,
+            overview: infoForNearestDays[0].weather_code.value.split('_').join(' '),
             feels: getAverage(
                 infoForNearestDays[0].feels_like[1].max.value,
                 infoForNearestDays[0].feels_like[0].min.value
@@ -52,7 +55,7 @@ const getTemperature = async (latitude, longitude) => {
     };
 };
 
-const getLocation = async () => {
+const getLocationWeather = async () => {
     const url = `https://ipinfo.io/json?token=${keyForAPiInfo}`;
 
     const res = await window.fetch(url);
@@ -73,16 +76,40 @@ const getLocation = async () => {
     };
 };
 
-const getBackground = async () => {
-    const url = `https://api.unsplash.com/photos/random?orientation=landscape&per_page=1&query=weather&client_id=${keyForUnsplash}`;
+const getCoordinatesWeather = async (adress) => {
+    const url = encodeURI(
+        `https://api.opencagedata.com/geocode/v1/json?q=${adress}&language=en&key=${keyForOpemCage}&pretty=1&no_annotations=1`
+    );
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
 
-    return data.urls.full;
+    const weatherInfo = await getTemperature(
+        data.results[0].geometry.lat,
+        data.results[0].geometry.lng
+    );
+
+    return {
+        city: data.results[0].components.city || data.results[0].components.state,
+        country: data.results[0].components.country,
+        latitude: `${data.results[0].geometry.lat}`,
+        longitude: `${data.results[0].geometry.lng}`,
+        weatherInfo,
+    };
+};
+
+const getBackground = async () => {
+    const url =
+        'https://api.unsplash.com/photos/random?orientation=landscape&per_page=1&query=nature&client_id=e2077ad31a806c894c460aec8f81bc2af4d09c4f8104ae3177bb809faf0eac17';
+    const res = await window.fetch(url);
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+
+    return data.urls.regular;
 };
 
 export default {
-    getLocation,
+    getLocationWeather,
+    getCoordinatesWeather,
     getBackground,
 };

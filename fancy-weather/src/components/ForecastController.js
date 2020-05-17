@@ -5,27 +5,36 @@ export default class ForecastController {
         this.view = view;
         this.model = model;
 
-        this.model.bindOnLoadingChange(this.onLoadingChange);
+        this.view.handleSearch(this.onSearch);
 
-        this.getLocation();
+        this.onInitMainLayout();
     }
 
-    getLocation = async () => {
-        // this.model.loading = true;
+    onInitMainLayout = async () => {
+        //    this.model.isLoading = true;
+        //     this.view.addWaitingLayer();
+        // this.view.setLoading(this.model.isLoading);
         try {
-            this.model.backgroundImage = await api.getBackground();
+            // this.model.backgroundImage = await api.getBackground();
+            this.model.locationWeatherData = await api.getLocationWeather();
+            this.view.initMainLayout(this.model.locationWeatherData);
+            this.view.setBackground('./img/bg.png');
         } catch (e) {
             this.model.error = e.message;
         }
-        try {
-            this.model.locationWeatherData = await api.getLocation();
-        } catch (e) {
-            this.model.error = e.message;
-        }
-        this.view.initLayout(this.model.backgroundImage, this.model.locationWeatherData);
+
+        //     this.model.isLoading = false;
+        //    this.view.setLoading();
     };
 
-    onLoadingChange() {
-        this.view.setLoading(this.model.loading);
-    }
+    onSearch = async (searchValue) => {
+        try {
+            // this.model.backgroundImage = await api.getBackground();
+            this.model.locationWeatherData = await api.getCoordinatesWeather(searchValue);
+            this.view.initMainLayout(this.model.locationWeatherData);
+            this.view.setBackground('./img/bg.png');
+        } catch (e) {
+            this.model.error = e.message;
+        }
+    };
 }

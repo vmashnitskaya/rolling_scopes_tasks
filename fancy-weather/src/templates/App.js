@@ -1,13 +1,11 @@
 import Header from './Header';
-import Main from './Main';
 import Footer from './Footer';
 
-const App = (image, data, dateTime) => `
-    <div class="app" style="background: url(${image}); background-repeat: no-repeat; background-size: cover;">
+const App = () => `
+    <div class="app">
         ${Header()}
-        ${Main(data, dateTime)}
+        <main></main>
         ${Footer()}
     </div>
 `;
-
 export default App;

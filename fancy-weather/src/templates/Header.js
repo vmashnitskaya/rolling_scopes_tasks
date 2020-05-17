@@ -30,9 +30,9 @@ const Header = () => `
                         </p>
                     </form>
                 </div>
-                <form autocomplete="off">
+                <form class="search-form" id="search-form" autocomplete="off">
                     <div class="input-field">
-                        <input placeholder="Search city or ZIP" id="search" type="text" class="search">
+                        <input placeholder="Search city or ZIP" id="search" name="search" type="text" class="search">
                     </div>
                     <input type="submit" class="waves-effect waves-light btn" value="Search"></input>
                 </form>

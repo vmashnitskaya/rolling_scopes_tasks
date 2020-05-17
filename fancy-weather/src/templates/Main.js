@@ -2,7 +2,7 @@ const Main = (
     {city, country, latitude, longitude, weatherInfo},
     {date, time, dayTomorrow, dayAfterTomorrow, dayAfterAfterTomorrow}
 ) => `
-<main>
+
 <div class="container">
     <div class="forecast">
         <div class="weather">
@@ -59,7 +59,7 @@ const Main = (
         </div>
 
         <div class="map">
-            <div><img src="./img/Map.png" alt="map"></div>
+            <div class="map-wrapper" id="map-wrapper"></div>
             <div class="latitude">Latitude: <span>${latitude.slice(0, 2)}°${latitude.slice(
     3,
     5
@@ -71,7 +71,7 @@ const Main = (
         </div>
     </div>
 </div>
-</main>
+
 `;
 
 export default Main;
