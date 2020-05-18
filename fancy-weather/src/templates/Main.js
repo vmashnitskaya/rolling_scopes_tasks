@@ -1,6 +1,7 @@
 const Main = (
     {city, country, latitude, longitude, weatherInfo},
-    {date, time, dayTomorrow, dayAfterTomorrow, dayAfterAfterTomorrow}
+    {date, dayTomorrow, dayAfterTomorrow, dayAfterAfterTomorrow},
+    timeForDisplaying
 ) => `
 
 <div class="container">
@@ -9,7 +10,7 @@ const Main = (
             <div class="location">${city ? `${city}, ${country}` : `${country}`}</div>
             <div class="time">
                 <span class="time__date">${date}</span>
-                <span class="time__timer">${time}</span>
+                <span class="time__timer">${timeForDisplaying}</span>
             </div>
             <div class="day">
                 <div class="day__temperature">${weatherInfo.todayTemperature.temp}</div>

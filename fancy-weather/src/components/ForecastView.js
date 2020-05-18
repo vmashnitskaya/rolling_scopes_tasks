@@ -23,22 +23,23 @@ export default class ForecastView {
         });
     }
 
-    initMainLayout(data) {
+    initMainLayout(time, date, data) {
         this.location = this.body.querySelector('.location');
         this.date = this.body.querySelector('.time__date');
         this.latitude = this.body.querySelector('.latitude + span');
         this.longitude = this.body.querySelector('.longitude + span');
         this.main = this.body.querySelector('main');
 
-        const dateTime = ForecastView.getdateTime();
+        const dateForDisplaying = ForecastView.getdateTime(date);
+        this.timer = time;
 
-        this.setLocationData(data, dateTime);
+        this.setLocationData(data, dateForDisplaying, this.timer);
     }
 
-    setLocationData(data, dateTime) {
-        this.main.innerHTML = Main(data, dateTime);
+    setLocationData(data, dateForDisplaying, timeForDisplaying) {
+        this.main.innerHTML = Main(data, dateForDisplaying, timeForDisplaying);
 
-        setInterval(this.updateTimer, 1000);
+        // setInterval(this.updateTimer, 1000);
 
         this.setMap(data);
     }
@@ -65,7 +66,7 @@ export default class ForecastView {
             });
     }
 
-    static getdateTime() {
+    static getdateTime(date) {
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const fullDays = [
             'Sunday',
@@ -90,16 +91,18 @@ export default class ForecastView {
             'November',
             'December',
         ];
-        const date = new Date();
+
+        const todayDate = date.slice(0, 1)[0].split(',');
+        const todayMonthYear = todayDate
+            .slice(1, 2)[0]
+            .split(' ')
+            .filter((el) => el !== '');
 
         const dateTime = {
-            date: `${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`,
-            time: `${date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()} 
-            : ${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()} 
-            : ${date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()}`,
-            dayTomorrow: fullDays[date.getDay() + 1],
-            dayAfterTomorrow: fullDays[date.getDay() + 2],
-            dayAfterAfterTomorrow: fullDays[date.getDay() + 3],
+            date: `${todayDate[0].slice(0, 3)} ${todayMonthYear[0]} ${todayMonthYear[1]}`,
+            dayTomorrow: date[1],
+            dayAfterTomorrow: date[2],
+            dayAfterAfterTomorrow: date[3],
         };
         return dateTime;
     }

@@ -105,7 +105,7 @@ const getCoordinatesWeather = async (adress) => {
 
 const getBackground = async () => {
     const url =
-        'https://api.unsplash.com/photos/random?orientation=landscape&per_page=1&query=nature&client_id=HvHyu0GsTuTeIWj_gjU1AezwwhhthBsmhLfdOroAWbA';
+        'https://api.unsplash.com/photos/random?orientation=landscape&per_page=1&query=nature&client_id=e2077ad31a806c894c460aec8f81bc2af4d09c4f8104ae3177bb809faf0eac17';
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
