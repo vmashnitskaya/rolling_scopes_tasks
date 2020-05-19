@@ -23,7 +23,7 @@ export default class ForecastView {
         });
     }
 
-    initMainLayout(time, date, data) {
+    initMainLayout(time, date, data, unit) {
         this.location = this.body.querySelector('.location');
         this.date = this.body.querySelector('.time__date');
         this.latitude = this.body.querySelector('.latitude + span');
@@ -33,20 +33,18 @@ export default class ForecastView {
         const dateForDisplaying = ForecastView.getdateTime(date);
         this.timer = time;
 
-        this.setLocationData(data, dateForDisplaying, this.timer);
+        this.setLocationData(data, dateForDisplaying, this.timer, unit);
     }
 
-    setLocationData(data, dateForDisplaying, timeForDisplaying) {
-        this.main.innerHTML = Main(data, dateForDisplaying, timeForDisplaying);
-
-        // setInterval(this.updateTimer, 1000);
+    setLocationData(data, dateForDisplaying, timeForDisplaying, unit) {
+        this.main.innerHTML = Main(data, dateForDisplaying, timeForDisplaying, unit);
 
         this.setMap(data);
     }
 
     setBackground(image) {
         const app = this.body.querySelector('.app');
-        app.style.background = `linear-gradient(rgba(0, 0, 0, 0.5), rgb(0, 0, 0)), url(${image}), center center`;
+        app.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgb(0, 0, 0)), url(${image}), center center`;
         app.style.backgroundRepeat = 'no-repeat';
         app.style.backgroundSize = '100% 100%';
         this.body.querySelector('.image-change-icon').classList.remove('active');
@@ -67,31 +65,6 @@ export default class ForecastView {
     }
 
     static getdateTime(date) {
-        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const fullDays = [
-            'Sunday',
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday',
-        ];
-        const months = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
-        ];
-
         const todayDate = date.slice(0, 1)[0].split(',');
         const todayMonthYear = todayDate
             .slice(1, 2)[0]
@@ -107,8 +80,7 @@ export default class ForecastView {
         return dateTime;
     }
 
-    updateTimer() {
-        const {time} = ForecastView.getdateTime();
+    updateTimer(time) {
         this.timer = document.querySelector('.time__timer');
         this.timer.innerHTML = time;
     }
@@ -155,4 +127,36 @@ export default class ForecastView {
             handler();
         });
     }
+
+    handleUnitChange(handler) {
+        this.body.addEventListener('click', (event) => {
+            if (event.target.classList.contains('unit-change')) {
+                handler(event.target.dataset.unit);
+            }
+        });
+    }
+
+    updateTemperatureUnits = (locationWeatherData, unit) => {
+        const dayTemp = this.body.querySelector('.day__temperature');
+        const tomorrow = this.body.querySelector('.tomorrow');
+        const afterTomorrow = this.body.querySelector('.after-tomorrow');
+        const afterAfterTomorrow = this.body.querySelector('.after-after-tomorrow');
+
+        dayTemp.innerHTML =
+            unit === 'C'
+                ? locationWeatherData.weatherInfo.todayTemperature.tempC
+                : locationWeatherData.weatherInfo.todayTemperature.tempF;
+        tomorrow.innerHTML =
+            unit === 'C'
+                ? locationWeatherData.weatherInfo.tomorrowTemperatureC
+                : locationWeatherData.weatherInfo.tomorrowTemperatureF;
+        afterTomorrow.innerHTML =
+            unit === 'C'
+                ? locationWeatherData.weatherInfo.afterTomorrowTemperatureC
+                : locationWeatherData.weatherInfo.afterTomorrowTemperatureF;
+        afterAfterTomorrow.innerHTML =
+            unit === 'C'
+                ? locationWeatherData.weatherInfo.afterAfterTomorrowTemperatureC
+                : locationWeatherData.weatherInfo.afterAfterTomorrowTemperatureF;
+    };
 }

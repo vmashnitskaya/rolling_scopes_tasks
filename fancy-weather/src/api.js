@@ -11,47 +11,67 @@ const getAverage = (max, min) => {
     return Math.round((max + min) / 2);
 };
 
+const fromCelsiusToFahrenheit = (celsius) => {
+    return Math.round(celsius * 1.8 + 32);
+};
+
 const getTemperature = async (latitude, longitude) => {
-    const url = `https://api.climacell.co/v3/weather/forecast/daily?lat=${latitude}&lon=${longitude}&unit_system=si&start_time=now&fields=feels_like%2Ctemp%2Chumidity%2Cwind_speed%2Cweather_code&apikey=rEjTfVZQwCwAbgfBMVVNUlTNtCYeft0V`;
+    const url = `https://api.climacell.co/v3/weather/forecast/daily?lat=${latitude}&lon=${longitude}&unit_system=si&start_time=now&fields=feels_like%2Ctemp%2Chumidity%2Cwind_speed%2Cweather_code&apikey=rh8L0roTYDgi9hvbGsd6X3cu5rRWiV05`;
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
 
     const infoForNearestDays = data.slice(1, 5);
 
+    const todayTemp = getAverage(
+        infoForNearestDays[0].temp[1].max.value,
+        infoForNearestDays[0].temp[0].min.value
+    );
+    const todayFeels = getAverage(
+        infoForNearestDays[0].feels_like[1].max.value,
+        infoForNearestDays[0].feels_like[0].min.value
+    );
+
+    const todayWind = getAverage(
+        infoForNearestDays[0].wind_speed[1].max.value,
+        infoForNearestDays[0].wind_speed[0].min.value
+    );
+
+    const todayHumidity = getAverage(
+        infoForNearestDays[0].humidity[1].max.value,
+        infoForNearestDays[0].humidity[0].min.value
+    );
+
+    const tomorrowTemperature = getAverage(
+        infoForNearestDays[1].temp[1].max.value,
+        infoForNearestDays[1].temp[0].min.value
+    );
+
+    const afterTomorrowTemperature = getAverage(
+        infoForNearestDays[2].temp[1].max.value,
+        infoForNearestDays[2].temp[0].min.value
+    );
+
+    const afterAfterTomorrowTemperature = getAverage(
+        infoForNearestDays[3].temp[1].max.value,
+        infoForNearestDays[3].temp[0].min.value
+    );
+
     return {
         todayTemperature: {
-            temp: getAverage(
-                infoForNearestDays[0].temp[1].max.value,
-                infoForNearestDays[0].temp[0].min.value
-            ),
+            tempC: todayTemp,
+            tempF: fromCelsiusToFahrenheit(todayTemp),
             overview: infoForNearestDays[0].weather_code.value.split('_').join(' '),
-            feels: getAverage(
-                infoForNearestDays[0].feels_like[1].max.value,
-                infoForNearestDays[0].feels_like[0].min.value
-            ),
-            wind: getAverage(
-                infoForNearestDays[0].wind_speed[1].max.value,
-                infoForNearestDays[0].wind_speed[0].min.value
-            ),
-            humidity: Math.round(
-                (infoForNearestDays[0].humidity[1].max.value +
-                    infoForNearestDays[0].humidity[0].min.value) /
-                    2
-            ),
+            feels: todayFeels,
+            wind: todayWind,
+            humidity: todayHumidity,
         },
-        tomorrowTemperature: getAverage(
-            infoForNearestDays[1].temp[1].max.value,
-            infoForNearestDays[1].temp[0].min.value
-        ),
-        afterTomorrowTemperature: getAverage(
-            infoForNearestDays[2].temp[1].max.value,
-            infoForNearestDays[2].temp[0].min.value
-        ),
-        afterAfterTomorrowTemperature: getAverage(
-            infoForNearestDays[3].temp[1].max.value,
-            infoForNearestDays[3].temp[0].min.value
-        ),
+        tomorrowTemperatureC: tomorrowTemperature,
+        tomorrowTemperatureF: fromCelsiusToFahrenheit(tomorrowTemperature),
+        afterTomorrowTemperatureC: afterTomorrowTemperature,
+        afterTomorrowTemperatureF: fromCelsiusToFahrenheit(afterTomorrowTemperature),
+        afterAfterTomorrowTemperatureC: afterAfterTomorrowTemperature,
+        afterAfterTomorrowTemperatureF: fromCelsiusToFahrenheit(afterAfterTomorrowTemperature),
     };
 };
 
@@ -94,6 +114,7 @@ const getCoordinatesWeather = async (adress) => {
             data.results[0].components.village ||
             data.results[0].components.suburb ||
             data.results[0].components.town ||
+            data.results[0].components.county ||
             data.results[0].components.city ||
             data.results[0].components.state,
         country: data.results[0].components.country,
@@ -103,9 +124,8 @@ const getCoordinatesWeather = async (adress) => {
     };
 };
 
-const getBackground = async () => {
-    const url =
-        'https://api.unsplash.com/photos/random?orientation=landscape&per_page=1&query=nature&client_id=e2077ad31a806c894c460aec8f81bc2af4d09c4f8104ae3177bb809faf0eac17';
+const getBackground = async (searchParametrs) => {
+    const url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${searchParametrs}&client_id=97468db9ac3f46aba050edeb6ee94ee6c2fa732c4970c3d260cdbf50156a6f44`;
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();

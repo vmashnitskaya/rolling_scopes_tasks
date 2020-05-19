@@ -19,13 +19,13 @@ const Header = () => `
                         <p>
                         <label>
                             <input name="group1" type="radio" checked />
-                            <span class="celsius"></span>
+                            <span class="unit-change celsius" data-unit="C"></span>
                         </label>
                         </p>
                         <p>
                         <label>
                             <input name="group1" type="radio" />
-                            <span class="fahrenheit"></span>
+                            <span class="unit-change fahrenheit" data-unit="F"></span>
                         </label>
                         </p>
                     </form>

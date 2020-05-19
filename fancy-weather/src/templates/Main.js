@@ -1,7 +1,8 @@
 const Main = (
     {city, country, latitude, longitude, weatherInfo},
     {date, dayTomorrow, dayAfterTomorrow, dayAfterAfterTomorrow},
-    timeForDisplaying
+    timeForDisplaying,
+    unit
 ) => `
 
 <div class="container">
@@ -13,7 +14,11 @@ const Main = (
                 <span class="time__timer">${timeForDisplaying}</span>
             </div>
             <div class="day">
-                <div class="day__temperature">${weatherInfo.todayTemperature.temp}</div>
+                <div class="day__temperature">${
+                    unit === 'C'
+                        ? `${weatherInfo.todayTemperature.tempC}`
+                        : `${weatherInfo.todayTemperature.tempF}`
+                }</div>
                 <div class="day__info">
                     <div class="day__info-animation"><img src="./img/animation.png" alt="weather image"></div>
                     <div class="day__info-text">
@@ -32,27 +37,39 @@ const Main = (
                 <div class="following-day">
                     <div class="following-day__day">${dayTomorrow}</div>
                     <div class="following-day__weather">
-                        <div class="following-day__weather-temperature">${
-                            weatherInfo.tomorrowTemperature
-                        }°</div>
+                        <div class="following-day__weather-temperature  tomorrow">
+                        ${
+                            unit === 'C'
+                                ? `${weatherInfo.tomorrowTemperatureC}`
+                                : `${weatherInfo.tomorrowTemperatureF}`
+                        }
+                        </div>
                         <div class="following-day__weather-animation"><img src="./img/cloud.png" alt="weather image"></div>
                     </div>
                  </div>
                 <div class="following-day">
                     <div class="following-day__day">${dayAfterTomorrow}</div>
                     <div class="following-day__weather">
-                        <div class="following-day__weather-temperature">${
-                            weatherInfo.afterTomorrowTemperature
-                        }°</div>
+                        <div class="following-day__weather-temperature  after-tomorrow">
+                        ${
+                            unit === 'C'
+                                ? `${weatherInfo.afterTomorrowTemperatureC}`
+                                : `${weatherInfo.afterTomorrowTemperatureF}`
+                        }
+                        </div>
                         <div class="following-day__weather-animation"><img src="./img/cloud.png" alt="weather image"></div>
                     </div>
                 </div>
                 <div class="following-day">
                     <div class="following-day__day">${dayAfterAfterTomorrow}</div>
                     <div class="following-day__weather">
-                        <div class="following-day__weather-temperature">${
-                            weatherInfo.afterAfterTomorrowTemperature
-                        }°</div>
+                        <div class="following-day__weather-temperature  after-after-tomorrow">
+                        ${
+                            unit === 'C'
+                                ? `${weatherInfo.afterAfterTomorrowTemperatureC}`
+                                : `${weatherInfo.afterAfterTomorrowTemperatureF}`
+                        }
+                        </div>
                         <div class="following-day__weather-animation"><img src="./img/cloud.png" alt="weather image"></div>
                     </div>
                 </div>

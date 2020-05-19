@@ -137,6 +137,7 @@ header {
                 height: 44px;
                 margin-right: 10px;
                 font-weight: 700;
+                z-index: 10;
                 button.btn {
                     display: flex;
                     width: 100%;
@@ -149,6 +150,7 @@ header {
                         &.opened {
                             transform: rotateX(180deg);
                             transition: transform 0.4s;
+                            z-index: 10;
                         }
                     }
                     .language {
@@ -306,12 +308,12 @@ main {
                 display: flex;
                 justify-content: flex-start;
                 &__temperature {
-                    width: 350px;
                     height: 310px;
+                    min-width: 310px;
                     margin-top: 10px;
-                    margin-right: 20px;
-                    font-size: 29rem;
-                    line-height: 29rem;
+                    margin-right: 30px;
+                    font-size: 26rem;
+                    line-height: 26rem;
                     font-weight: 600;
                     text-transform: uppercase;
                     text-align: center;
@@ -347,7 +349,7 @@ main {
                     &__weather {
                         display: flex;
                         &-temperature {
-                            width: 115px;
+                            min-width: 70px;
                             font-size: 8rem;
                             line-height: 9.8rem;
                             text-transform: uppercase;
