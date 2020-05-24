@@ -3,19 +3,18 @@ import ymaps from 'ymaps';
 import App from '../templates/App';
 import WaitingLayer from '../templates/WaitingLayer';
 import Main from '../templates/Main';
+import localization from '../localization';
 
 export default class ForecastView {
     constructor() {
         this.body = document.querySelector('body');
-
-        this.initPreliminarLayout();
     }
 
-    initPreliminarLayout() {
-        this.body.innerHTML = App();
+    initPreliminarLayout(unit, lang) {
+        this.body.innerHTML = App(unit, lang);
 
-        const dropdownHeader = document.querySelector('.dropdown-trigger');
-        this.dropdown = M.Dropdown.init(dropdownHeader, {
+        this.dropdownHeader = document.querySelector('.dropdown-trigger');
+        this.dropdown = M.Dropdown.init(this.dropdownHeader, {
             coverTrigger: false,
             alignment: 'bottom',
             constrainWidth: true,
@@ -23,7 +22,7 @@ export default class ForecastView {
         });
     }
 
-    initMainLayout(time, date, data, unit) {
+    initMainLayout(time, date, data, unit, lang) {
         this.location = this.body.querySelector('.location');
         this.date = this.body.querySelector('.time__date');
         this.latitude = this.body.querySelector('.latitude + span');
@@ -33,13 +32,7 @@ export default class ForecastView {
         const dateForDisplaying = ForecastView.getdateTime(date);
         this.timer = time;
 
-        this.setLocationData(data, dateForDisplaying, this.timer, unit);
-    }
-
-    setLocationData(data, dateForDisplaying, timeForDisplaying, unit) {
-        this.main.innerHTML = Main(data, dateForDisplaying, timeForDisplaying, unit);
-
-        this.setMap(data);
+        this.main.innerHTML = Main(data, dateForDisplaying, this.timer, unit, lang);
     }
 
     setBackground(image) {
@@ -50,17 +43,18 @@ export default class ForecastView {
         this.body.querySelector('.image-change-icon').classList.remove('active');
     }
 
-    setMap({latitude, longitude}) {
+    setMap({latitude, longitude}, handler) {
         ymaps
             .load()
             .then((maps) => {
                 this.map = new maps.Map(document.querySelector('#map-wrapper'), {
                     center: [latitude, longitude],
                     zoom: 10,
+                    controls: [],
                 });
             })
             .catch((e) => {
-                throw new Error(`Yandex Map error${e.message}`);
+                handler(e);
             });
     }
 
@@ -72,7 +66,7 @@ export default class ForecastView {
             .filter((el) => el !== '');
 
         const dateTime = {
-            date: `${todayDate[0].slice(0, 3)} ${todayMonthYear[0]} ${todayMonthYear[1]}`,
+            date: `${todayDate[0]} ${todayMonthYear[0]} ${todayMonthYear[1]}`,
             dayTomorrow: date[1],
             dayAfterTomorrow: date[2],
             dayAfterAfterTomorrow: date[3],
@@ -104,7 +98,7 @@ export default class ForecastView {
         const searchForm = document.querySelector('form.search-form');
         searchForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            const searchValue = new FormData(searchForm).get('search');
+            const searchValue = new FormData(searchForm).get('search-input');
             if (searchValue) {
                 handler(searchValue.trim());
             }
@@ -144,19 +138,36 @@ export default class ForecastView {
 
         dayTemp.innerHTML =
             unit === 'C'
-                ? locationWeatherData.weatherInfo.todayTemperature.tempC
-                : locationWeatherData.weatherInfo.todayTemperature.tempF;
+                ? `${locationWeatherData.weatherInfo.todayTemperature.tempC}`
+                : `${locationWeatherData.weatherInfo.todayTemperature.tempF}`;
         tomorrow.innerHTML =
             unit === 'C'
-                ? locationWeatherData.weatherInfo.tomorrowTemperatureC
-                : locationWeatherData.weatherInfo.tomorrowTemperatureF;
+                ? `${locationWeatherData.weatherInfo.tomorrowTemperatureC}°`
+                : `${locationWeatherData.weatherInfo.tomorrowTemperatureF}°`;
         afterTomorrow.innerHTML =
             unit === 'C'
-                ? locationWeatherData.weatherInfo.afterTomorrowTemperatureC
-                : locationWeatherData.weatherInfo.afterTomorrowTemperatureF;
+                ? `${locationWeatherData.weatherInfo.afterTomorrowTemperatureC}°`
+                : `${locationWeatherData.weatherInfo.afterTomorrowTemperatureF}°`;
         afterAfterTomorrow.innerHTML =
             unit === 'C'
-                ? locationWeatherData.weatherInfo.afterAfterTomorrowTemperatureC
-                : locationWeatherData.weatherInfo.afterAfterTomorrowTemperatureF;
+                ? `${locationWeatherData.weatherInfo.afterAfterTomorrowTemperatureC}°`
+                : `${locationWeatherData.weatherInfo.afterAfterTomorrowTemperatureF}°`;
+    };
+
+    handleLocaleChange = (handler) => {
+        this.body.addEventListener('click', (event) => {
+            if (event.target.classList.contains('lang-locale')) {
+                document.querySelector(
+                    'span.language'
+                ).innerHTML = event.target.dataset.lang.toUpperCase();
+                this.dropdown.close();
+                handler(event.target.dataset.lang);
+            }
+        });
+    };
+
+    changeHeaderLocalization = (lang) => {
+        this.body.querySelector('#search').placeholder = localization[lang].placeholder;
+        this.body.querySelector('.submit-button').innerHTML = localization[lang].search;
     };
 }

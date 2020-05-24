@@ -1,4 +1,5 @@
 import getCountryName from './countryCodes';
+import localization from './localization';
 
 const keyForAPiInfo = '1242c96842c107';
 const keyForClimaCell = 'rEjTfVZQwCwAbgfBMVVNUlTNtCYeft0V';
@@ -13,6 +14,23 @@ const getAverage = (max, min) => {
 
 const fromCelsiusToFahrenheit = (celsius) => {
     return Math.round(celsius * 1.8 + 32);
+};
+
+const getTranslations = async (words) => {
+    const wordsForTranslation = words.map((word) => `&text=${word}`).join('');
+    const translations = await Promise.all(
+        ['en-ru', 'en-be']
+            .map(
+                (lang) =>
+                    `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200425T170620Z.55c8b9394267ab3a.3447d744700d3f2e8e6216551e211e2089052f54&lang=${lang}${wordsForTranslation}`
+            )
+            .map((url) => fetch(url).then((res) => res.json()))
+    );
+
+    return translations.reduce((acc, {lang, text}) => {
+        acc[lang.split('-')[1]] = text;
+        return acc;
+    }, {});
 };
 
 const getTemperature = async (latitude, longitude) => {
@@ -61,17 +79,20 @@ const getTemperature = async (latitude, longitude) => {
         todayTemperature: {
             tempC: todayTemp,
             tempF: fromCelsiusToFahrenheit(todayTemp),
-            overview: infoForNearestDays[0].weather_code.value.split('_').join(' '),
+            overview: infoForNearestDays[0].weather_code.value,
             feels: todayFeels,
             wind: todayWind,
             humidity: todayHumidity,
         },
         tomorrowTemperatureC: tomorrowTemperature,
         tomorrowTemperatureF: fromCelsiusToFahrenheit(tomorrowTemperature),
+        tomorrowOverview: infoForNearestDays[1].weather_code.value,
         afterTomorrowTemperatureC: afterTomorrowTemperature,
         afterTomorrowTemperatureF: fromCelsiusToFahrenheit(afterTomorrowTemperature),
+        afterTomorrowOverview: infoForNearestDays[2].weather_code.value,
         afterAfterTomorrowTemperatureC: afterAfterTomorrowTemperature,
         afterAfterTomorrowTemperatureF: fromCelsiusToFahrenheit(afterAfterTomorrowTemperature),
+        afterAfterTomorrowOverview: infoForNearestDays[3].weather_code.value,
     };
 };
 
@@ -87,12 +108,20 @@ const getLocationWeather = async () => {
 
     const weatherInfo = await getTemperature(latitude, longitude);
 
+    const {city} = data;
+    const country = getCountryName(data.country);
+
+    const translations = await getTranslations([city, country]);
+
+    translations.en = [city, country];
+
     return {
-        city: data.city,
-        country: getCountryName(data.country),
+        city,
+        country,
         latitude,
         longitude,
         weatherInfo,
+        translations,
     };
 };
 
@@ -108,19 +137,26 @@ const getCoordinatesWeather = async (adress) => {
         data.results[0].geometry.lat,
         data.results[0].geometry.lng
     );
+    const city =
+        data.results[0].components.village ||
+        data.results[0].components.suburb ||
+        data.results[0].components.town ||
+        data.results[0].components.county ||
+        data.results[0].components.city ||
+        data.results[0].components.state;
+    const {country} = data.results[0].components;
+
+    const translations = await getTranslations([city, country]);
+
+    translations.en = [city, country];
 
     return {
-        city:
-            data.results[0].components.village ||
-            data.results[0].components.suburb ||
-            data.results[0].components.town ||
-            data.results[0].components.county ||
-            data.results[0].components.city ||
-            data.results[0].components.state,
-        country: data.results[0].components.country,
+        city,
+        country,
         latitude: `${data.results[0].geometry.lat}`,
         longitude: `${data.results[0].geometry.lng}`,
         weatherInfo,
+        translations,
     };
 };
 
@@ -137,4 +173,5 @@ export default {
     getLocationWeather,
     getCoordinatesWeather,
     getBackground,
+    getTranslations,
 };

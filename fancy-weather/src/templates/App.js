@@ -1,9 +1,9 @@
 import Header from './Header';
 import Footer from './Footer';
 
-const App = () => `
+const App = (unit, lang) => `
     <div class="app">
-        ${Header()}
+        ${Header(unit, lang)}
         <main></main>
         ${Footer()}
     </div>

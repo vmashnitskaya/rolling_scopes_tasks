@@ -3,6 +3,7 @@ export default class ForecastModel {
         this._locationWeatherData = {};
         this._isLoading = false;
         this._unit = localStorage.getItem('unit') ? localStorage.getItem('unit') : 'C';
+        this._lang = localStorage.getItem('lang') ? localStorage.getItem('lang') : 'en';
     }
 
     get locationWeatherData() {
@@ -27,5 +28,13 @@ export default class ForecastModel {
 
     set unit(unit) {
         this._unit = unit;
+    }
+
+    get lang() {
+        return this._lang;
+    }
+
+    set lang(lang) {
+        this._lang = lang;
     }
 }

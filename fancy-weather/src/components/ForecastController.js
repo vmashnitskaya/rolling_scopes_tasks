@@ -7,11 +7,13 @@ export default class ForecastController {
         this.view = view;
         this.model = model;
 
+        this.view.initPreliminarLayout(this.model.unit, this.model.lang);
         this.view.handleSearch(this.onSearch);
+        this.onInitMainLayout();
+
         this.view.handleBackgroundChange(this.onBackgroundChange);
         this.view.handleUnitChange(this.onUnitChange);
-
-        this.onInitMainLayout();
+        this.view.handleLocaleChange(this.onLocaleChange);
     }
 
     onInitMainLayout = async () => {
@@ -23,19 +25,7 @@ export default class ForecastController {
         } catch (e) {
             this.model.error = e.message;
         }
-        this.model.date = this.countDate();
-        this.model.time = this.countTime();
-        const searchCriteria = this.onBackgroundCriteriaChange();
-        this.view.initMainLayout(
-            this.model.time,
-            this.model.date,
-            this.model.locationWeatherData,
-            this.model.unit
-        );
-        this.onBackgroundChange(searchCriteria);
-        // eslint-disable-next-line no-console
-        console.info(`Search string for background: ${searchCriteria}`);
-
+        this.onLayoutChange(true);
         //     this.model.isLoading = false;
         //    this.view.setLoading();
     };
@@ -48,18 +38,7 @@ export default class ForecastController {
             this.model.error = e.message;
             this.view.setErrorDisplaying(true);
         }
-        this.model.date = this.countDate();
-        this.model.time = this.countTime();
-        const searchCriteria = this.onBackgroundCriteriaChange();
-        this.view.initMainLayout(
-            this.model.time,
-            this.model.date,
-            this.model.locationWeatherData,
-            this.model.unit
-        );
-        this.onBackgroundChange(searchCriteria);
-        // eslint-disable-next-line no-console
-        console.info(`Search string for background: ${searchCriteria}`);
+        this.onLayoutChange(true);
     };
 
     onBackgroundCriteriaChange() {
@@ -120,34 +99,40 @@ export default class ForecastController {
         }
     };
 
-    countTime() {
+    countTime = () => {
         const currentTime = moment().format();
         const timeForDisplaying = moment(currentTime)
             .tz(this.model.timezone)
-            .locale('en')
+            .locale(this.model.lang)
             .format('LTS');
 
         setInterval(this.onUpdateTimer, 1000);
 
         return timeForDisplaying;
-    }
+    };
 
     onUpdateTimer = () => {
         this.model.time = this.countTime();
         this.view.updateTimer(this.model.time);
     };
 
-    countDate() {
+    countDate = () => {
         const cityOrCountry = this.model.locationWeatherData.country;
         this.model.timezone = cityTimezones.findFromCityStateProvince(cityOrCountry)[0].timezone;
-        const currentTime = moment().tz(this.model.timezone).locale('en');
+        const currentTime = moment().tz(this.model.timezone).locale(this.model.lang);
         this.model.month = moment(currentTime).format('M');
-        const today = moment(currentTime).format('dddd, MMMM DD YYYY, h:mm:ss a');
+        const today = moment(currentTime).format(
+            `${
+                this.model.lang === 'en'
+                    ? `${'ddd, DD MMMM YYYY, h:mm:ss a'}`
+                    : `${'dd, DD MMMM YYYY, h:mm:ss a'}`
+            }`
+        );
         const tomorrow = moment(currentTime).add(1, 'd').format('dddd');
         const afterTomorrow = moment(currentTime).add(2, 'd').format('dddd');
         const afterAfterTomorrow = moment(currentTime).add(3, 'd').format('dddd');
         return [today, tomorrow, afterTomorrow, afterAfterTomorrow];
-    }
+    };
 
     onUnitChange = (unit) => {
         if (this.model.unit !== unit) {
@@ -155,5 +140,36 @@ export default class ForecastController {
             localStorage.setItem('unit', unit);
             this.view.updateTemperatureUnits(this.model.locationWeatherData, this.model.unit);
         }
+    };
+
+    onLocaleChange = (lang) => {
+        if (this.model.lang !== lang) {
+            this.model.lang = lang;
+            localStorage.setItem('lang', lang);
+            this.view.changeHeaderLocalization(this.model.lang);
+            this.onLayoutChange(false);
+        }
+    };
+
+    onLayoutChange = (isBackgroundMapChanged) => {
+        this.model.date = this.countDate();
+        this.model.time = this.countTime();
+        this.view.initMainLayout(
+            this.model.time,
+            this.model.date,
+            this.model.locationWeatherData,
+            this.model.unit,
+            this.model.lang
+        );
+        this.view.setMap(this.model.locationWeatherData, this.onMapError);
+        if (isBackgroundMapChanged) {
+            const searchCriteria = this.onBackgroundCriteriaChange();
+            this.onBackgroundChange(searchCriteria);
+            console.info(`Search string for background: ${searchCriteria}`);
+        }
+    };
+
+    onMapError = (e) => {
+        this.model.error = e.message;
     };
 }
