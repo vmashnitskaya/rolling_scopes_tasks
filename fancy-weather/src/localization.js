@@ -8,6 +8,7 @@ const localization = {
         search: 'SEARCH',
         latitude: 'Latitude',
         longitude: 'Longitude',
+        error: 'Failed to load results',
         overview: {
             freezing_rain_heavy: 'Freezing heavy rain',
             freezing_rain: 'Freezing rain',
@@ -43,6 +44,7 @@ const localization = {
         search: 'ПОИСК',
         latitude: 'Широта',
         longitude: 'Долгота',
+        error: 'Не удалось загрузить результаты',
         overview: {
             freezing_rain_heavy: 'Cильный снег с дождем',
             freezing_rain: 'Cнег с дождем',
@@ -78,6 +80,7 @@ const localization = {
         search: 'ПОШУК',
         latitude: 'Шырата',
         longitude: 'Даўгата',
+        error: 'Не атрымалася загрузіць вынікі',
         overview: {
             freezing_rain_heavy: 'Моцны снег з дажджом',
             freezing_rain: 'Cнег з дажджом',

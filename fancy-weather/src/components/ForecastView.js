@@ -1,7 +1,6 @@
 import M from 'materialize-css';
 import ymaps from 'ymaps';
 import App from '../templates/App';
-import WaitingLayer from '../templates/WaitingLayer';
 import Main from '../templates/Main';
 import localization from '../localization';
 
@@ -20,6 +19,7 @@ export default class ForecastView {
             constrainWidth: true,
             closeOnClick: true,
         });
+        this.main = this.body.querySelector('main');
     }
 
     initMainLayout(time, date, data, unit, lang) {
@@ -27,7 +27,6 @@ export default class ForecastView {
         this.date = this.body.querySelector('.time__date');
         this.latitude = this.body.querySelector('.latitude + span');
         this.longitude = this.body.querySelector('.longitude + span');
-        this.main = this.body.querySelector('main');
 
         const dateForDisplaying = ForecastView.getdateTime(date);
         this.timer = time;
@@ -36,11 +35,11 @@ export default class ForecastView {
     }
 
     setBackground(image) {
-        const app = this.body.querySelector('.app');
-        app.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgb(0, 0, 0)), url(${image}), center center`;
-        app.style.backgroundRepeat = 'no-repeat';
-        app.style.backgroundSize = '100% 100%';
-        this.body.querySelector('.image-change-icon').classList.remove('active');
+        const backgroundImage = this.body.querySelector('.background-image');
+        backgroundImage.src = image;
+        backgroundImage.addEventListener('load', () => {
+            backgroundImage.style.opacity = 1;
+        });
     }
 
     setMap({latitude, longitude}, handler) {
@@ -79,26 +78,11 @@ export default class ForecastView {
         this.timer.innerHTML = time;
     }
 
-    addWaitingLayer() {
-        this.waitingLayer = document.createElement('div');
-        this.waitingLayer.classList.add('waiting-layer', 'hidden');
-        this.waitingLayer.innerHTML = WaitingLayer();
-        this.body.append(this.waitingLayer);
-    }
-
-    // setLoading(isLoading) {
-    //     if (isLoading) {
-    //         this.waitingLayer.classList.remove('hidden');
-    //     } else {
-    //         this.waitingLayer.classList.add('hidden');
-    //     }
-    // }
-
     handleSearch = (handler) => {
-        const searchForm = document.querySelector('form.search-form');
-        searchForm.addEventListener('submit', (event) => {
+        this.searchForm = document.querySelector('form.search-form');
+        this.searchForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            const searchValue = new FormData(searchForm).get('search-input');
+            const searchValue = new FormData(this.searchForm).get('search-input');
             if (searchValue) {
                 handler(searchValue.trim());
             }
@@ -130,28 +114,78 @@ export default class ForecastView {
         });
     }
 
-    updateTemperatureUnits = (locationWeatherData, unit) => {
-        const dayTemp = this.body.querySelector('.day__temperature');
-        const tomorrow = this.body.querySelector('.tomorrow');
-        const afterTomorrow = this.body.querySelector('.after-tomorrow');
-        const afterAfterTomorrow = this.body.querySelector('.after-after-tomorrow');
+    static temperatureRecognizer(weatherInfo, key, unit, weatherKey) {
+        return unit === 'C'
+            ? `${weatherInfo[key][`${weatherKey}C`]}`
+            : `${weatherInfo[key][`${weatherKey}F`]}`;
+    }
 
-        dayTemp.innerHTML =
-            unit === 'C'
-                ? `${locationWeatherData.weatherInfo.todayTemperature.tempC}`
-                : `${locationWeatherData.weatherInfo.todayTemperature.tempF}`;
-        tomorrow.innerHTML =
-            unit === 'C'
-                ? `${locationWeatherData.weatherInfo.tomorrowTemperatureC}°`
-                : `${locationWeatherData.weatherInfo.tomorrowTemperatureF}°`;
-        afterTomorrow.innerHTML =
-            unit === 'C'
-                ? `${locationWeatherData.weatherInfo.afterTomorrowTemperatureC}°`
-                : `${locationWeatherData.weatherInfo.afterTomorrowTemperatureF}°`;
-        afterAfterTomorrow.innerHTML =
-            unit === 'C'
-                ? `${locationWeatherData.weatherInfo.afterAfterTomorrowTemperatureC}°`
-                : `${locationWeatherData.weatherInfo.afterAfterTomorrowTemperatureF}°`;
+    updateTemperatureUnits = ({weatherInfo}, unit) => {
+        this.body.querySelector('.day__temperature').innerHTML = ForecastView.temperatureRecognizer(
+            weatherInfo,
+            'todayTemperature',
+            unit,
+            'temp'
+        );
+        this.body.querySelector('.feeling-temp').innerHTML = `${ForecastView.temperatureRecognizer(
+            weatherInfo,
+            'todayTemperature',
+            unit,
+            'feels'
+        )}`;
+
+        const tomorrowClasses = ['.tomorrow', '.ticker__one-day-temp'];
+        tomorrowClasses.forEach((className) => {
+            this.body.querySelector(className).innerHTML = `${ForecastView.temperatureRecognizer(
+                weatherInfo,
+                'tomorrowTemperature',
+                unit,
+                'temp'
+            )}°`;
+        });
+
+        this.body.querySelector('.one-day.feels').innerHTML = `${ForecastView.temperatureRecognizer(
+            weatherInfo,
+            'tomorrowTemperature',
+            unit,
+            'feels'
+        )}`;
+
+        const afterTomorrowClasses = ['.after-tomorrow', '.ticker__two-day-temp'];
+        afterTomorrowClasses.forEach((className) => {
+            this.body.querySelector(className).innerHTML = `${ForecastView.temperatureRecognizer(
+                weatherInfo,
+                'afterTomorrowTemperature',
+                unit,
+                'temp'
+            )}°`;
+        });
+
+        this.body.querySelector('.two-day.feels').innerHTML = `${ForecastView.temperatureRecognizer(
+            weatherInfo,
+            'afterTomorrowTemperature',
+            unit,
+            'feels'
+        )}`;
+
+        const afterAfterTomorrowClasses = ['.after-after-tomorrow', '.ticker__three-day-temp'];
+        afterAfterTomorrowClasses.forEach((className) => {
+            this.body.querySelector(className).innerHTML = `${ForecastView.temperatureRecognizer(
+                weatherInfo,
+                'afterAfterTomorrowTemperature',
+                unit,
+                'temp'
+            )}°`;
+        });
+
+        this.body.querySelector(
+            '.three-day.feels'
+        ).innerHTML = `${ForecastView.temperatureRecognizer(
+            weatherInfo,
+            'afterAfterTomorrowTemperature',
+            unit,
+            'feels'
+        )}`;
     };
 
     handleLocaleChange = (handler) => {
@@ -169,5 +203,37 @@ export default class ForecastView {
     changeHeaderLocalization = (lang) => {
         this.body.querySelector('#search').placeholder = localization[lang].placeholder;
         this.body.querySelector('.submit-button').innerHTML = localization[lang].search;
+        this.body.querySelector('.error').innerHTML = localization[lang].error;
+        document.querySelector('html').lang = lang;
+    };
+
+    handleSoundClick(handler) {
+        this.voiceIcon = this.body.querySelector('i.voice');
+        this.voiceIcon.addEventListener('click', () => {
+            handler();
+        });
+    }
+
+    setSpeechText(text) {
+        this.searchInput = this.body.querySelector('#search');
+        this.searchInput.value = text;
+    }
+
+    changeIconColor() {
+        if (this.voiceIcon.classList.contains('active')) {
+            this.voiceIcon.classList.remove('active');
+        } else {
+            this.voiceIcon.classList.add('active');
+        }
+    }
+
+    setErrorPage = () => {
+        this.errorPage = document.querySelector('.error-page');
+
+        if (this.errorPage.classList.contains('hide')) {
+            this.errorPage.classList.remove('hide');
+        } else {
+            this.errorPage.classList.add('hide');
+        }
     };
 }

@@ -1,11 +1,14 @@
 import cityTimezones from 'city-timezones';
 import moment from 'moment-timezone';
 import api from '../api';
+import createSpeechRecognition from '../createSpeechRecognition';
 
 export default class ForecastController {
     constructor(view, model) {
         this.view = view;
         this.model = model;
+
+        this.speechRecognition = createSpeechRecognition(this.model.lang);
 
         this.view.initPreliminarLayout(this.model.unit, this.model.lang);
         this.view.handleSearch(this.onSearch);
@@ -14,31 +17,29 @@ export default class ForecastController {
         this.view.handleBackgroundChange(this.onBackgroundChange);
         this.view.handleUnitChange(this.onUnitChange);
         this.view.handleLocaleChange(this.onLocaleChange);
+        this.view.handleSoundClick(this.onSound);
     }
 
     onInitMainLayout = async () => {
-        //    this.model.isLoading = true;
-        //     this.view.addWaitingLayer();
-        // this.view.setLoading(this.model.isLoading);
         try {
             this.model.locationWeatherData = await api.getLocationWeather();
+            this.onLayoutChange();
+            this.onBackgroundChange();
         } catch (e) {
             this.model.error = e.message;
         }
-        this.onLayoutChange(true);
-        //     this.model.isLoading = false;
-        //    this.view.setLoading();
     };
 
     onSearch = async (searchValue) => {
         try {
             this.view.setErrorDisplaying(false);
             this.model.locationWeatherData = await api.getCoordinatesWeather(searchValue);
+            this.onLayoutChange();
+            this.onBackgroundChange();
         } catch (e) {
             this.model.error = e.message;
             this.view.setErrorDisplaying(true);
         }
-        this.onLayoutChange(true);
     };
 
     onBackgroundCriteriaChange() {
@@ -46,16 +47,29 @@ export default class ForecastController {
         const timeCopy = this.model.time.slice(0);
         const timeOfDay = timeCopy.split(' ')[1];
         const hour = Number(timeCopy.split(' ')[0].split(':')[0]);
-        if (hour >= 5 && hour <= 11 && timeOfDay === 'AM') {
+
+        if (this.model.lang === 'en') {
+            if (hour >= 5 && hour <= 11 && timeOfDay === 'AM') {
+                criteria += 'morning';
+            } else if (hour >= 12 && hour <= 4 && timeOfDay === 'PM') {
+                criteria += 'afternoon';
+            } else if (hour >= 5 && hour <= 11 && timeOfDay === 'PM') {
+                criteria += 'evening';
+            } else if (
+                (hour >= 1 && hour <= 4 && timeOfDay === 'AM') ||
+                (hour === 12 && timeOfDay === 'AM')
+            ) {
+                criteria += 'night';
+            } else {
+                criteria += 'day';
+            }
+        } else if (hour >= 5 && hour <= 11) {
             criteria += 'morning';
-        } else if (hour >= 12 && hour <= 4 && timeOfDay === 'PM') {
+        } else if (hour >= 12 && hour <= 16) {
             criteria += 'afternoon';
-        } else if (hour >= 5 && hour <= 11 && timeOfDay === 'PM') {
+        } else if (hour >= 17 && hour <= 23) {
             criteria += 'evening';
-        } else if (
-            (hour >= 1 && hour <= 4 && timeOfDay === 'AM') ||
-            (hour === 12 && timeOfDay === 'AM')
-        ) {
+        } else if ((hour >= 1 && hour <= 4) || hour === 0) {
             criteria += 'night';
         } else {
             criteria += 'day';
@@ -91,11 +105,13 @@ export default class ForecastController {
 
     onBackgroundChange = async () => {
         try {
-            this.model.backgroundImage = await api.getBackground('spring');
+            const searchCriteria = this.onBackgroundCriteriaChange();
+            this.model.backgroundImage = await api.getBackground(searchCriteria);
             this.view.setBackground(this.model.backgroundImage);
+            console.info(`Search string for background: ${searchCriteria}`);
         } catch (e) {
             this.model.error = e.message;
-            this.view.setBackground('./img/default_bg.jpg');
+            this.view.setBackground('../../img/default_bg.jpg');
         }
     };
 
@@ -147,29 +163,49 @@ export default class ForecastController {
             this.model.lang = lang;
             localStorage.setItem('lang', lang);
             this.view.changeHeaderLocalization(this.model.lang);
-            this.onLayoutChange(false);
+            this.onLayoutChange();
+
+            this.speechRecognition.stop();
+            this.speechRecognition = createSpeechRecognition(this.model.lang);
         }
     };
 
-    onLayoutChange = (isBackgroundMapChanged) => {
-        this.model.date = this.countDate();
-        this.model.time = this.countTime();
-        this.view.initMainLayout(
-            this.model.time,
-            this.model.date,
-            this.model.locationWeatherData,
-            this.model.unit,
-            this.model.lang
-        );
-        this.view.setMap(this.model.locationWeatherData, this.onMapError);
-        if (isBackgroundMapChanged) {
-            const searchCriteria = this.onBackgroundCriteriaChange();
-            this.onBackgroundChange(searchCriteria);
-            console.info(`Search string for background: ${searchCriteria}`);
+    onLayoutChange = () => {
+        try {
+            this.model.date = this.countDate();
+            this.model.time = this.countTime();
+            this.view.initMainLayout(
+                this.model.time,
+                this.model.date,
+                this.model.locationWeatherData,
+                this.model.unit,
+                this.model.lang
+            );
+            this.view.setMap(this.model.locationWeatherData, this.onMapError);
+        } catch (e) {
+            this.model.error = e.message;
+            this.view.setErrorPage();
         }
     };
 
     onMapError = (e) => {
         this.model.error = e.message;
+    };
+
+    onSound = () => {
+        if (this.speechRecognition.isStarted()) {
+            this.view.changeIconColor();
+            this.speechRecognition.stop();
+        } else {
+            this.view.changeIconColor();
+            this.speechRecognition.start(this.handleSpeechText);
+        }
+    };
+
+    handleSpeechText = (text) => {
+        this.view.setSpeechText(text);
+        this.speechRecognition.stop();
+        this.view.changeIconColor();
+        this.onSearch(text);
     };
 }

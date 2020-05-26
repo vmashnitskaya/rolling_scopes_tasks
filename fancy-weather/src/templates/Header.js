@@ -5,9 +5,9 @@ const Header = (unit, lang) => `
         <div class="container">
             <div class="navbar">
                 <div class="controls">
-                    <button class="waves-effect waves-light btn image-change"><i class="material-icons image-change-icon">loop</i></button>
+                    <button class="waves-light btn image-change"><i class="material-icons image-change-icon">loop</i></button>
                     <div class="dropdown">
-                        <button class='dropdown-trigger btn' href='#' data-target='dropdown1'><span class="language">${lang.toUpperCase()}</span><span class="material-icons arrow-down">
+                        <button class='dropdown-trigger waves-light btn' href='#' data-target='dropdown1'><span class="language">${lang.toUpperCase()}</span><span class="material-icons arrow-down">
                         keyboard_arrow_down
                         </span></button>
 
@@ -41,13 +41,13 @@ const Header = (unit, lang) => `
                         <input placeholder="${
                             localization[lang].placeholder
                         }" id="search" name="search-input" type="text" class="search">
-                        <i class="material-icons">keyboard_voice</i>
+                        <i class="material-icons voice">keyboard_voice</i>
                     </div>
-                    <input type="submit" class="waves-effect waves-light btn submit-button" value="${
+                    <input type="submit" class="waves-light btn submit-button" value="${
                         localization[lang].search
                     }"></input>
                 </form>
-                <div class="error hide">Failed to load results</div>
+                <div class="error hide">${localization[lang].error}</div>
             </div>
         </div>
     </header>
