@@ -17,7 +17,7 @@ const Header = (unit, lang) => `
                             <li class="lang-locale" data-lang="be">BE</li>
                         </ul>
                     </div>
-                    <form action="#">
+                    <form class="units" action="#">
                         <p>
                         <label>
                             <input class="celsius-button" name="group1" type="radio" ${

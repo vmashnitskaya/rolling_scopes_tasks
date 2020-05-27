@@ -27,6 +27,7 @@ export default class ForecastController {
             this.onBackgroundChange();
         } catch (e) {
             this.model.error = e.message;
+            this.view.setErrorPage();
         }
     };
 
@@ -171,25 +172,21 @@ export default class ForecastController {
     };
 
     onLayoutChange = () => {
-        try {
-            this.model.date = this.countDate();
-            this.model.time = this.countTime();
-            this.view.initMainLayout(
-                this.model.time,
-                this.model.date,
-                this.model.locationWeatherData,
-                this.model.unit,
-                this.model.lang
-            );
-            this.view.setMap(this.model.locationWeatherData, this.onMapError);
-        } catch (e) {
-            this.model.error = e.message;
-            this.view.setErrorPage();
-        }
+        this.model.date = this.countDate();
+        this.model.time = this.countTime();
+        this.view.initMainLayout(
+            this.model.time,
+            this.model.date,
+            this.model.locationWeatherData,
+            this.model.unit,
+            this.model.lang
+        );
+        this.view.setMap(this.model.locationWeatherData, this.onMapError);
     };
 
     onMapError = (e) => {
         this.model.error = e.message;
+        this.view.setErrorPage();
     };
 
     onSound = () => {
