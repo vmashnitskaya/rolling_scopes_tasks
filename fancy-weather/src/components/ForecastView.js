@@ -35,11 +35,11 @@ export default class ForecastView {
     }
 
     setBackground(image) {
-        const backgroundImage = this.body.querySelector('.background-image');
-        backgroundImage.src = image;
-        backgroundImage.addEventListener('load', () => {
-            backgroundImage.style.opacity = 1;
-        });
+        const app = this.body.querySelector('.app');
+        app.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgb(0, 0, 0)), url(${image}), center center`;
+        app.style.backgroundRepeat = 'no-repeat';
+        app.style.backgroundSize = 'cover';
+        this.body.querySelector('.image-change-icon').classList.remove('active');
     }
 
     setMap({latitude, longitude}, handler) {

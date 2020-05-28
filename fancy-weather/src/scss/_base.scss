@@ -23,16 +23,6 @@ body {
     position: relative;
     overflow-y: auto;
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgb(0, 0, 0));
-    .background-image {
-        position: absolute;
-        z-index: -100;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 100%;
-        opacity: 0;
-        filter: blur(3px) brightness(50%);
-    }
     .error-page {
         position: absolute;
         height: 100%;
