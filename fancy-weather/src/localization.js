@@ -34,6 +34,7 @@ const localization = {
             mostly_clear: 'Mostly clear',
             clear: 'Clear',
         },
+        codePhrase: 'Code word: Forecast',
     },
     ru: {
         feels: 'ОЩУЩАЕТСЯ:',
@@ -70,6 +71,7 @@ const localization = {
             mostly_clear: 'Малооблачно',
             clear: 'Ясно',
         },
+        codePhrase: 'Кодовое слово: Погода',
     },
     be: {
         feels: 'АДЧУВАЕЦЦА:',
@@ -106,6 +108,7 @@ const localization = {
             mostly_clear: 'Малавоблачна',
             clear: 'Ясна',
         },
+        codePhrase: 'Кодавае слова: Погода',
     },
 };
 

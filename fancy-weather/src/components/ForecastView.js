@@ -19,16 +19,20 @@ export default class ForecastView {
             constrainWidth: true,
             closeOnClick: true,
         });
+
+        const tooltiped = document.querySelectorAll('.tooltipped');
+        this.tooltip = M.Tooltip.init(tooltiped, {
+            position: 'bottom',
+        });
         this.main = this.body.querySelector('main');
     }
 
-    initMainLayout(time, date, data, unit, lang) {
+    initMainLayout(time, dateForDisplaying, data, unit, lang) {
         this.location = this.body.querySelector('.location');
         this.date = this.body.querySelector('.time__date');
         this.latitude = this.body.querySelector('.latitude + span');
         this.longitude = this.body.querySelector('.longitude + span');
 
-        const dateForDisplaying = ForecastView.getdateTime(date);
         this.timer = time;
 
         this.main.innerHTML = Main(data, dateForDisplaying, this.timer, unit, lang);
@@ -36,7 +40,7 @@ export default class ForecastView {
 
     setBackground(image) {
         const app = this.body.querySelector('.app');
-        app.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgb(0, 0, 0)), url(${image}), center center`;
+        app.style.background = `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7)), url(${image}), center center`;
         app.style.backgroundRepeat = 'no-repeat';
         app.style.backgroundSize = 'cover';
         this.body.querySelector('.image-change-icon').classList.remove('active');
@@ -55,22 +59,6 @@ export default class ForecastView {
             .catch((e) => {
                 handler(e);
             });
-    }
-
-    static getdateTime(date) {
-        const todayDate = date.slice(0, 1)[0].split(',');
-        const todayMonthYear = todayDate
-            .slice(1, 2)[0]
-            .split(' ')
-            .filter((el) => el !== '');
-
-        const dateTime = {
-            date: `${todayDate[0]} ${todayMonthYear[0]} ${todayMonthYear[1]}`,
-            dayTomorrow: date[1],
-            dayAfterTomorrow: date[2],
-            dayAfterAfterTomorrow: date[3],
-        };
-        return dateTime;
     }
 
     updateTimer(time) {
@@ -204,6 +192,7 @@ export default class ForecastView {
         this.body.querySelector('#search').placeholder = localization[lang].placeholder;
         this.body.querySelector('.submit-button').innerHTML = localization[lang].search;
         this.body.querySelector('.error').innerHTML = localization[lang].error;
+        this.body.querySelector('.tooltipped').dataset.tooltip = localization[lang].codePhrase;
         document.querySelector('html').lang = lang;
     };
 
@@ -236,4 +225,12 @@ export default class ForecastView {
             this.errorPage.classList.add('hide');
         }
     };
+
+    handleForecastAloud(handler) {
+        const voiceEnabler = this.body.querySelector('.speech-enabler');
+
+        voiceEnabler.addEventListener('click', () => {
+            handler();
+        });
+    }
 }

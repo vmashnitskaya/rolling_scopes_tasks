@@ -35,13 +35,16 @@ const Header = (unit, lang) => `
                         </label>
                         </p>
                     </form>
+                    <button class="waves-light btn speech-enabler"><i class="material-icons">record_voice_over</i></button>
                 </div>
                 <form class="search-form" id="search-form" autocomplete="off">
                     <div class="input-field">
                         <input placeholder="${
                             localization[lang].placeholder
                         }" id="search" name="search-input" type="text" class="search">
-                        <i class="material-icons voice">keyboard_voice</i>
+                        <i class="material-icons voice tooltipped" data-tooltip="${
+                            localization[lang].codePhrase
+                        }">keyboard_voice</i>
                     </div>
                     <input type="submit" class="waves-light btn submit-button" value="${
                         localization[lang].search

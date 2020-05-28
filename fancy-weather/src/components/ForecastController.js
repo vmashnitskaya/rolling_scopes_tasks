@@ -2,6 +2,7 @@ import cityTimezones from 'city-timezones';
 import moment from 'moment-timezone';
 import api from '../api';
 import createSpeechRecognition from '../createSpeechRecognition';
+import createSpeechSynthesis from '../createSpeechSynthesis';
 
 export default class ForecastController {
     constructor(view, model) {
@@ -18,14 +19,17 @@ export default class ForecastController {
         this.view.handleUnitChange(this.onUnitChange);
         this.view.handleLocaleChange(this.onLocaleChange);
         this.view.handleSoundClick(this.onSound);
+        this.view.handleForecastAloud(this.onForecastAloud);
     }
 
     onInitMainLayout = async () => {
         try {
             this.model.locationWeatherData = await api.getLocationWeather();
+            this.speechSynthesis = await createSpeechSynthesis(this.model.lang);
             this.onLayoutChange();
             this.onBackgroundChange();
         } catch (e) {
+            console.log(e);
             this.model.error = e.message;
             this.view.setErrorPage();
         }
@@ -112,6 +116,7 @@ export default class ForecastController {
             console.info(`Search string for background: ${searchCriteria}`);
         } catch (e) {
             this.model.error = e.message;
+            console.log(e);
             this.view.setBackground('../../img/default_bg.jpg');
         }
     };
@@ -129,8 +134,13 @@ export default class ForecastController {
     };
 
     onUpdateTimer = () => {
-        this.model.time = this.countTime();
-        this.view.updateTimer(this.model.time);
+        try {
+            this.model.time = this.countTime();
+            this.view.updateTimer(this.model.time);
+        } catch (e) {
+            this.model.error = e.message;
+            clearInterval(this.onUpdateTimer);
+        }
     };
 
     countDate = () => {
@@ -159,7 +169,7 @@ export default class ForecastController {
         }
     };
 
-    onLocaleChange = (lang) => {
+    onLocaleChange = async (lang) => {
         if (this.model.lang !== lang) {
             this.model.lang = lang;
             localStorage.setItem('lang', lang);
@@ -168,23 +178,43 @@ export default class ForecastController {
 
             this.speechRecognition.stop();
             this.speechRecognition = createSpeechRecognition(this.model.lang);
+
+            this.speechSynthesis.cancel();
+            this.speechSynthesis = await createSpeechSynthesis(this.model.lang);
         }
     };
 
     onLayoutChange = () => {
         this.model.date = this.countDate();
         this.model.time = this.countTime();
+        this.dateForDisplaying = ForecastController.getdateTime(this.model.date);
         this.view.initMainLayout(
             this.model.time,
-            this.model.date,
+            this.dateForDisplaying,
             this.model.locationWeatherData,
             this.model.unit,
             this.model.lang
         );
-        this.view.setMap(this.model.locationWeatherData, this.onMapError);
+        this.view.setMap(this.model.locationWeatherData, this.onError);
     };
 
-    onMapError = (e) => {
+    static getdateTime(date) {
+        const todayDate = date.slice(0, 1)[0].split(',');
+        const todayMonthYear = todayDate
+            .slice(1, 2)[0]
+            .split(' ')
+            .filter((el) => el !== '');
+
+        const dateTime = {
+            date: `${todayDate[0]} ${todayMonthYear[0]} ${todayMonthYear[1]}`,
+            dayTomorrow: date[1],
+            dayAfterTomorrow: date[2],
+            dayAfterAfterTomorrow: date[3],
+        };
+        return dateTime;
+    }
+
+    onError = (e) => {
         this.model.error = e.message;
         this.view.setErrorPage();
     };
@@ -200,9 +230,19 @@ export default class ForecastController {
     };
 
     handleSpeechText = (text) => {
-        this.view.setSpeechText(text);
+        if (text.toLowerCase() === 'погода' || text.toLowerCase() === 'forecast') {
+            this.onForecastAloud();
+        } else {
+            this.view.setSpeechText(text);
+
+            this.onSearch(text);
+        }
         this.speechRecognition.stop();
         this.view.changeIconColor();
-        this.onSearch(text);
+    };
+
+    onForecastAloud = () => {
+        this.speechSynthesis.cancel();
+        this.speechSynthesis.speak(this.model.locationWeatherData, this.model.unit);
     };
 }

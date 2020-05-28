@@ -133,7 +133,7 @@
     }
 }
 
-@media only screen and (max-width: 680px) {
+@media only screen and (max-width: 740px) {
     html {
         font-size: 9px;
     }
@@ -235,11 +235,16 @@
     header {
         .navbar {
             flex-direction: column-reverse;
+            align-items: center;
             .error {
                 font-size: 1.6rem;
             }
+            .controls {
+                justify-content: center;
+            }
             form.search-form {
                 width: 90%;
+                min-width: 283px;
                 .input-field {
                     width: 100%;
                     min-width: 200px;
