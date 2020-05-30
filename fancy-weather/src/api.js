@@ -15,10 +15,10 @@ const fromCelsiusToFahrenheit = (celsius) => {
     return Math.round(celsius * 1.8 + 32);
 };
 
-const getTranslations = async (words) => {
+const getTranslations = async (words, translationLanguages) => {
     const wordsForTranslation = words.map((word) => `&text=${word}`).join('');
     const translations = await Promise.all(
-        ['ru-en', 'ru-be']
+        translationLanguages
             .map(
                 (lang) =>
                     `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${keyForYandexTranslation}&lang=${lang}${wordsForTranslation}`
@@ -107,8 +107,8 @@ const getLocationWeather = async () => {
     const {city} = data;
     const country = getCountryName(data.country);
 
-    const translations = await getTranslations([city, country]);
-    translations.ru = [city, country];
+    const translations = await getTranslations([city, country], ['en-ru', 'en-be']);
+    translations.en = [city, country];
 
     return {
         city,
@@ -145,7 +145,7 @@ const getCoordinatesWeather = async (address) => {
         (element) => element.kind === 'country'
     )[0].name;
 
-    const translations = await getTranslations([city, country]);
+    const translations = await getTranslations([city, country], ['ru-en', 'ru-be']);
     translations.ru = [city, country];
 
     return {
