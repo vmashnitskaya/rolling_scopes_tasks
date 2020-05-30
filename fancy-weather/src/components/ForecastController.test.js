@@ -174,9 +174,8 @@ describe('SearchController', () => {
     });
     describe('on background criteria changed', () => {
         test('english language, latitude negative', () => {
-            model.time = '6:36:12 PM';
-            model.lang = 'en';
-            model.month = '3';
+            model.time = '6:36:12';
+            model.month = 3;
             model.locationWeatherData = {
                 city: 'City',
                 country: 'Country',
@@ -227,7 +226,7 @@ describe('SearchController', () => {
                 },
                 latitudeNegative: false,
             };
-            const testCriteia = 'evening,spring';
+            const testCriteia = 'morning,spring';
             const criteria = controller.onBackgroundCriteriaChange();
             expect(criteria).toBe(testCriteia);
         });
@@ -272,9 +271,11 @@ describe('SearchController', () => {
     });
     describe('format date and time', () => {
         test('format date and time', () => {
-            const date = ['Sat, 30 May 2020, 9:42:57 pm', 'Sunday', 'Monday', 'Tuesday'];
+            const date = [[0, 31, 5], 'Sunday', 'Monday', 'Tuesday'];
             const expectedDate = {
-                date: 'Sat 30 May',
+                weekDay: `${date[0][0]}`,
+                month: `${date[0][2]}`,
+                monthDay: `${date[0][1]}`,
                 dayTomorrow: 'Sunday',
                 dayAfterTomorrow: 'Monday',
                 dayAfterAfterTomorrow: 'Tuesday',

@@ -4,7 +4,14 @@ import Ticker from './Ticker';
 
 const Main = (data, dataForDisplaing, timeForDisplaying, unit, lang) => {
     const {city, latitude, longitude, weatherInfo, translations} = data;
-    const {date, dayTomorrow, dayAfterTomorrow, dayAfterAfterTomorrow} = dataForDisplaing;
+    const {
+        weekDay,
+        month,
+        monthDay,
+        dayTomorrow,
+        dayAfterTomorrow,
+        dayAfterAfterTomorrow,
+    } = dataForDisplaing;
     return `
 <div class="container">
     <div class="forecast">
@@ -15,7 +22,9 @@ const Main = (data, dataForDisplaing, timeForDisplaying, unit, lang) => {
                     : `${translations[lang][1]}`
             }</div>
             <div class="time">
-                <span class="time__date">${date}</span>
+                <span class="time__date">${localization[lang].weekDays[weekDay].slice(0, 3)}  ${
+        localization[lang].months[month]
+    }  ${monthDay}</span>
                 <span class="time__timer">${timeForDisplaying}</span>
             </div>
             <div class="day">
@@ -49,7 +58,9 @@ const Main = (data, dataForDisplaing, timeForDisplaying, unit, lang) => {
             </div>
             <div class="following-days">
                 <div class="following-day">
-                    <div class="following-day__day">${dayTomorrow}</div>
+                    <div class="following-day__day">${
+                        localization[lang].weekDays[dayTomorrow]
+                    }</div>
                     <div class="following-day__weather">
                         <div class="following-day__weather-temperature tomorrow">
                         ${
@@ -64,7 +75,8 @@ const Main = (data, dataForDisplaing, timeForDisplaying, unit, lang) => {
                     </div>
                  </div>
                 <div class="following-day">
-                    <div class="following-day__day">${dayAfterTomorrow}</div>
+                    <div class="following-day__day">
+                    ${localization[lang].weekDays[dayAfterTomorrow]}</div>
                     <div class="following-day__weather">
                         <div class="following-day__weather-temperature after-tomorrow">
                         ${
@@ -79,7 +91,8 @@ const Main = (data, dataForDisplaing, timeForDisplaying, unit, lang) => {
                     </div>
                 </div>
                 <div class="following-day">
-                    <div class="following-day__day">${dayAfterAfterTomorrow}</div>
+                    <div class="following-day__day">
+                    ${localization[lang].weekDays[dayAfterAfterTomorrow]}</div>
                     <div class="following-day__weather">
                         <div class="following-day__weather-temperature after-after-tomorrow">
                         ${

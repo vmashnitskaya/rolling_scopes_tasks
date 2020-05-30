@@ -6,6 +6,7 @@ const keyForUnsplash = 'bCTB7zZHguyxXEXwMrWwQ5SZ2jFwQTKx-YdFmcBqUJs';
 const keyForYandex = 'cd6f28a6-0e73-4a3f-bb7f-3febd6b954ad';
 const keyForYandexTranslation =
     'trnsl.1.1.20200425T170620Z.55c8b9394267ab3a.3447d744700d3f2e8e6216551e211e2089052f54';
+const keyForTimezoneDB = '609EY53HMH6M';
 
 const getAverage = (array, index, value) => {
     return Math.round((array[index][value][1].max.value + array[index][value][0].min.value) / 2);
@@ -13,6 +14,15 @@ const getAverage = (array, index, value) => {
 
 const fromCelsiusToFahrenheit = (celsius) => {
     return Math.round(celsius * 1.8 + 32);
+};
+
+const getGmtOffset = async (latitude, longitude) => {
+    const url = `http://api.timezonedb.com/v2.1/get-time-zone?key=${keyForTimezoneDB}&format=json&by=position&lat=${latitude}&lng=${longitude}`;
+    const res = await window.fetch(url);
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+
+    return Number(data.gmtOffset) * 1000;
 };
 
 const getTranslations = async (words, translationLanguages) => {
@@ -110,6 +120,8 @@ const getLocationWeather = async () => {
     const translations = await getTranslations([city, country], ['en-ru', 'en-be']);
     translations.en = [city, country];
 
+    const offset = await getGmtOffset(latitude, longitude);
+
     return {
         city,
         country,
@@ -118,6 +130,7 @@ const getLocationWeather = async () => {
         weatherInfo,
         translations,
         latitudeNegative: +latitude < 0,
+        offset,
     };
 };
 
@@ -148,6 +161,7 @@ const getCoordinatesWeather = async (address) => {
     const translations = await getTranslations([city, country], ['ru-en', 'ru-be']);
     translations.ru = [city, country];
 
+    const offset = await getGmtOffset(latitude, longitude);
     return {
         city: translations.en[0],
         country: translations.en[1],
@@ -156,6 +170,7 @@ const getCoordinatesWeather = async (address) => {
         weatherInfo,
         translations,
         latitudeNegative: +latitude < 0,
+        offset,
     };
 };
 

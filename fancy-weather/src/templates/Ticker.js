@@ -1,8 +1,13 @@
 import localization from '../localization';
 
-const Ticker = ({weatherInfo}, dataForDisplaing, lang, unit) => `
+const Ticker = (
+    {weatherInfo},
+    {dayTomorrow, dayAfterTomorrow, dayAfterAfterTomorrow},
+    lang,
+    unit
+) => `
     <div class="ticker">
-        <div class="ticker__one-day">${dataForDisplaing.dayTomorrow}:
+        <div class="ticker__one-day">${localization[lang].weekDays[dayTomorrow]}:
             <span class="ticker__one-day-temp feature">
                 ${
                     unit === 'C'
@@ -31,7 +36,7 @@ const Ticker = ({weatherInfo}, dataForDisplaing, lang, unit) => `
                 <span class="humidity">${weatherInfo.todayTemperature.humidity}</span>%
             </span>
         </div>
-        <div class="ticker__two-day">${dataForDisplaing.dayAfterTomorrow}:
+        <div class="ticker__two-day">${localization[lang].weekDays[dayAfterTomorrow]}:
             <span class="ticker__two-day-temp feature">
                 ${
                     unit === 'C'
@@ -60,7 +65,7 @@ const Ticker = ({weatherInfo}, dataForDisplaing, lang, unit) => `
                 <span class="humidity">${weatherInfo.afterTomorrowTemperature.humidity}</span>%
             </span>
         </div>
-        <div class="ticker__three-day">${dataForDisplaing.dayAfterAfterTomorrow}:
+        <div class="ticker__three-day">${localization[lang].weekDays[dayAfterAfterTomorrow]}:
         <span class="ticker__three-day-temp feature">
             ${
                 unit === 'C'

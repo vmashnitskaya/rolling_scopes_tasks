@@ -1,8 +1,8 @@
-import cityTimezones from 'city-timezones';
-import moment from 'moment-timezone';
 import api from '../api';
 import createSpeechRecognition from '../createSpeechRecognition';
 import createSpeechSynthesis from '../createSpeechSynthesis';
+import dateTimeFormatter from '../dateTimeFormatter';
+import getUTCDate from '../getUTCDate';
 
 export default class ForecastController {
     constructor(view, model) {
@@ -49,62 +49,40 @@ export default class ForecastController {
     onBackgroundCriteriaChange() {
         let criteria = '';
         const timeCopy = this.model.time.slice(0);
-        const timeOfDay = timeCopy.split(' ')[1];
         const hour = Number(timeCopy.split(' ')[0].split(':')[0]);
 
-        if (this.model.lang === 'en') {
-            if (hour >= 5 && hour <= 11 && timeOfDay === 'AM') {
-                criteria += 'morning';
-            } else if (
-                (hour >= 1 && hour <= 4 && timeOfDay === 'PM') ||
-                (hour === 12 && timeOfDay === 'PM')
-            ) {
-                criteria += 'afternoon';
-            } else if (hour >= 5 && hour <= 11 && timeOfDay === 'PM') {
-                criteria += 'evening';
-            } else if (
-                (hour >= 1 && hour <= 4 && timeOfDay === 'AM') ||
-                (hour === 12 && timeOfDay === 'AM')
-            ) {
-                criteria += 'night';
-            } else {
-                criteria += 'day';
-            }
-        }
-        if (this.model.lang === 'ru' || this.model.lang === 'be') {
-            if (hour >= 5 && hour <= 11) {
-                criteria += 'morning';
-            } else if (hour >= 12 && hour <= 16) {
-                criteria += 'afternoon';
-            } else if (hour >= 17 && hour <= 23) {
-                criteria += 'evening';
-            } else if ((hour >= 1 && hour <= 4) || hour === 0) {
-                criteria += 'night';
-            } else {
-                criteria += 'day';
-            }
+        if (hour >= 5 && hour <= 11) {
+            criteria += 'morning';
+        } else if (hour >= 12 && hour <= 16) {
+            criteria += 'afternoon';
+        } else if (hour >= 17 && hour <= 23) {
+            criteria += 'evening';
+        } else if ((hour >= 1 && hour <= 4) || hour === 0) {
+            criteria += 'night';
+        } else {
+            criteria += 'day';
         }
 
         if (this.model.locationWeatherData.latitudeNegative) {
             switch (this.model.month) {
-                case '6':
-                case '7':
-                case '8':
+                case 5:
+                case 6:
+                case 7:
                     criteria += ',winter';
                     break;
-                case '9':
-                case '10':
-                case '11':
+                case 8:
+                case 9:
+                case 10:
                     criteria += ',spring';
                     break;
-                case '12':
-                case '1':
-                case '2':
+                case 11:
+                case 0:
+                case 1:
                     criteria += ',summer';
                     break;
-                case '3':
-                case '4':
-                case '5':
+                case 2:
+                case 3:
+                case 4:
                     criteria += ',autumn';
                     break;
                 default:
@@ -112,24 +90,24 @@ export default class ForecastController {
             }
         } else {
             switch (this.model.month) {
-                case '12':
-                case '1':
-                case '2':
+                case 11:
+                case 0:
+                case 1:
                     criteria += ',winter';
                     break;
-                case '3':
-                case '4':
-                case '5':
+                case 2:
+                case 3:
+                case 4:
                     criteria += ',spring';
                     break;
-                case '6':
-                case '7':
-                case '8':
+                case 5:
+                case 6:
+                case 7:
                     criteria += ',summer';
                     break;
-                case '9':
-                case '10':
-                case '11':
+                case 8:
+                case 9:
+                case 10:
                     criteria += ',autumn';
                     break;
                 default:
@@ -159,11 +137,8 @@ export default class ForecastController {
     };
 
     countTime = () => {
-        const currentTime = moment().format();
-        const timeForDisplaying = moment(currentTime)
-            .tz(this.model.timezone)
-            .locale(this.model.lang)
-            .format('LTS');
+        const currentTime = getUTCDate(this.model.locationWeatherData.offset);
+        const timeForDisplaying = dateTimeFormatter.timeFormatter(currentTime);
 
         setInterval(this.onUpdateTimer, 1000);
 
@@ -181,32 +156,13 @@ export default class ForecastController {
     };
 
     countDate = () => {
-        try {
-            const cityOrCountry = this.model.locationWeatherData.city;
-            this.model.timezone = cityTimezones.findFromCityStateProvince(
-                cityOrCountry
-            )[0].timezone;
-            this.currentTime = moment().tz(this.model.timezone).locale(this.model.lang);
-        } catch (e) {
-            this.model.error = e.message;
-            const cityOrCountry = this.model.locationWeatherData.country;
-            this.model.timezone = cityTimezones.findFromCityStateProvince(
-                cityOrCountry
-            )[0].timezone;
-            this.currentTime = moment().tz(this.model.timezone).locale(this.model.lang);
-        }
+        const currentDate = getUTCDate(this.model.locationWeatherData.offset);
+        this.model.month = currentDate.getMonth();
+        const today = dateTimeFormatter.dateFormatterToday(currentDate);
 
-        this.model.month = moment(this.currentTime).format('M');
-        const today = moment(this.currentTime).format(
-            `${
-                this.model.lang === 'en'
-                    ? `${'ddd, DD MMMM YYYY, h:mm:ss a'}`
-                    : `${'dd, DD MMMM YYYY, h:mm:ss a'}`
-            }`
-        );
-        const tomorrow = moment(this.currentTime).add(1, 'd').format('dddd');
-        const afterTomorrow = moment(this.currentTime).add(2, 'd').format('dddd');
-        const afterAfterTomorrow = moment(this.currentTime).add(3, 'd').format('dddd');
+        const tomorrow = dateTimeFormatter.dateFormatterNexDays(currentDate, 1);
+        const afterTomorrow = dateTimeFormatter.dateFormatterNexDays(currentDate, 2);
+        const afterAfterTomorrow = dateTimeFormatter.dateFormatterNexDays(currentDate, 3);
         return [today, tomorrow, afterTomorrow, afterAfterTomorrow];
     };
 
@@ -248,15 +204,10 @@ export default class ForecastController {
     };
 
     static getdateTime(date) {
-        const todayDate = date.slice(0, 1)[0].split(',');
-
-        const todayMonthYear = todayDate
-            .slice(1, 2)[0]
-            .split(' ')
-            .filter((el) => el !== '');
-
         const dateTime = {
-            date: `${todayDate[0]} ${todayMonthYear[0]} ${todayMonthYear[1]}`,
+            weekDay: `${date[0][0]}`,
+            month: `${date[0][2]}`,
+            monthDay: `${date[0][1]}`,
             dayTomorrow: date[1],
             dayAfterTomorrow: date[2],
             dayAfterAfterTomorrow: date[3],
