@@ -98,12 +98,12 @@ const Main = (data, dataForDisplaing, timeForDisplaying, unit, lang) => {
 
         <div class="map">
             <div class="map-wrapper" id="map-wrapper"></div>
-            <div class="latitude">${localization[lang].latitude} <span>${latitude
-        .split('.')
-        .join("'")}°</span></div>
-            <div class="longitude">${localization[lang].longitude} <span>${longitude
-        .split('.')
-        .join("'")}°</span></div>
+            <div class="latitude">${localization[lang].latitude} <span>${`${
+        data.latitude.split('.')[0]
+    }'${data.latitude.split('.')[1].slice(0, 2)}`}°</span></div>
+            <div class="longitude">${localization[lang].longitude} <span>${`${
+        data.longitude.split('.')[0]
+    }'${data.longitude.split('.')[1].slice(0, 2)}`}°</span></div>
         </div>
     </div>
 </div>

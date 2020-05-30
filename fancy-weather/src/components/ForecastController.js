@@ -29,7 +29,6 @@ export default class ForecastController {
             this.onLayoutChange();
             this.onBackgroundChange();
         } catch (e) {
-            console.log(e);
             this.model.error = e.message;
             this.view.setErrorPage();
         }
@@ -56,7 +55,10 @@ export default class ForecastController {
         if (this.model.lang === 'en') {
             if (hour >= 5 && hour <= 11 && timeOfDay === 'AM') {
                 criteria += 'morning';
-            } else if (hour >= 12 && hour <= 4 && timeOfDay === 'PM') {
+            } else if (
+                (hour >= 1 && hour <= 4 && timeOfDay === 'PM') ||
+                (hour === 12 && timeOfDay === 'PM')
+            ) {
                 criteria += 'afternoon';
             } else if (hour >= 5 && hour <= 11 && timeOfDay === 'PM') {
                 criteria += 'evening';
@@ -68,41 +70,71 @@ export default class ForecastController {
             } else {
                 criteria += 'day';
             }
-        } else if (hour >= 5 && hour <= 11) {
-            criteria += 'morning';
-        } else if (hour >= 12 && hour <= 16) {
-            criteria += 'afternoon';
-        } else if (hour >= 17 && hour <= 23) {
-            criteria += 'evening';
-        } else if ((hour >= 1 && hour <= 4) || hour === 0) {
-            criteria += 'night';
-        } else {
-            criteria += 'day';
+        }
+        if (this.model.lang === 'ru' || this.model.lang === 'be') {
+            if (hour >= 5 && hour <= 11) {
+                criteria += 'morning';
+            } else if (hour >= 12 && hour <= 16) {
+                criteria += 'afternoon';
+            } else if (hour >= 17 && hour <= 23) {
+                criteria += 'evening';
+            } else if ((hour >= 1 && hour <= 4) || hour === 0) {
+                criteria += 'night';
+            } else {
+                criteria += 'day';
+            }
         }
 
-        switch (this.model.month) {
-            case '12':
-            case '1':
-            case '2':
-                criteria += ',winter';
-                break;
-            case '3':
-            case '4':
-            case '5':
-                criteria += ',spring';
-                break;
-            case '6':
-            case '7':
-            case '8':
-                criteria += ',summer';
-                break;
-            case '9':
-            case '10':
-            case '11':
-                criteria += ',autumn';
-                break;
-            default:
-                criteria += ',seasons';
+        if (this.model.locationWeatherData.latitudeNegative) {
+            switch (this.model.month) {
+                case '6':
+                case '7':
+                case '8':
+                    criteria += ',winter';
+                    break;
+                case '9':
+                case '10':
+                case '11':
+                    criteria += ',spring';
+                    break;
+                case '12':
+                case '1':
+                case '2':
+                    criteria += ',summer';
+                    break;
+                case '3':
+                case '4':
+                case '5':
+                    criteria += ',autumn';
+                    break;
+                default:
+                    criteria += ',seasons';
+            }
+        } else {
+            switch (this.model.month) {
+                case '12':
+                case '1':
+                case '2':
+                    criteria += ',winter';
+                    break;
+                case '3':
+                case '4':
+                case '5':
+                    criteria += ',spring';
+                    break;
+                case '6':
+                case '7':
+                case '8':
+                    criteria += ',summer';
+                    break;
+                case '9':
+                case '10':
+                case '11':
+                    criteria += ',autumn';
+                    break;
+                default:
+                    criteria += ',seasons';
+            }
         }
 
         return criteria;
@@ -113,10 +145,15 @@ export default class ForecastController {
             const searchCriteria = this.onBackgroundCriteriaChange();
             this.model.backgroundImage = await api.getBackground(searchCriteria);
             this.view.setBackground(this.model.backgroundImage);
-            console.info(`Search string for background: ${searchCriteria}`);
+            if (this.model.locationWeatherData.latitudeNegative) {
+                console.info(
+                    `Search string(Southern Hemisphere) for background: ${searchCriteria}`
+                );
+            } else {
+                console.info(`Search string(North hemisphere) for background: ${searchCriteria}`);
+            }
         } catch (e) {
             this.model.error = e.message;
-            console.log(e);
             this.view.setBackground('../../img/default_bg.jpg');
         }
     };
@@ -144,20 +181,32 @@ export default class ForecastController {
     };
 
     countDate = () => {
-        const cityOrCountry = this.model.locationWeatherData.country;
-        this.model.timezone = cityTimezones.findFromCityStateProvince(cityOrCountry)[0].timezone;
-        const currentTime = moment().tz(this.model.timezone).locale(this.model.lang);
-        this.model.month = moment(currentTime).format('M');
-        const today = moment(currentTime).format(
+        try {
+            const cityOrCountry = this.model.locationWeatherData.city;
+            this.model.timezone = cityTimezones.findFromCityStateProvince(
+                cityOrCountry
+            )[0].timezone;
+            this.currentTime = moment().tz(this.model.timezone).locale(this.model.lang);
+        } catch (e) {
+            this.model.error = e.message;
+            const cityOrCountry = this.model.locationWeatherData.country;
+            this.model.timezone = cityTimezones.findFromCityStateProvince(
+                cityOrCountry
+            )[0].timezone;
+            this.currentTime = moment().tz(this.model.timezone).locale(this.model.lang);
+        }
+
+        this.model.month = moment(this.currentTime).format('M');
+        const today = moment(this.currentTime).format(
             `${
                 this.model.lang === 'en'
                     ? `${'ddd, DD MMMM YYYY, h:mm:ss a'}`
                     : `${'dd, DD MMMM YYYY, h:mm:ss a'}`
             }`
         );
-        const tomorrow = moment(currentTime).add(1, 'd').format('dddd');
-        const afterTomorrow = moment(currentTime).add(2, 'd').format('dddd');
-        const afterAfterTomorrow = moment(currentTime).add(3, 'd').format('dddd');
+        const tomorrow = moment(this.currentTime).add(1, 'd').format('dddd');
+        const afterTomorrow = moment(this.currentTime).add(2, 'd').format('dddd');
+        const afterAfterTomorrow = moment(this.currentTime).add(3, 'd').format('dddd');
         return [today, tomorrow, afterTomorrow, afterAfterTomorrow];
     };
 
@@ -200,6 +249,7 @@ export default class ForecastController {
 
     static getdateTime(date) {
         const todayDate = date.slice(0, 1)[0].split(',');
+
         const todayMonthYear = todayDate
             .slice(1, 2)[0]
             .split(' ')

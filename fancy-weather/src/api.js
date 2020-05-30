@@ -1,12 +1,11 @@
 import getCountryName from './countryCodes';
-import localization from './localization';
 
 const keyForAPiInfo = '1242c96842c107';
 const keyForClimaCell = 'rEjTfVZQwCwAbgfBMVVNUlTNtCYeft0V';
 const keyForUnsplash = 'bCTB7zZHguyxXEXwMrWwQ5SZ2jFwQTKx-YdFmcBqUJs';
-const keyForUnsplash1 = 'pFikN91oIsf3zqcjnQ86ZQkUiCok39F9zMz2UEtSVn0';
 const keyForYandex = 'cd6f28a6-0e73-4a3f-bb7f-3febd6b954ad';
-const keyForOpemCage = '83e064d6811247aa80e8a6f373fefec8';
+const keyForYandexTranslation =
+    'trnsl.1.1.20200425T170620Z.55c8b9394267ab3a.3447d744700d3f2e8e6216551e211e2089052f54';
 
 const getAverage = (array, index, value) => {
     return Math.round((array[index][value][1].max.value + array[index][value][0].min.value) / 2);
@@ -19,10 +18,10 @@ const fromCelsiusToFahrenheit = (celsius) => {
 const getTranslations = async (words) => {
     const wordsForTranslation = words.map((word) => `&text=${word}`).join('');
     const translations = await Promise.all(
-        ['en-ru', 'en-be']
+        ['ru-en', 'ru-be']
             .map(
                 (lang) =>
-                    `https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200425T170620Z.55c8b9394267ab3a.3447d744700d3f2e8e6216551e211e2089052f54&lang=${lang}${wordsForTranslation}`
+                    `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${keyForYandexTranslation}&lang=${lang}${wordsForTranslation}`
             )
             .map((url) => fetch(url).then((res) => res.json()))
     );
@@ -34,7 +33,7 @@ const getTranslations = async (words) => {
 };
 
 const getTemperature = async (latitude, longitude) => {
-    const url = `https://api.climacell.co/v3/weather/forecast/daily?lat=${latitude}&lon=${longitude}&unit_system=si&start_time=now&fields=feels_like%2Ctemp%2Chumidity%2Cwind_speed%2Cweather_code&apikey=rEjTfVZQwCwAbgfBMVVNUlTNtCYeft0V`;
+    const url = `https://api.climacell.co/v3/weather/forecast/daily?lat=${latitude}&lon=${longitude}&unit_system=si&start_time=now&fields=feels_like%2Ctemp%2Chumidity%2Cwind_speed%2Cweather_code&apikey=${keyForClimaCell}`;
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
@@ -109,8 +108,7 @@ const getLocationWeather = async () => {
     const country = getCountryName(data.country);
 
     const translations = await getTranslations([city, country]);
-
-    translations.en = [city, country];
+    translations.ru = [city, country];
 
     return {
         city,
@@ -119,46 +117,50 @@ const getLocationWeather = async () => {
         longitude,
         weatherInfo,
         translations,
+        latitudeNegative: +latitude < 0,
     };
 };
 
-const getCoordinatesWeather = async (adress) => {
+const getCoordinatesWeather = async (address) => {
     const url = encodeURI(
-        `https://api.opencagedata.com/geocode/v1/json?q=${adress}&language=en&key=${keyForOpemCage}&pretty=1&no_annotations=1`
+        `https://geocode-maps.yandex.ru/1.x/?apikey=${keyForYandex}&geocode=${address}&format=json&lang=ru-RU&results=1`
     );
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
 
-    const weatherInfo = await getTemperature(
-        data.results[0].geometry.lat,
-        data.results[0].geometry.lng
-    );
-    const city =
-        data.results[0].components.village ||
-        data.results[0].components.suburb ||
-        data.results[0].components.town ||
-        data.results[0].components.county ||
-        data.results[0].components.city ||
-        data.results[0].components.state;
-    const {country} = data.results[0].components;
+    const response = data.response.GeoObjectCollection.featureMember[0].GeoObject;
+
+    const point = response.Point.pos;
+    const latitude = point.split(' ')[1];
+    const longitude = point.split(' ')[0];
+
+    const weatherInfo = await getTemperature(latitude, longitude);
+
+    const city = response.metaDataProperty.GeocoderMetaData.Address.Components.filter(
+        (element) => element.kind === 'locality'
+    )[0].name;
+
+    const country = response.metaDataProperty.GeocoderMetaData.Address.Components.filter(
+        (element) => element.kind === 'country'
+    )[0].name;
 
     const translations = await getTranslations([city, country]);
-
-    translations.en = [city, country];
+    translations.ru = [city, country];
 
     return {
-        city,
-        country,
-        latitude: `${data.results[0].geometry.lat}`,
-        longitude: `${data.results[0].geometry.lng}`,
+        city: translations.en[0],
+        country: translations.en[1],
+        latitude: `${latitude}`,
+        longitude: `${longitude}`,
         weatherInfo,
         translations,
+        latitudeNegative: +latitude < 0,
     };
 };
 
 const getBackground = async (searchParametrs) => {
-    const url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${searchParametrs}&client_id=pFikN91oIsf3zqcjnQ86ZQkUiCok39F9zMz2UEtSVn0`;
+    const url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${searchParametrs}&client_id=${keyForUnsplash}`;
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
