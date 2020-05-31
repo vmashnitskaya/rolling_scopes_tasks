@@ -2,7 +2,7 @@ import api from '../api';
 import createSpeechRecognition from '../createSpeechRecognition';
 import createSpeechSynthesis from '../createSpeechSynthesis';
 import dateTimeFormatter from '../dateTimeFormatter';
-import getUTCDate from '../getUTCDate';
+import getLocalDate from '../getLocalDate';
 
 export default class ForecastController {
     constructor(view, model) {
@@ -137,7 +137,7 @@ export default class ForecastController {
     };
 
     countTime = () => {
-        const currentTime = getUTCDate(this.model.locationWeatherData.offset);
+        const currentTime = getLocalDate(this.model.locationWeatherData.offset);
         const timeForDisplaying = dateTimeFormatter.timeFormatter(currentTime);
 
         setInterval(this.onUpdateTimer, 1000);
@@ -156,7 +156,7 @@ export default class ForecastController {
     };
 
     countDate = () => {
-        const currentDate = getUTCDate(this.model.locationWeatherData.offset);
+        const currentDate = getLocalDate(this.model.locationWeatherData.offset);
         this.model.month = currentDate.getMonth();
         const today = dateTimeFormatter.dateFormatterToday(currentDate);
 
