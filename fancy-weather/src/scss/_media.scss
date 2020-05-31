@@ -67,6 +67,7 @@
                 margin-top: 10px;
                 left: 0;
                 top: 0;
+                bottom: unset;
                 text-align: center;
             }
         }
@@ -251,7 +252,7 @@
                     max-width: 100%;
                     input {
                         &::placeholder {
-                            font-size: 1.4rem;
+                            font-size: 1.6rem;
                         }
                     }
                 }
@@ -278,8 +279,11 @@
             .weather {
                 width: 100%;
                 max-width: 100%;
-                .location,
                 .time {
+                    text-align: center;
+                }
+                .location {
+                    font-size: 4rem;
                     text-align: center;
                 }
                 .day {
