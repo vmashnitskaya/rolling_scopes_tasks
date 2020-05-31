@@ -285,8 +285,7 @@ main {
             display: flex;
             flex-direction: column;
             height: 100%;
-            width: 50%;
-            max-width: 50%;
+            max-width: 60%;
             color: $text-color;
             .location {
                 font-size: 4.4rem;
@@ -310,8 +309,8 @@ main {
                     min-width: 310px;
                     margin-top: 10px;
                     margin-right: 30px;
-                    font-size: 26rem;
-                    line-height: 26rem;
+                    font-size: 23rem;
+                    line-height: 23rem;
                     font-weight: 600;
                     text-transform: uppercase;
                     text-align: center;

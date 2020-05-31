@@ -42,6 +42,7 @@ export default class ForecastController {
             this.onBackgroundChange();
         } catch (e) {
             this.model.error = e.message;
+            console.log(e);
             this.view.setErrorDisplaying(true);
         }
     };

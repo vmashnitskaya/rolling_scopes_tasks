@@ -14,7 +14,7 @@
                     justify-content: flex-start;
                     &__temperature {
                         text-align: left;
-                        margin-right: 0;
+                        margin-right: 20px;
                         margin-top: 20px;
                         height: 270px;
                         width: 290px;
@@ -89,7 +89,6 @@
                     justify-content: center;
                     &__temperature {
                         text-align: left;
-                        margin-right: 0;
                         margin-top: 30px;
                         height: 300px;
                         width: 300px;
@@ -163,7 +162,7 @@
         .following-days {
             align-self: center;
             .following-day {
-                margin-right: 0;
+                margin-right: 10px;
             }
         }
     }
@@ -183,6 +182,9 @@
                     display: flex;
                     justify-content: space-around;
                     &__temperature {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                         text-align: left;
                         margin-right: 0;
                         margin-top: 30px;
@@ -219,7 +221,7 @@
     }
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 530px) {
     .container {
         max-width: 90%;
     }

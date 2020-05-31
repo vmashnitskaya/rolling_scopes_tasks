@@ -109,7 +109,9 @@ export default class ForecastView {
     }
 
     updateTemperatureUnits = ({weatherInfo}, unit) => {
-        this.body.querySelector('.day__temperature').innerHTML = ForecastView.temperatureRecognizer(
+        this.body.querySelector(
+            '.day__temperature-degrees'
+        ).innerHTML = ForecastView.temperatureRecognizer(
             weatherInfo,
             'todayTemperature',
             unit,

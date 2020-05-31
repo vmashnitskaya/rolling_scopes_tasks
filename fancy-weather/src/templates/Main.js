@@ -28,11 +28,11 @@ const Main = (data, dataForDisplaing, timeForDisplaying, unit, lang) => {
                 <span class="time__timer">${timeForDisplaying}</span>
             </div>
             <div class="day">
-                <div class="day__temperature">${
+                <div class="day__temperature"><span class="day__temperature-degrees">${
                     unit === 'C'
                         ? `${weatherInfo.todayTemperature.tempC}`
                         : `${weatherInfo.todayTemperature.tempF}`
-                }</div>
+                }</span></div>
                 <div class="day__info">
                     <div class="day__info-animation"><img src="${
                         imagesPaths[weatherInfo.todayTemperature.overview]

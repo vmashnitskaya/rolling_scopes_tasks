@@ -150,13 +150,9 @@ const getCoordinatesWeather = async (address) => {
 
     const weatherInfo = await getTemperature(latitude, longitude);
 
-    const city = response.metaDataProperty.GeocoderMetaData.Address.Components.filter(
-        (element) => element.kind === 'locality'
-    )[0].name;
+    const city = response.name;
 
-    const country = response.metaDataProperty.GeocoderMetaData.Address.Components.filter(
-        (element) => element.kind === 'country'
-    )[0].name;
+    const country = response.metaDataProperty.GeocoderMetaData.AddressDetails.Country.CountryName;
 
     const translations = await getTranslations([city, country], ['ru-en', 'ru-be']);
     translations.ru = [city, country];
