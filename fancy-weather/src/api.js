@@ -17,7 +17,7 @@ const fromCelsiusToFahrenheit = (celsius) => {
 };
 
 const getGmtOffset = async (latitude, longitude) => {
-    const url = `http://api.timezonedb.com/v2.1/get-time-zone?key=${keyForTimezoneDB}&format=json&by=position&lat=${latitude}&lng=${longitude}`;
+    const url = `https://api.timezonedb.com/v2.1/get-time-zone?key=${keyForTimezoneDB}&format=json&by=position&lat=${latitude}&lng=${longitude}`;
     const res = await window.fetch(url);
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
