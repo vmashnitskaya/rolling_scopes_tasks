@@ -1,0 +1,43 @@
+@media screen and (max-width: 760px) {
+    .main {
+        padding: 0 10px;
+        .main-wrapper {
+            justify-content: center;
+        }
+        .statistics {
+            margin: 0 -10px;
+            width: calc(100% + 18px);
+        }
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .button-wrapper {
+        button {
+            &.new-game {
+                width: 100%;
+            }
+        }
+    }
+    .statistics {
+        &__category {
+            font-size: 1.6rem;
+        }
+        &__category-item {
+            font-size: 1rem;
+        }
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .wrapper {
+        min-width: 320px;
+    }
+    .main {
+        .main-wrapper {
+            .card__main-name {
+                font-size: 2rem;
+            }
+        }
+    }
+}

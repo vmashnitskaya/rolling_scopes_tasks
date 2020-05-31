@@ -1,1 +1,2 @@
-https://vmashnitskaya-movie-search.netlify.app/
+# vmashnitskaya-RS2020Q1
+Private repository for @vmashnitskaya
