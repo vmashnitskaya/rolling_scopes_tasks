@@ -1,0 +1,47 @@
+html {
+  font-size: 10px;
+}
+
+body {
+  box-sizing: border-box;
+  font-family: "Roboto", "Arial", sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100%;
+}
+
+.start-page {
+  background: url("/img/bg.jpg") no-repeat;
+  background-clip: border-box;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: white;
+  h1 {
+    font-size: 3rem;
+  }
+  p {
+    font-size: 2rem;
+    margin: 0;
+  }
+  a {
+    font-size: 2.5rem;
+    color: #29404e;
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 2px;
+    text-align: center;
+    padding: 2px 8px;
+    &:link {
+      text-decoration: none;
+    }
+  }
+}
