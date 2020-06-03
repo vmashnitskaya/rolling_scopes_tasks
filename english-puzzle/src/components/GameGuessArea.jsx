@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 
-const GameGuessArea = ({ array, length, differenceIndexes }) => {
+const GameGuessArea = ({ array, length, onClick }) => {
+    const handleClick = (event) => {
+        onClick(event.target.innerHTML);
+    };
     const width = parseFloat(100 / length).toFixed(2);
     return array.map((element, index) => (
         <div
             key={index}
-            className={clsx('guessed', differenceIndexes.includes(index) && 'red')}
+            className="guessed-word"
             style={{ width: `${width}%` }}
+            onClick={handleClick}
         >
             {element}
         </div>
@@ -18,7 +21,7 @@ const GameGuessArea = ({ array, length, differenceIndexes }) => {
 GameGuessArea.propTypes = {
     array: PropTypes.arrayOf(PropTypes.string).isRequired,
     length: PropTypes.number.isRequired,
-    differenceIndexes: PropTypes.arrayOf(PropTypes.number).isRequired,
+    onClick: PropTypes.func.isRequired,
 };
 
 export default GameGuessArea;

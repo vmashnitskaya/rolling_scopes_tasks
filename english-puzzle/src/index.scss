@@ -122,7 +122,6 @@ body {
   }
   .game {
     &__translation {
-      visibility: hidden;
       text-align: center;
       height: 60px;
       i {
@@ -130,6 +129,9 @@ body {
       }
       .translation {
         font-size: 2rem;
+      }
+      &.hidden {
+        visibility: hidden;
       }
     }
     &__box {
@@ -147,6 +149,12 @@ body {
         font-size: 1.4rem;
         cursor: pointer;
         user-select: none;
+        &.coloredRed {
+          color: red;
+        }
+        &.coloredGreen {
+          color: green;
+        }
       }
     }
     &__guess-area {
@@ -154,7 +162,7 @@ body {
       margin-top: 20px;
       height: 35px;
       background-color: lighten($color: $main-color, $amount: 10);
-      .guessed {
+      .guessed-word {
         padding-top: 6px;
         border: 1px solid black;
         font-size: 1.4rem;

@@ -2,17 +2,31 @@ import React, { useMemo, useState, useEffect } from 'react';
 import api from '../api';
 import Checkbox from './Checkbox';
 import DropDown from './DropDown';
-import GameBox from './GameBox';
 import Button from './Button';
+import GameBoxLine from './GameBoxLine';
+import GameGuessArea from './GameGuessArea';
+import Translation from './Translation';
 
-const maxLevel = 5;
-const maxOption = 59;
+const maxLevel = 6;
+const maxOption = 60;
 
 const GamePage = () => {
     const [level, setLevel] = useState(0);
     const [option, setOption] = useState(0);
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
+    const [currentLine, setCurrentLine] = useState(0);
+    const [currentGuessedWords, setCurrentGuessedWords] = useState([]);
+    const [guessedArrays, setGuessedArrays] = useState([]);
+    const [currentShuffledArray, setCurrentShuffledArray] = useState([]);
+    const [currentOriginalArray, setCurrentOriginalArray] = useState([]);
+    const [showOriginalArray, setShowOriginalArray] = useState(false);
+    const [differenceIndexes, setDifferenceIndexes] = useState([]);
+    const [gameInProgress, setGameInProgress] = useState(true);
+    const [readyForReview, setReadyForReview] = useState(false);
+    const [readyForContinue, setReadyForContinue] = useState(false);
+    const [translation, setTranslation] = useState('');
+    const [translationShown, setTranslationShown] = useState(false);
 
     const levelOptions = useMemo(
         () =>
@@ -40,7 +54,62 @@ const GamePage = () => {
             .then(() => setLoading(false));
     }, [level, option]);
 
+    useEffect(() => {
+        if (data.length) {
+            setCurrentGuessedWords(data[currentLine].guessedArray);
+            setCurrentShuffledArray(data[currentLine].shuffledArray);
+            setCurrentOriginalArray(data[currentLine].originalArray);
+            setTranslation(data[currentLine].translation);
+        }
+    }, [data, currentLine]);
+
+    useEffect(() => {
+        if (data.length) {
+            if (currentGuessedWords.length === data[currentLine].sentenceLength) {
+                setGameInProgress(false);
+            } else {
+                setGameInProgress(true);
+            }
+        }
+    }, [currentGuessedWords, currentLine, data]);
+
     const handleCheckboxChecked = () => {};
+
+    const handleWordGuessed = (word) => {
+        setCurrentGuessedWords((prevState) => [...prevState, word]);
+        setCurrentShuffledArray(currentShuffledArray.filter((el) => el !== word));
+    };
+
+    const handleWordPassed = (word) => {
+        setCurrentShuffledArray((prevState) => [...prevState, word]);
+        setCurrentGuessedWords(currentGuessedWords.filter((el) => el !== word));
+    };
+
+    const checkGuessingResult = () => {
+        currentGuessedWords.forEach((word, index) => {
+            if (word !== currentOriginalArray[index]) {
+                setDifferenceIndexes((prevState) => [...prevState, index]);
+                setReadyForContinue(true);
+            } else {
+                setReadyForContinue(true);
+            }
+        });
+        setReadyForReview(true);
+    };
+
+    const showAnswer = () => {
+        setShowOriginalArray(true);
+        setGameInProgress(false);
+        setCurrentGuessedWords(currentOriginalArray);
+        setCurrentShuffledArray([]);
+    };
+
+    const continueGame = () => {
+        if (currentLine < 10) {
+            setGuessedArrays((prevState) => [...prevState, currentGuessedWords]);
+            setCurrentLine((prevState) => prevState + 1);
+        }
+    };
 
     return (
         <div className="game-page">
@@ -94,14 +163,51 @@ const GamePage = () => {
                     </div>
                 </div>
                 <div className="main game">
-                    <div className="game__translation">
-                        <i className="material-icons">volume_up</i>
-                        <div className="translation">hjhklk</div>
-                    </div>
-                    {loading ? 'loading' : <GameBox data={data} />}
+                    <Translation text={translation} translationShown={translationShown} />
+                    {loading ? (
+                        'loading'
+                    ) : (
+                        <>
+                            <div className="game__box">
+                                {guessedArrays.map((array, index) => (
+                                    <GameBoxLine
+                                        key={index}
+                                        guessedArray={array}
+                                        length={array.length}
+                                        onWordClick={handleWordPassed}
+                                        readyForReview={readyForReview}
+                                        differenceIndexes={differenceIndexes}
+                                    />
+                                ))}
+                                {guessedArrays.length !== 10 && (
+                                    <GameBoxLine
+                                        guessedArray={currentGuessedWords}
+                                        length={data[currentLine].sentenceLength}
+                                        onWordClick={handleWordPassed}
+                                        readyForReview={readyForReview}
+                                        differenceIndexes={differenceIndexes}
+                                    />
+                                )}
+                            </div>
+                            <div className="game__guess-area">
+                                <GameGuessArea
+                                    array={currentShuffledArray}
+                                    length={data[currentLine].sentenceLength}
+                                    onClick={handleWordGuessed}
+                                />
+                            </div>
+                        </>
+                    )}
                     <div className="game__buttons">
-                        <Button className="not-know" text="I don't know" />
-                        <Button className="check" text="Check" />
+                        {gameInProgress && !readyForContinue && (
+                            <Button className="not-know" text="I don't know" onClick={showAnswer} />
+                        )}
+                        {!gameInProgress && !readyForContinue && (
+                            <Button className="check" text="Check" onClick={checkGuessingResult} />
+                        )}
+                        {!gameInProgress && readyForContinue && (
+                            <Button className="continue" text="Continue" onClick={continueGame} />
+                        )}
                     </div>
                 </div>
             </div>

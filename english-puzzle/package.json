@@ -15,6 +15,7 @@
     "node-sass": "^4.14.1",
     "prettier": "^2.0.5",
     "react": "^16.13.1",
+    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1"
@@ -39,6 +40,7 @@
       "react/no-array-index-key": "off",
       "jsx-a11y/no-static-element-interactions": "off",
       "jsx-a11y/click-events-have-key-events": "off",
+      "react/jsx-props-no-spreading": "off",
       "prettier/prettier": [
         "error",
         {

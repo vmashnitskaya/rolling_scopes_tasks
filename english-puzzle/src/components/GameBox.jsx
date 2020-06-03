@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import GameBoxLine from './GameBoxLine';
-import GameGuessArea from './GameGuessArea';
+
+
 
 const GameBox = ({ data }) => {
     const [dataArray, setDataArray] = useState([...data]);
@@ -9,43 +9,23 @@ const GameBox = ({ data }) => {
     const [currentGuessedWords, setCurrentGuessedWords] = useState(
         dataArray[currentLine].guessedArray
     );
+    const [currentShuffledArray, setCurrentShuffledArray] = useState(
+        dataArray[currentLine].shuffledArray
+    );
     const [differenceIndexes, setDifferenceIndexes] = useState([]);
 
-    useEffect(() => {
-        if (currentGuessedWords.length >= dataArray[currentLine].sentenceLength) {
-            const newDifferenceIndexes = [];
-            currentGuessedWords.forEach((element, index) => {
-                if (element !== dataArray[index].originalArray) {
-                    newDifferenceIndexes.push(index);
-                }
-            });
-            setDifferenceIndexes(newDifferenceIndexes);
-        }
-    }, [currentGuessedWords]);
-
-    const handleWordGuessed = (word) => {
-        setCurrentGuessedWords((prevState) => [...prevState, word]);
-    };
-
+    
     return (
         <>
             <div className="game__box">
-                {dataArray.map((lineSentence, index) => (
-                    <GameBoxLine
-                        key={index}
-                        shuffledArray={lineSentence.shuffledArray}
-                        length={lineSentence.sentenceLength}
-                        onWordSelected={handleWordGuessed}
-                    />
-                ))}
-            </div>
-            <div className="game__guess-area">
-                <GameGuessArea
-                    array={currentGuessedWords}
+                <GameBoxLine
+                    guessedArray={currentGuessedWords}
                     length={dataArray[currentLine].sentenceLength}
-                    differenceIndexes={differenceIndexes}
+                    onWordClick={handleWordPassed}
                 />
             </div>
+
+            
         </>
     );
 };

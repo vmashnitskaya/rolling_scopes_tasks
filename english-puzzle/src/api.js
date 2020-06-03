@@ -23,7 +23,7 @@ const getSentences = async (level, option) => {
     const url = `https://afternoon-falls-25894.herokuapp.com/words?page=${page}&group=${level}`;
     const res = await window.fetch(url, { method: 'GET' });
     const json = await res.json();
-    const currectSet = option % 2 ? json.slice(0, 10) : json.slice(10, 20);
+    const currectSet = option % 2 ? json.slice(10, 20) : json.slice(0, 10);
     const sentences = currectSet.map(({ textExample, audioExample }) => {
         const sentence = textExample.replace(/<\/?[^>]+(>|$)/g, '');
         const shuffledArray = shuffle(sentence.slice(0).split(' '));
@@ -38,7 +38,7 @@ const getSentences = async (level, option) => {
         };
     });
 
-    const sentencesForTranslation = sentences.slice(0).map((element) => element.sentence);
+    const sentencesForTranslation = sentences.slice(0).map((element) => element.text);
     const translations = await getTranslations(sentencesForTranslation);
     translations.forEach((translation, index) => {
         sentences[index].translation = translation;
