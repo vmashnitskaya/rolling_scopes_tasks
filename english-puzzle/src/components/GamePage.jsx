@@ -1,39 +1,47 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import api from '../api';
 import Checkbox from './Checkbox';
 import DropDown from './DropDown';
 import GameBox from './GameBox';
 import Button from './Button';
 
-const maxLevel = 6;
-const maxPage = 30;
+const maxLevel = 5;
+const maxOption = 59;
 
 const GamePage = () => {
-    const [level, setLevel] = useState('1');
-    const [page, setPage] = useState('1');
+    const [level, setLevel] = useState(0);
+    const [option, setOption] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+
     const levelOptions = useMemo(
         () =>
-            Array.from({ length: maxLevel }, (v, i) => {
-                const l = (i + 1).toString();
-                return {
-                    value: l,
-                    text: l,
-                };
-            }),
+            Array.from({ length: maxLevel }, (v, i) => ({
+                value: i,
+                text: (i + 1).toString(),
+            })),
         []
     );
-    const pageOptions = useMemo(
+    const optionOptions = useMemo(
         () =>
-            Array.from({ length: maxPage }, (v, i) => {
-                const p = (i + 1).toString();
-                return {
-                    value: p,
-                    text: p,
-                };
-            }),
+            Array.from({ length: maxOption }, (v, i) => ({
+                value: i,
+                text: (i + 1).toString(),
+            })),
         []
     );
     const handleLevelChange = (event) => setLevel(event.target.value);
-    const handlePageChange = (event) => setPage(event.target.value);
+    const handleOptionChange = (event) => setOption(event.target.value);
+
+    useEffect(() => {
+        setLoading(true);
+        api.getSentences(level, option)
+            .then(setData)
+            .then(() => setLoading(false));
+    }, [level, option]);
+
+    const handleCheckboxChecked = () => {};
+
     return (
         <div className="game-page">
             <div className="container">
@@ -49,9 +57,9 @@ const GamePage = () => {
                         <DropDown
                             name="page"
                             label="Page"
-                            value={page}
-                            options={pageOptions}
-                            onChange={handlePageChange}
+                            value={option}
+                            options={optionOptions}
+                            onChange={handleOptionChange}
                         />
                     </div>
                     <div className="header__checkboxes">
@@ -59,25 +67,29 @@ const GamePage = () => {
                             className="material-icons control"
                             id="music_note"
                             text="music_note"
-                            checked="true"
+                            checked
+                            onChange={handleCheckboxChecked}
                         />
                         <Checkbox
                             className="material-icons control"
                             id="volume_up"
                             text="volume_up"
-                            checked="true"
+                            checked
+                            onChange={handleCheckboxChecked}
                         />
                         <Checkbox
                             className="material-icons control"
                             id="insert_photo"
                             text="insert_photo"
-                            checked="true"
+                            checked
+                            onChange={handleCheckboxChecked}
                         />
                         <Checkbox
                             className="material-icons control"
                             id="translate"
                             text="translate"
-                            checked="true"
+                            checked
+                            onChange={handleCheckboxChecked}
                         />
                     </div>
                 </div>
@@ -86,8 +98,7 @@ const GamePage = () => {
                         <i className="material-icons">volume_up</i>
                         <div className="translation">hjhklk</div>
                     </div>
-                    <GameBox className="game__box" />
-                    <div className="game__guess-area" />
+                    {loading ? 'loading' : <GameBox data={data} />}
                     <div className="game__buttons">
                         <Button className="not-know" text="I don't know" />
                         <Button className="check" text="Check" />

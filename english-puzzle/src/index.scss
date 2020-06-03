@@ -6,7 +6,7 @@ $main-color: lighten(
 );
 $contrast-color: lighten(
   $color: #b79884,
-  $amount: 5,
+  $amount: 10,
 );
 
 html {
@@ -134,17 +134,34 @@ body {
     }
     &__box {
       width: 1000px;
-      height: 400px;
+      height: 350px;
       background-color: $contrast-color;
       &-line {
+        display: flex;
+        height: 35px;
+      }
+      &-word {
         border: 1px solid black;
+        padding-top: 6px;
+        text-align: center;
+        font-size: 1.4rem;
+        cursor: pointer;
+        user-select: none;
       }
     }
     &__guess-area {
+      display: flex;
       margin-top: 20px;
-      height: 50px;
-      border: 1px solid black;
+      height: 35px;
       background-color: lighten($color: $main-color, $amount: 10);
+      .guessed {
+        padding-top: 6px;
+        border: 1px solid black;
+        font-size: 1.4rem;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+      }
     }
     &__buttons {
       display: flex;
