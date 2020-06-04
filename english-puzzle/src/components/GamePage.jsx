@@ -1,11 +1,12 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import api from '../api';
-import Checkbox from './Checkbox';
 import DropDown from './DropDown';
 import Button from './Button';
 import GameBoxLine from './GameBoxLine';
 import GameGuessArea from './GameGuessArea';
 import Translation from './Translation';
+import GameBoxLineStatic from './GameBoxLineStatic';
+import Hints from './Hints';
 
 const maxLevel = 6;
 const maxOption = 60;
@@ -21,12 +22,21 @@ const GamePage = () => {
     const [currentShuffledArray, setCurrentShuffledArray] = useState([]);
     const [currentOriginalArray, setCurrentOriginalArray] = useState([]);
     const [showOriginalArray, setShowOriginalArray] = useState(false);
+    const [soundLink, setSoundLink] = useState('')
+
     const [differenceIndexes, setDifferenceIndexes] = useState([]);
+
     const [gameInProgress, setGameInProgress] = useState(true);
     const [readyForReview, setReadyForReview] = useState(false);
     const [readyForContinue, setReadyForContinue] = useState(false);
+
     const [translation, setTranslation] = useState('');
-    const [translationShown, setTranslationShown] = useState(false);
+
+    const [options, setOptions] = useState(localStorage.getItem('optionsObject') ? JSON.parse(localStorage.getItem('optionsObject')) : {
+        translationShown: true,
+        soundEnabled: true,
+        autoSoundEnabled: true
+    })
 
     const levelOptions = useMemo(
         () =>
@@ -56,10 +66,14 @@ const GamePage = () => {
 
     useEffect(() => {
         if (data.length) {
-            setCurrentGuessedWords(data[currentLine].guessedArray);
-            setCurrentShuffledArray(data[currentLine].shuffledArray);
             setCurrentOriginalArray(data[currentLine].originalArray);
             setTranslation(data[currentLine].translation);
+            setReadyForContinue(false);
+            setReadyForReview(false);
+            setCurrentGuessedWords(data[currentLine].guessedArray);
+            setCurrentShuffledArray(data[currentLine].shuffledArray);
+            setDifferenceIndexes([]);
+            setSoundLink(data[currentLine].pronunciation);
         }
     }, [data, currentLine]);
 
@@ -73,27 +87,39 @@ const GamePage = () => {
         }
     }, [currentGuessedWords, currentLine, data]);
 
-    const handleCheckboxChecked = () => {};
 
-    const handleWordGuessed = (word) => {
+    useEffect(() => {
+        localStorage.setItem('optionsObject', JSON.stringify(options));
+    }, [options])
+
+    const handleWordGuessed = (word, index) => {
         setCurrentGuessedWords((prevState) => [...prevState, word]);
-        setCurrentShuffledArray(currentShuffledArray.filter((el) => el !== word));
+        setCurrentShuffledArray((prevState) => {
+            const state = [...prevState];
+            state.splice(index, 1);
+            return state;
+        });
     };
 
-    const handleWordPassed = (word) => {
+    const handleWordPassed = (word, index) => {
         setCurrentShuffledArray((prevState) => [...prevState, word]);
-        setCurrentGuessedWords(currentGuessedWords.filter((el) => el !== word));
+        setCurrentGuessedWords((prevState) => {
+            const state = [...prevState];
+            state.splice(index, 1);
+            return state;
+        });
     };
 
     const checkGuessingResult = () => {
+        console.log(currentGuessedWords);
+        console.log(currentOriginalArray);
         currentGuessedWords.forEach((word, index) => {
             if (word !== currentOriginalArray[index]) {
                 setDifferenceIndexes((prevState) => [...prevState, index]);
-                setReadyForContinue(true);
-            } else {
-                setReadyForContinue(true);
+
             }
         });
+        setReadyForContinue(true);
         setReadyForReview(true);
     };
 
@@ -110,6 +136,23 @@ const GamePage = () => {
             setCurrentLine((prevState) => prevState + 1);
         }
     };
+
+    const enableAutoPronunciation = () => {
+        setOptions(prevState => ({ ...prevState, autoSoundEnabled: !prevState.autoSoundEnabled }));
+    }
+
+    const enablePronunciation = () => {
+        setOptions(prevState => ({ ...prevState, soundEnabled: !prevState.soundEnabled }));
+    }
+
+    const enableImage = () => { }
+
+    const enableTranslation = () => {
+        setOptions(prevState => ({ ...prevState, translationShown: !prevState.translationShown }));
+
+
+    }
+
 
     return (
         <div className="game-page">
@@ -131,73 +174,45 @@ const GamePage = () => {
                             onChange={handleOptionChange}
                         />
                     </div>
-                    <div className="header__checkboxes">
-                        <Checkbox
-                            className="material-icons control"
-                            id="music_note"
-                            text="music_note"
-                            checked
-                            onChange={handleCheckboxChecked}
-                        />
-                        <Checkbox
-                            className="material-icons control"
-                            id="volume_up"
-                            text="volume_up"
-                            checked
-                            onChange={handleCheckboxChecked}
-                        />
-                        <Checkbox
-                            className="material-icons control"
-                            id="insert_photo"
-                            text="insert_photo"
-                            checked
-                            onChange={handleCheckboxChecked}
-                        />
-                        <Checkbox
-                            className="material-icons control"
-                            id="translate"
-                            text="translate"
-                            checked
-                            onChange={handleCheckboxChecked}
-                        />
-                    </div>
+                    <Hints handleAutoEnabledChecked={enableAutoPronunciation}
+                        handlePronunciationHintChecked={enablePronunciation}
+                        handleImageHintChecked={enableImage}
+                        handleTranslationHintChecked={enableTranslation}
+                        options={options} />
                 </div>
                 <div className="main game">
-                    <Translation text={translation} translationShown={translationShown} />
+                    <Translation text={translation} audio={soundLink} options={options} />
                     {loading ? (
                         'loading'
                     ) : (
-                        <>
-                            <div className="game__box">
-                                {guessedArrays.map((array, index) => (
-                                    <GameBoxLine
-                                        key={index}
-                                        guessedArray={array}
-                                        length={array.length}
-                                        onWordClick={handleWordPassed}
-                                        readyForReview={readyForReview}
-                                        differenceIndexes={differenceIndexes}
-                                    />
-                                ))}
-                                {guessedArrays.length !== 10 && (
-                                    <GameBoxLine
-                                        guessedArray={currentGuessedWords}
+                            <>
+                                <div className="game__box">
+                                    {guessedArrays.map((array, index) => (
+                                        <GameBoxLineStatic
+                                            key={index}
+                                            guessedArray={array}
+                                            length={array.length}
+                                        />
+                                    ))}
+                                    {guessedArrays.length !== 10 && (
+                                        <GameBoxLine
+                                            guessedArray={currentGuessedWords}
+                                            length={data[currentLine].sentenceLength}
+                                            onWordClick={handleWordPassed}
+                                            readyForReview={readyForReview}
+                                            differenceIndexes={differenceIndexes}
+                                        />
+                                    )}
+                                </div>
+                                <div className="game__guess-area">
+                                    <GameGuessArea
+                                        array={currentShuffledArray}
                                         length={data[currentLine].sentenceLength}
-                                        onWordClick={handleWordPassed}
-                                        readyForReview={readyForReview}
-                                        differenceIndexes={differenceIndexes}
+                                        onClick={handleWordGuessed}
                                     />
-                                )}
-                            </div>
-                            <div className="game__guess-area">
-                                <GameGuessArea
-                                    array={currentShuffledArray}
-                                    length={data[currentLine].sentenceLength}
-                                    onClick={handleWordGuessed}
-                                />
-                            </div>
-                        </>
-                    )}
+                                </div>
+                            </>
+                        )}
                     <div className="game__buttons">
                         {gameInProgress && !readyForContinue && (
                             <Button className="not-know" text="I don't know" onClick={showAnswer} />

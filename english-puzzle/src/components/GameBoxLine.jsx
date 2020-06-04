@@ -11,9 +11,7 @@ const GameBoxLine = ({ guessedArray, length, onWordClick, readyForReview, differ
             if (differenceIndexes.includes(index)) {
                 return 'coloredRed';
             }
-            if (!differenceIndexes.includes(index)) {
-                return 'coloredGreen';
-            }
+            return 'coloredGreen';
         }
         return '';
     };
@@ -25,6 +23,7 @@ const GameBoxLine = ({ guessedArray, length, onWordClick, readyForReview, differ
                         className={checkColors(index)}
                         key={index}
                         text={word}
+                        index={index}
                         style={{ width: `${wordWidth}%` }}
                         onClick={onWordClick}
                     />

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-const GameBoxWord = ({ className, text, style, onClick }) => {
-    const handleClick = (event) => {
-        onClick(event.target.innerHTML);
+const GameBoxWord = ({ className, text, index, style, onClick }) => {
+    const handleClick = () => {
+        onClick(text, index);
     };
     return (
         <div className={clsx('game__box-word', `${className}`)} style={style} onClick={handleClick}>
@@ -20,6 +20,7 @@ GameBoxWord.propTypes = {
         width: PropTypes.string.isRequired,
     }).isRequired,
     onClick: PropTypes.func.isRequired,
+    index: PropTypes.number.isRequired
 };
 
 export default GameBoxWord;

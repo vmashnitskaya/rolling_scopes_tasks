@@ -101,6 +101,9 @@ body {
         &:hover {
           background-color: lighten($color: $contrast-color, $amount: 10);
         }
+        &:not(:checked) {
+          background-color: lighten($color: $contrast-color, $amount: 10);
+        }
       }
       label {
         font-size: 3rem;
@@ -124,14 +127,23 @@ body {
     &__translation {
       text-align: center;
       height: 60px;
-      i {
-        font-size: 3rem;
+      .sound-wrapper {
+        height: 30px;
+        .sound {
+          font-size: 3rem;
+          &.hidden {
+            display: none;
+          }
+          &.active {
+            color: $contrast-color;
+          }
+        }
       }
       .translation {
         font-size: 2rem;
-      }
-      &.hidden {
-        visibility: hidden;
+        &.hidden {
+          display: none;
+        }
       }
     }
     &__box {
