@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import GameBoxWord from './GameBoxWord';
+import GameBoxWordStatic from './GameBoxWordStatic';
 
 const GameBoxLineStatic = ({ guessedArray, length }) => {
     const arrayOfWords = guessedArray.slice(0);
@@ -9,11 +9,7 @@ const GameBoxLineStatic = ({ guessedArray, length }) => {
         <>
             <div className="game__box-line">
                 {arrayOfWords.map((word, index) => (
-                    <GameBoxWord
-                        key={index}
-                        text={word}
-                        style={{ width: `${wordWidth}%` }}
-                    />
+                    <GameBoxWordStatic key={index} text={word} style={{ width: `${wordWidth}%` }} />
                 ))}
             </div>
         </>

@@ -8,12 +8,22 @@ import Translation from './Translation';
 import GameBoxLineStatic from './GameBoxLineStatic';
 import Hints from './Hints';
 
-const maxLevel = 6;
-const maxOption = 60;
+const maxLevel = 5;
+const maxOption = 59;
+const optionsPassedObject = Array.from({ length: maxLevel + 1 }, (_, i) => i).reduce(
+    (acc, el) => ({ ...acc, [el]: [] }),
+    {}
+);
 
 const GamePage = () => {
-    const [level, setLevel] = useState(0);
-    const [option, setOption] = useState(0);
+    const [{ level, option }, setPagination] = useState(
+        localStorage.getItem('pagination')
+            ? JSON.parse(localStorage.getItem('pagination'))
+            : { level: 0, option: 0 }
+    );
+    const [levelPassed, setlevelPassed] = useState([]);
+    const [optionsPassed, setOptionsPassed] = useState(optionsPassedObject);
+
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const [currentLine, setCurrentLine] = useState(0);
@@ -22,7 +32,7 @@ const GamePage = () => {
     const [currentShuffledArray, setCurrentShuffledArray] = useState([]);
     const [currentOriginalArray, setCurrentOriginalArray] = useState([]);
     const [showOriginalArray, setShowOriginalArray] = useState(false);
-    const [soundLink, setSoundLink] = useState('')
+    const [soundLink, setSoundLink] = useState('');
 
     const [differenceIndexes, setDifferenceIndexes] = useState([]);
 
@@ -32,15 +42,19 @@ const GamePage = () => {
 
     const [translation, setTranslation] = useState('');
 
-    const [options, setOptions] = useState(localStorage.getItem('optionsObject') ? JSON.parse(localStorage.getItem('optionsObject')) : {
-        translationShown: true,
-        soundEnabled: true,
-        autoSoundEnabled: true
-    })
+    const [options, setOptions] = useState(
+        localStorage.getItem('optionsObject')
+            ? JSON.parse(localStorage.getItem('optionsObject'))
+            : {
+                  translationShown: true,
+                  soundEnabled: true,
+                  autoSoundEnabled: true,
+              }
+    );
 
     const levelOptions = useMemo(
         () =>
-            Array.from({ length: maxLevel }, (v, i) => ({
+            Array.from({ length: maxLevel + 1 }, (v, i) => ({
                 value: i,
                 text: (i + 1).toString(),
             })),
@@ -48,20 +62,27 @@ const GamePage = () => {
     );
     const optionOptions = useMemo(
         () =>
-            Array.from({ length: maxOption }, (v, i) => ({
+            Array.from({ length: maxOption + 1 }, (v, i) => ({
                 value: i,
                 text: (i + 1).toString(),
             })),
         []
     );
-    const handleLevelChange = (event) => setLevel(event.target.value);
-    const handleOptionChange = (event) => setOption(event.target.value);
+
+    const handleLevelChange = (event) =>
+        setPagination((prevState) => ({ ...prevState, level: Number(event.target.value) }));
+
+    const handleOptionChange = (event) =>
+        setPagination((prevState) => ({ ...prevState, option: Number(event.target.value) }));
 
     useEffect(() => {
         setLoading(true);
+        setCurrentLine(0);
+        setGuessedArrays([]);
         api.getSentences(level, option)
             .then(setData)
             .then(() => setLoading(false));
+        localStorage.setItem('pagination', JSON.stringify({ level, option }));
     }, [level, option]);
 
     useEffect(() => {
@@ -87,10 +108,9 @@ const GamePage = () => {
         }
     }, [currentGuessedWords, currentLine, data]);
 
-
     useEffect(() => {
         localStorage.setItem('optionsObject', JSON.stringify(options));
-    }, [options])
+    }, [options]);
 
     const handleWordGuessed = (word, index) => {
         setCurrentGuessedWords((prevState) => [...prevState, word]);
@@ -111,12 +131,9 @@ const GamePage = () => {
     };
 
     const checkGuessingResult = () => {
-        console.log(currentGuessedWords);
-        console.log(currentOriginalArray);
         currentGuessedWords.forEach((word, index) => {
             if (word !== currentOriginalArray[index]) {
                 setDifferenceIndexes((prevState) => [...prevState, index]);
-
             }
         });
         setReadyForContinue(true);
@@ -130,29 +147,63 @@ const GamePage = () => {
         setCurrentShuffledArray([]);
     };
 
+    const startNewLevel = () => {
+        if (option < maxOption) {
+            setPagination((prevState) => ({ ...prevState, option: prevState.option + 1 }));
+        } else if (level < maxLevel) {
+            setPagination((prevState) => ({ option: 0, level: prevState.level + 1 }));
+        } else {
+            setPagination({ level: 0, option: 0 });
+        }
+    };
+
+    useEffect(() => {
+        if (readyForContinue === true && optionsPassed[level - 1].length === maxOption) {
+            setOptionsPassed((prevState) => ({
+                ...prevState,
+                [level]: [...prevState[level], maxOption],
+            }));
+            setlevelPassed((prevState) => [...prevState, level - 1]);
+        }
+    }, [level]);
+
+    useEffect(() => {
+        if (readyForContinue === true) {
+            setOptionsPassed((prevState) => ({
+                ...prevState,
+                [level]: [...prevState[level], option - 1],
+            }));
+        }
+    }, [option]);
+
     const continueGame = () => {
-        if (currentLine < 10) {
+        if (currentLine < 9) {
             setGuessedArrays((prevState) => [...prevState, currentGuessedWords]);
             setCurrentLine((prevState) => prevState + 1);
+        } else {
+            startNewLevel();
         }
     };
 
     const enableAutoPronunciation = () => {
-        setOptions(prevState => ({ ...prevState, autoSoundEnabled: !prevState.autoSoundEnabled }));
-    }
+        setOptions((prevState) => ({
+            ...prevState,
+            autoSoundEnabled: !prevState.autoSoundEnabled,
+        }));
+    };
 
     const enablePronunciation = () => {
-        setOptions(prevState => ({ ...prevState, soundEnabled: !prevState.soundEnabled }));
-    }
+        setOptions((prevState) => ({ ...prevState, soundEnabled: !prevState.soundEnabled }));
+    };
 
-    const enableImage = () => { }
+    const enableImage = () => {};
 
     const enableTranslation = () => {
-        setOptions(prevState => ({ ...prevState, translationShown: !prevState.translationShown }));
-
-
-    }
-
+        setOptions((prevState) => ({
+            ...prevState,
+            translationShown: !prevState.translationShown,
+        }));
+    };
 
     return (
         <div className="game-page">
@@ -160,59 +211,67 @@ const GamePage = () => {
                 <div className="header">
                     <div className="header__drop-downs">
                         <DropDown
+                            className="level"
                             name="level"
                             label="Level"
                             value={level}
                             options={levelOptions}
                             onChange={handleLevelChange}
+                            level={level}
+                            passed={levelPassed}
                         />
                         <DropDown
+                            className="page"
                             name="page"
                             label="Page"
                             value={option}
                             options={optionOptions}
                             onChange={handleOptionChange}
+                            level={level}
+                            passed={optionsPassed}
                         />
                     </div>
-                    <Hints handleAutoEnabledChecked={enableAutoPronunciation}
+                    <Hints
+                        handleAutoEnabledChecked={enableAutoPronunciation}
                         handlePronunciationHintChecked={enablePronunciation}
                         handleImageHintChecked={enableImage}
                         handleTranslationHintChecked={enableTranslation}
-                        options={options} />
+                        options={options}
+                    />
                 </div>
                 <div className="main game">
                     <Translation text={translation} audio={soundLink} options={options} />
                     {loading ? (
                         'loading'
                     ) : (
-                            <>
-                                <div className="game__box">
-                                    {guessedArrays.map((array, index) => (
-                                        <GameBoxLineStatic
-                                            key={index}
-                                            guessedArray={array}
-                                            length={array.length}
-                                        />
-                                    ))}
-                                    {guessedArrays.length !== 10 && (
-                                        <GameBoxLine
-                                            guessedArray={currentGuessedWords}
-                                            length={data[currentLine].sentenceLength}
-                                            onWordClick={handleWordPassed}
-                                            readyForReview={readyForReview}
-                                            differenceIndexes={differenceIndexes}
-                                        />
-                                    )}
-                                </div>
-                                <div className="game__guess-area">
-                                    <GameGuessArea
-                                        array={currentShuffledArray}
-                                        length={data[currentLine].sentenceLength}
-                                        onClick={handleWordGuessed}
+                        <>
+                            <div className="game__box">
+                                {guessedArrays.map((array, index) => (
+                                    <GameBoxLineStatic
+                                        key={index}
+                                        guessedArray={array}
+                                        length={array.length}
                                     />
-                                </div>
-                            </>
-                        )}
+                                ))}
+                                {guessedArrays.length !== 10 && (
+                                    <GameBoxLine
+                                        guessedArray={currentGuessedWords}
+                                        length={data[currentLine].sentenceLength}
+                                        onWordClick={handleWordPassed}
+                                        readyForReview={readyForReview}
+                                        differenceIndexes={differenceIndexes}
+                                    />
+                                )}
+                            </div>
+                            <div className="game__guess-area">
+                                <GameGuessArea
+                                    array={currentShuffledArray}
+                                    length={data[currentLine].sentenceLength}
+                                    onClick={handleWordGuessed}
+                                />
+                            </div>
+                        </>
+                    )}
                     <div className="game__buttons">
                         {gameInProgress && !readyForContinue && (
                             <Button className="not-know" text="I don't know" onClick={showAnswer} />

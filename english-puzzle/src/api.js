@@ -44,6 +44,7 @@ const getSentences = async (level, option) => {
         sentences[index].translation = translation;
     });
 
+    console.log(sentences);
     return sentences;
 };
 

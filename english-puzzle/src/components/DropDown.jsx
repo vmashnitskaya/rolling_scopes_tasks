@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
-const DropDown = ({ className, name, label, value, options, onChange }) => {
+const DropDown = ({ className, name, label, value, level, options, onChange, passed }) => {
     return (
         <div className="dropdown">
             <label htmlFor={name}>{label}</label>
@@ -13,11 +14,22 @@ const DropDown = ({ className, name, label, value, options, onChange }) => {
                 value={value}
                 onChange={onChange}
             >
-                {options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                        {option.text}
-                    </option>
-                ))}
+                {options.map((option) => {
+                    return (
+                        <option
+                            key={option.value}
+                            value={option.value}
+                            className={clsx(
+                                className === 'page' &&
+                                    passed[level].includes(option.value) &&
+                                    'passed',
+                                className === 'level' && passed.includes(option.value) && 'passed'
+                            )}
+                        >
+                            {option.text}
+                        </option>
+                    );
+                })}
             </select>
         </div>
     );
@@ -35,6 +47,11 @@ DropDown.propTypes = {
             text: PropTypes.string.isRequired,
         })
     ).isRequired,
+    passed: PropTypes.oneOfType(
+        PropTypes.arrayOf(PropTypes.number),
+        PropTypes.objectOf(PropTypes.string)
+    ).isRequired,
+    level: PropTypes.number.isRequired,
 };
 
 DropDown.defaultProps = {

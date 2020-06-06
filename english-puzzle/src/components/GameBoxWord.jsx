@@ -7,7 +7,12 @@ const GameBoxWord = ({ className, text, index, style, onClick }) => {
         onClick(text, index);
     };
     return (
-        <div className={clsx('game__box-word', `${className}`)} style={style} onClick={handleClick}>
+        <div
+            className={clsx('game__box-word', `${className}`)}
+            index={index}
+            style={style}
+            onClick={handleClick}
+        >
             {text}
         </div>
     );
@@ -20,7 +25,7 @@ GameBoxWord.propTypes = {
         width: PropTypes.string.isRequired,
     }).isRequired,
     onClick: PropTypes.func.isRequired,
-    index: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired,
 };
 
 export default GameBoxWord;

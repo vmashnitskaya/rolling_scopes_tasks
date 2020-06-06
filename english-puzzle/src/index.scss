@@ -88,6 +88,11 @@ body {
           cursor: pointer;
           background-color: lighten($color: $main-color, $amount: 10);
         }
+        option {
+          &.passed {
+            background-color: $contrast-color;
+          }
+        }
       }
     }
     &__checkboxes {
