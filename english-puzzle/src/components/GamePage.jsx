@@ -7,6 +7,7 @@ import GameGuessArea from './GameGuessArea';
 import Translation from './Translation';
 import GameBoxLineStatic from './GameBoxLineStatic';
 import Hints from './Hints';
+import Loader from './Loader';
 
 const maxLevel = 5;
 const maxOption = 59;
@@ -21,7 +22,7 @@ const GamePage = () => {
             ? JSON.parse(localStorage.getItem('pagination'))
             : { level: 0, option: 0 }
     );
-    const [levelPassed, setlevelPassed] = useState([]);
+    const [levelPassed, setLevelPassed] = useState([]);
     const [optionsPassed, setOptionsPassed] = useState(optionsPassedObject);
 
     const [loading, setLoading] = useState(true);
@@ -29,18 +30,20 @@ const GamePage = () => {
     const [currentLine, setCurrentLine] = useState(0);
     const [currentGuessedWords, setCurrentGuessedWords] = useState([]);
     const [guessedArrays, setGuessedArrays] = useState([]);
-    const [currentShuffledArray, setCurrentShuffledArray] = useState([]);
+    const [currentShuffledArray, setCurrentShuffledArray] = useState({});
     const [currentOriginalArray, setCurrentOriginalArray] = useState([]);
     const [showOriginalArray, setShowOriginalArray] = useState(false);
     const [soundLink, setSoundLink] = useState('');
 
-    const [differenceIndexes, setDifferenceIndexes] = useState([]);
+    const [differenceIndexes, setDifferenceIndexes] = useState(undefined);
 
     const [gameInProgress, setGameInProgress] = useState(true);
     const [readyForReview, setReadyForReview] = useState(false);
     const [readyForContinue, setReadyForContinue] = useState(false);
 
     const [translation, setTranslation] = useState('');
+
+    const [wrongResult, setWrongResult] = useState(false);
 
     const [options, setOptions] = useState(
         localStorage.getItem('optionsObject')
@@ -51,6 +54,7 @@ const GamePage = () => {
                   autoSoundEnabled: true,
               }
     );
+    const [correctResultEnabledOptions, setCorrectResultEnabledOptions] = useState(false);
 
     const levelOptions = useMemo(
         () =>
@@ -93,8 +97,9 @@ const GamePage = () => {
             setReadyForReview(false);
             setCurrentGuessedWords(data[currentLine].guessedArray);
             setCurrentShuffledArray(data[currentLine].shuffledArray);
-            setDifferenceIndexes([]);
+            setDifferenceIndexes(undefined);
             setSoundLink(data[currentLine].pronunciation);
+            setWrongResult(false);
         }
     }, [data, currentLine]);
 
@@ -131,18 +136,37 @@ const GamePage = () => {
     };
 
     const checkGuessingResult = () => {
+        const _differenceIndexes = [];
         currentGuessedWords.forEach((word, index) => {
             if (word !== currentOriginalArray[index]) {
-                setDifferenceIndexes((prevState) => [...prevState, index]);
+                _differenceIndexes.push(index);
             }
         });
-        setReadyForContinue(true);
-        setReadyForReview(true);
+        setDifferenceIndexes(_differenceIndexes);
     };
+
+    useEffect(() => {
+        if (differenceIndexes && differenceIndexes.length === 0) {
+            setReadyForReview(true);
+            setReadyForContinue(true);
+            setWrongResult(false);
+            if (
+                options.showAnswer === false ||
+                options.soundEnabled === false ||
+                optionOptions.autoSoundEnabled === false
+            ) {
+                setCorrectResultEnabledOptions(true);
+            }
+        } else if (differenceIndexes && differenceIndexes.length > 0) {
+            setReadyForReview(true);
+            setWrongResult(true);
+        }
+    }, [differenceIndexes]);
 
     const showAnswer = () => {
         setShowOriginalArray(true);
         setGameInProgress(false);
+        setReadyForReview(false);
         setCurrentGuessedWords(currentOriginalArray);
         setCurrentShuffledArray([]);
     };
@@ -163,7 +187,7 @@ const GamePage = () => {
                 ...prevState,
                 [level]: [...prevState[level], maxOption],
             }));
-            setlevelPassed((prevState) => [...prevState, level - 1]);
+            setLevelPassed((prevState) => [...prevState, level - 1]);
         }
     }, [level]);
 
@@ -178,6 +202,8 @@ const GamePage = () => {
 
     const continueGame = () => {
         if (currentLine < 9) {
+            setCurrentGuessedWords([]);
+            setCorrectResultEnabledOptions(false);
             setGuessedArrays((prevState) => [...prevState, currentGuessedWords]);
             setCurrentLine((prevState) => prevState + 1);
         } else {
@@ -240,9 +266,14 @@ const GamePage = () => {
                     />
                 </div>
                 <div className="main game">
-                    <Translation text={translation} audio={soundLink} options={options} />
+                    <Translation
+                        text={translation}
+                        audio={soundLink}
+                        options={options}
+                        correctResultEnabledOptions={correctResultEnabledOptions}
+                    />
                     {loading ? (
-                        'loading'
+                        <Loader />
                     ) : (
                         <>
                             <div className="game__box">
@@ -273,13 +304,13 @@ const GamePage = () => {
                         </>
                     )}
                     <div className="game__buttons">
-                        {gameInProgress && !readyForContinue && (
+                        {(wrongResult || (gameInProgress && !readyForContinue)) && (
                             <Button className="not-know" text="I don't know" onClick={showAnswer} />
                         )}
-                        {!gameInProgress && !readyForContinue && (
+                        {(wrongResult || (!gameInProgress && !readyForContinue)) && (
                             <Button className="check" text="Check" onClick={checkGuessingResult} />
                         )}
-                        {!gameInProgress && readyForContinue && (
+                        {!wrongResult && !gameInProgress && readyForContinue && (
                             <Button className="continue" text="Continue" onClick={continueGame} />
                         )}
                     </div>

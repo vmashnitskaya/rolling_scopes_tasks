@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Checkbox = ({ className, id, text, checked, onChange }) => (
-    <>
-        <input id={id} type="checkbox" value={text} checked={checked} onChange={onChange} />
-        <label htmlFor={text} className={className}>
-            {id}
-        </label>
-    </>
-);
+const Checkbox = ({ className, id, text, checked, onChange }) => {
+    return (
+        <>
+            <input id={id} type="checkbox" value={text} checked={checked} onChange={onChange} />
+            <label htmlFor={text} className={className}>
+                {id}
+            </label>
+        </>
+    );
+};
 
 Checkbox.propTypes = {
     text: PropTypes.string.isRequired,

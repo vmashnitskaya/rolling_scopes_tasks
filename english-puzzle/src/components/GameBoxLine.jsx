@@ -38,7 +38,11 @@ GameBoxLine.propTypes = {
     length: PropTypes.number.isRequired,
     onWordClick: PropTypes.func.isRequired,
     readyForReview: PropTypes.bool.isRequired,
-    differenceIndexes: PropTypes.arrayOf(PropTypes.number).isRequired,
+    differenceIndexes: PropTypes.arrayOf(PropTypes.number),
+};
+
+GameBoxLine.defaultProps = {
+    differenceIndexes: [],
 };
 
 export default GameBoxLine;

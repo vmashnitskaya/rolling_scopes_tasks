@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from './Checkbox';
 
-const Hints = ({ handleAutoEnabledChecked, handlePronunciationHintChecked, handleImageHintChecked, handleTranslationHintChecked, options }) => {
+const Hints = ({
+    handleAutoEnabledChecked,
+    handlePronunciationHintChecked,
+    handleImageHintChecked,
+    handleTranslationHintChecked,
+    options,
+}) => {
     return (
         <div className="header__checkboxes">
             <Checkbox
@@ -19,13 +25,13 @@ const Hints = ({ handleAutoEnabledChecked, handlePronunciationHintChecked, handl
                 checked={options.soundEnabled}
                 onChange={handlePronunciationHintChecked}
             />
-            <Checkbox
+            {/* <Checkbox
                 className="material-icons control"
                 id="insert_photo"
                 text="insert_photo"
                 checked
                 onChange={handleImageHintChecked}
-            />
+            /> */}
             <Checkbox
                 className="material-icons control"
                 id="translate"
@@ -34,19 +40,19 @@ const Hints = ({ handleAutoEnabledChecked, handlePronunciationHintChecked, handl
                 onChange={handleTranslationHintChecked}
             />
         </div>
-    )
-}
+    );
+};
 
-Hints.prototype = {
+Hints.propTypes = {
     handleAutoEnabledChecked: PropTypes.func.isRequired,
     handlePronunciationHintChecked: PropTypes.func.isRequired,
     handleImageHintChecked: PropTypes.func.isRequired,
     handleTranslationHintChecked: PropTypes.func.isRequired,
     options: PropTypes.shape({
-        translationShown: PropTypes.bool.isRequired,
-        soundEnabled: PropTypes.bool.isRequired,
-        autoSoundEnabled: PropTypes.bool.isRequired
-    })
-}
+        translationShown: PropTypes.bool,
+        soundEnabled: PropTypes.bool,
+        autoSoundEnabled: PropTypes,
+    }).isRequired,
+};
 
-export default Hints
+export default Hints;

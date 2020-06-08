@@ -28,13 +28,19 @@ const getSentences = async (level, option) => {
         const sentence = textExample.replace(/<\/?[^>]+(>|$)/g, '');
         const shuffledArray = shuffle(sentence.slice(0).split(' '));
         const originalArray = sentence.slice(0).split(' ');
+        const sentenceLength = sentence.split(' ').length;
         return {
             text: sentence,
             pronunciation: formatUrl(audioExample),
-            shuffledArray,
+            shuffledArray: shuffledArray.map((element, index) => ({
+                word: element,
+                order: index,
+                first: element === originalArray[0],
+                last: element === originalArray[sentenceLength - 1],
+            })),
             originalArray,
             guessedArray: [],
-            sentenceLength: sentence.split(' ').length,
+            sentenceLength,
         };
     });
 

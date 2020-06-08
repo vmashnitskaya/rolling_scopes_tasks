@@ -47,10 +47,10 @@ DropDown.propTypes = {
             text: PropTypes.string.isRequired,
         })
     ).isRequired,
-    passed: PropTypes.oneOfType(
+    passed: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.number),
-        PropTypes.objectOf(PropTypes.string)
-    ).isRequired,
+        PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)),
+    ]).isRequired,
     level: PropTypes.number.isRequired,
 };
 
