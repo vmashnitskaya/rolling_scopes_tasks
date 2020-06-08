@@ -15,7 +15,7 @@ const dateFormatterToday = (date) => {
 const dateFormatterNexDays = (date, plusDay) => {
     const weekDay = date.getDay();
 
-    return weekDay + plusDay > 6 ? (weekDay + plusDay) / weekDay : weekDay + plusDay;
+    return weekDay + plusDay > 6 ? (weekDay + plusDay) % 7 : weekDay + plusDay;
 };
 
 export default {

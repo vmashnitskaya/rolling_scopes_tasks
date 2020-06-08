@@ -98,7 +98,7 @@ const Main = (data, dataForDisplaing, timeForDisplaying, unit, lang) => {
                         ${
                             unit === 'C'
                                 ? `${weatherInfo.afterAfterTomorrowTemperature.tempC}`
-                                : `${weatherInfo.afterAfterTomorrowTemperature.tempC}`
+                                : `${weatherInfo.afterAfterTomorrowTemperature.tempF}`
                         }°
                         </div>
                         <div class="following-day__weather-animation"><img src="${

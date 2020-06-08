@@ -192,7 +192,7 @@ export default class ForecastView {
 
     changeHeaderLocalization = (lang) => {
         this.body.querySelector('#search').placeholder = localization[lang].placeholder;
-        this.body.querySelector('.submit-button').innerHTML = localization[lang].search;
+        this.body.querySelector('.submit-button').value = localization[lang].search;
         this.body.querySelector('.error').innerHTML = localization[lang].error;
         this.body.querySelector('.tooltipped').dataset.tooltip = localization[lang].codePhrase;
         document.querySelector('html').lang = lang;

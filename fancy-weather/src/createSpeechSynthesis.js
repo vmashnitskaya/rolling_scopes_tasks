@@ -1,9 +1,9 @@
 import localizationMessages from './localizationMessages';
 
-const voiceIndexes = {
-    en: 4,
-    ru: 17,
-    be: 17,
+const languages = {
+    en: 'en-US',
+    ru: 'ru-RU',
+    be: 'ru-RU',
 };
 
 const getVoices = () => {
@@ -22,7 +22,7 @@ const getVoices = () => {
 
 const createSpeechSynthesis = async (lang) => {
     const voices = await getVoices();
-    const voice = voices[voiceIndexes[lang]];
+    const voice = voices.filter((element) => element.lang === languages[lang])[0];
 
     return {
         speak: (data, unit) => {
