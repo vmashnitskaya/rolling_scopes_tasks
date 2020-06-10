@@ -15,6 +15,7 @@ html {
 }
 
 body {
+  overflow: hidden;
   box-sizing: border-box;
   font-family: "Roboto", "Arial", sans-serif;
   height: 100vh;
@@ -26,20 +27,23 @@ body {
   height: 100%;
 }
 .container {
-  width: 1000px;
+  width: 1200px;
   margin: 0 auto;
 }
-.start-page {
+.start-page,
+.signin-page,
+.signup-page {
   background: url("/img/bg.jpg") no-repeat;
   background-clip: border-box;
   background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   height: 100%;
   color: $main-color;
+  padding-top: 200px;
   h1 {
     font-size: 3rem;
   }
@@ -47,16 +51,97 @@ body {
     font-size: 2rem;
     margin: 0;
   }
-  a {
-    font-size: 2.5rem;
+  .start-page__button {
+    font-size: 2rem;
     color: #29404e;
-    margin-top: 10px;
+    margin-top: 15px;
     background-color: $main-color;
     border-radius: 2px;
     text-align: center;
     padding: 2px 8px;
+    background-color: $contrast-color;
     &:link {
       text-decoration: none;
+    }
+    &:hover {
+      background-color: darken($color: $contrast-color, $amount: 10);
+    }
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    label {
+      font-size: 1.8rem;
+      height: 30px;
+      width: 250px;
+      margin-top: 10px;
+      input.login,
+      input.sign,
+      input.password-for-sign-up,
+      input.password-for-sign-in {
+        width: 100%;
+        height: 30px;
+        border-radius: 2px;
+        border: none;
+        background-color: $main-color;
+        font-size: 1.6rem;
+        padding: 2px 6px;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+    input.submit,
+    input.sign-submit {
+      font-size: 2rem;
+      color: #29404e;
+      background-color: $contrast-color;
+      border-radius: 2px;
+      text-align: center;
+      padding: 2px 8px;
+      margin-top: 15px;
+      border: none;
+      cursor: pointer;
+      justify-self: center;
+      align-self: center;
+      margin-bottom: 15px;
+      &:focus {
+        outline: none;
+        box-shadow: none;
+        border: none;
+      }
+      &:hover {
+        background-color: darken($color: $main-color, $amount: 10);
+      }
+    }
+    h2 {
+      align-self: center;
+      font-size: 2rem;
+      margin-bottom: 0;
+    }
+  }
+  .info,
+  .error {
+    font-size: 1.6rem;
+    background-color: $main-color;
+    color: black;
+    border-radius: 2px;
+    padding: 2px 10px;
+    height: 2rem;
+  }
+  .error {
+    color: red;
+  }
+  .link-to-sign-up {
+    display: flex;
+    height: 2.4rem;
+    font-size: 1.8rem;
+    .sign-up,
+    .sign-in {
+      color: $contrast-color;
+      margin-left: 2px;
     }
   }
 }
@@ -96,12 +181,27 @@ body {
         }
       }
     }
+    .log-out {
+      margin-top: 10px;
+      font-size: 1.8rem;
+      height: 2px;
+      color: black;
+      background-color: transparent;
+      border: none;
+      text-decoration: underline;
+      cursor: pointer;
+      &:focus {
+        outline: none;
+        border: none;
+      }
+    }
     &__checkboxes {
-      width: 180px;
+      width: 150px;
       height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-left: -170px;
       input[type="checkbox"] {
         display: none;
         &:hover {
@@ -147,14 +247,14 @@ body {
         }
       }
       .translation {
-        font-size: 2rem;
+        font-size: 1.8rem;
         &.hidden {
           display: none;
         }
       }
     }
     &__box {
-      width: 1000px;
+      width: 1200px;
       height: 350px;
       background-color: $contrast-color;
       &-line {
@@ -163,11 +263,50 @@ body {
       }
       &-word {
         border: 1px solid black;
-        padding-top: 6px;
+        padding-top: 8px;
         text-align: center;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         cursor: pointer;
         user-select: none;
+        position: relative;
+        span {
+          background-color: $contrast-color;
+        }
+        .text {
+          display: block;
+          font-size: 1.2em;
+          text-align: center;
+          position: relative;
+          background: transparent !important;
+        }
+        .r {
+          width: 1em;
+          height: 1em;
+          position: absolute;
+          top: 0.7em;
+          right: -0.6em;
+          -webkit-border-radius: 4em;
+          -moz-border-radius: 4em;
+          border-radius: 4em;
+          border: none;
+          border-right: 1px solid black;
+        }
+        .l {
+          width: 0.5em;
+          height: 1em;
+          position: absolute;
+          top: 0.7em;
+          left: -0.1em;
+          -webkit-border-radius: 4em;
+          -moz-border-radius: 4em;
+          border-radius: 4em;
+          border-bottom-left-radius: 0;
+          border-top-left-radius: 0;
+          background-color: $contrast-color;
+          border: none;
+          border-right: 1px solid black;
+        }
+
         &.coloredRed {
           color: red;
         }
@@ -185,13 +324,12 @@ body {
       .guessed-word {
         background-color: $contrast-color;
         border: 1px solid black;
-        padding-top: 6px;
-        font-size: 1.4rem;
+        padding-top: 8px;
+        font-size: 1.2rem;
         text-align: center;
         cursor: pointer;
         user-select: none;
         position: relative;
-        cursor: pointer;
         span {
           background-color: $contrast-color;
         }
@@ -212,17 +350,6 @@ body {
           -moz-border-radius: 4em;
           border-radius: 4em;
           border-right: 1px solid black;
-        }
-        .t {
-          width: 1em;
-          height: 1em;
-          position: absolute;
-          top: 0.7em;
-          left: -0.6em;
-          -webkit-border-radius: 4em;
-          -moz-border-radius: 4em;
-          border-radius: 4em;
-          border-left: 1px solid black;
         }
         .l {
           width: 1em;
@@ -263,7 +390,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1000px;
+  width: 1200px;
   height: 405px;
 }
 .loader {

@@ -1,4 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import api from '../api';
 import DropDown from './DropDown';
 import Button from './Button';
@@ -15,12 +17,22 @@ const optionsPassedObject = Array.from({ length: maxLevel + 1 }, (_, i) => i).re
     (acc, el) => ({ ...acc, [el]: [] }),
     {}
 );
+let localStoragePagination = localStorage.getItem('pagination')
+    ? JSON.parse(localStorage.getItem('pagination'))
+    : false;
 
-const GamePage = () => {
+if (localStoragePagination && localStoragePagination.option < maxOption) {
+    localStoragePagination.option += 1;
+} else if (localStoragePagination && localStoragePagination.level < maxLevel) {
+    localStoragePagination.option = 0;
+    localStoragePagination.level += 1;
+} else if (localStoragePagination) {
+    localStoragePagination = { option: 0, level: 0 };
+}
+
+const GamePage = ({ onLogOut }) => {
     const [{ level, option }, setPagination] = useState(
-        localStorage.getItem('pagination')
-            ? JSON.parse(localStorage.getItem('pagination'))
-            : { level: 0, option: 0 }
+        localStoragePagination || { level: 0, option: 0 }
     );
     const [levelPassed, setLevelPassed] = useState([]);
     const [optionsPassed, setOptionsPassed] = useState(optionsPassedObject);
@@ -32,7 +44,6 @@ const GamePage = () => {
     const [guessedArrays, setGuessedArrays] = useState([]);
     const [currentShuffledArray, setCurrentShuffledArray] = useState({});
     const [currentOriginalArray, setCurrentOriginalArray] = useState([]);
-    const [showOriginalArray, setShowOriginalArray] = useState(false);
     const [soundLink, setSoundLink] = useState('');
 
     const [differenceIndexes, setDifferenceIndexes] = useState(undefined);
@@ -161,10 +172,14 @@ const GamePage = () => {
             setReadyForReview(true);
             setWrongResult(true);
         }
-    }, [differenceIndexes]);
+    }, [
+        differenceIndexes,
+        options.showAnswer,
+        options.soundEnabled,
+        optionOptions.autoSoundEnabled,
+    ]);
 
     const showAnswer = () => {
-        setShowOriginalArray(true);
         setGameInProgress(false);
         setReadyForReview(false);
         setCurrentGuessedWords(currentOriginalArray);
@@ -189,7 +204,7 @@ const GamePage = () => {
             }));
             setLevelPassed((prevState) => [...prevState, level - 1]);
         }
-    }, [level]);
+    }, [level, optionsPassed, levelPassed, readyForContinue]);
 
     useEffect(() => {
         if (readyForContinue === true) {
@@ -198,7 +213,7 @@ const GamePage = () => {
                 [level]: [...prevState[level], option - 1],
             }));
         }
-    }, [option]);
+    }, [option, level, readyForContinue]);
 
     const continueGame = () => {
         if (currentLine < 9) {
@@ -222,13 +237,15 @@ const GamePage = () => {
         setOptions((prevState) => ({ ...prevState, soundEnabled: !prevState.soundEnabled }));
     };
 
-    const enableImage = () => {};
-
     const enableTranslation = () => {
         setOptions((prevState) => ({
             ...prevState,
             translationShown: !prevState.translationShown,
         }));
+    };
+
+    const handleLogOut = () => {
+        onLogOut();
     };
 
     return (
@@ -260,10 +277,12 @@ const GamePage = () => {
                     <Hints
                         handleAutoEnabledChecked={enableAutoPronunciation}
                         handlePronunciationHintChecked={enablePronunciation}
-                        handleImageHintChecked={enableImage}
                         handleTranslationHintChecked={enableTranslation}
                         options={options}
                     />
+                    <Link to="/" className="log-out" onClick={handleLogOut}>
+                        Log out
+                    </Link>
                 </div>
                 <div className="main game">
                     <Translation
@@ -288,6 +307,10 @@ const GamePage = () => {
                                     <GameBoxLine
                                         guessedArray={currentGuessedWords}
                                         length={data[currentLine].sentenceLength}
+                                        firstWord={currentOriginalArray[0]}
+                                        lastWord={
+                                            currentOriginalArray[currentOriginalArray.length - 1]
+                                        }
                                         onWordClick={handleWordPassed}
                                         readyForReview={readyForReview}
                                         differenceIndexes={differenceIndexes}
@@ -320,6 +343,8 @@ const GamePage = () => {
     );
 };
 
-GamePage.propTypes = {};
+GamePage.propTypes = {
+    onLogOut: PropTypes.func.isRequired,
+};
 
 export default GamePage;

@@ -9,7 +9,13 @@ const GameBoxLineStatic = ({ guessedArray, length }) => {
         <>
             <div className="game__box-line">
                 {arrayOfWords.map((word, index) => (
-                    <GameBoxWordStatic key={index} text={word} style={{ width: `${wordWidth}%` }} />
+                    <GameBoxWordStatic
+                        key={index}
+                        index={index}
+                        text={word}
+                        lastIndex={length - 1}
+                        style={{ width: `${wordWidth}%` }}
+                    />
                 ))}
             </div>
         </>

@@ -2,7 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import GameBoxWord from './GameBoxWord';
 
-const GameBoxLine = ({ guessedArray, length, onWordClick, readyForReview, differenceIndexes }) => {
+const GameBoxLine = ({
+    guessedArray,
+    length,
+    onWordClick,
+    readyForReview,
+    differenceIndexes,
+    firstWord,
+    lastWord,
+}) => {
     const arrayOfWords = guessedArray.slice(0);
     const wordWidth = parseFloat(100 / length).toFixed(2);
 
@@ -26,6 +34,8 @@ const GameBoxLine = ({ guessedArray, length, onWordClick, readyForReview, differ
                         index={index}
                         style={{ width: `${wordWidth}%` }}
                         onClick={onWordClick}
+                        firstWord={firstWord}
+                        lastWord={lastWord}
                     />
                 ))}
             </div>
@@ -39,6 +49,8 @@ GameBoxLine.propTypes = {
     onWordClick: PropTypes.func.isRequired,
     readyForReview: PropTypes.bool.isRequired,
     differenceIndexes: PropTypes.arrayOf(PropTypes.number),
+    firstWord: PropTypes.string.isRequired,
+    lastWord: PropTypes.string.isRequired,
 };
 
 GameBoxLine.defaultProps = {

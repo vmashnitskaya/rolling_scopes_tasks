@@ -1,33 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import PuzzleComponentSpan from './PuzzleComponentSpan';
 
 const GameGuessArea = ({ array, length, onClick }) => {
     const handleClick = (event) => {
         onClick(event.target.dataset.word, event.target.dataset.index);
     };
 
-    const returnCorrectTags = (element) => {
+    const returnCorrectTags = (element, index) => {
         if (element.first === true) {
             return (
                 <>
-                    <span className="r" />
-                    <span className="text">{element.word}</span>
+                    <PuzzleComponentSpan className="r" index={index} word={element.word} />
+                    <PuzzleComponentSpan className="text" index={index} word={element.word} />
                 </>
             );
         }
         if (element.last === true) {
             return (
                 <>
-                    <span className="t" />
-                    <span className="text">{element.word}</span>
+                    <PuzzleComponentSpan className="l" index={index} word={element.word} />
+                    <PuzzleComponentSpan className="text" index={index} word={element.word} />
                 </>
             );
         }
         return (
             <>
-                <span className="r" />
-                <span className="l" />
-                <span className="text">{element.word}</span>
+                <PuzzleComponentSpan className="r" index={index} word={element.word} />
+                <PuzzleComponentSpan className="l" index={index} word={element.word} />
+                <PuzzleComponentSpan className="text" index={index} word={element.word} />
             </>
         );
     };
@@ -47,12 +48,14 @@ const GameGuessArea = ({ array, length, onClick }) => {
 };
 
 GameGuessArea.propTypes = {
-    array: PropTypes.shape({
-        word: PropTypes.string,
-        order: PropTypes.number,
-        first: PropTypes.bool,
-        last: PropTypes.bool,
-    }).isRequired,
+    array: PropTypes.arrayOf(
+        PropTypes.shape({
+            word: PropTypes.string,
+            order: PropTypes.number,
+            first: PropTypes.bool,
+            last: PropTypes.bool,
+        })
+    ).isRequired,
     length: PropTypes.number.isRequired,
     onClick: PropTypes.func.isRequired,
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Loader = () => (
+const Loader = () => (
     <div className="loader-wrapper">
         <div className="loader">Loading...</div>
     </div>

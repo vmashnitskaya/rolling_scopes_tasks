@@ -5,7 +5,6 @@ import Checkbox from './Checkbox';
 const Hints = ({
     handleAutoEnabledChecked,
     handlePronunciationHintChecked,
-    handleImageHintChecked,
     handleTranslationHintChecked,
     options,
 }) => {
@@ -25,13 +24,6 @@ const Hints = ({
                 checked={options.soundEnabled}
                 onChange={handlePronunciationHintChecked}
             />
-            {/* <Checkbox
-                className="material-icons control"
-                id="insert_photo"
-                text="insert_photo"
-                checked
-                onChange={handleImageHintChecked}
-            /> */}
             <Checkbox
                 className="material-icons control"
                 id="translate"
@@ -46,12 +38,11 @@ const Hints = ({
 Hints.propTypes = {
     handleAutoEnabledChecked: PropTypes.func.isRequired,
     handlePronunciationHintChecked: PropTypes.func.isRequired,
-    handleImageHintChecked: PropTypes.func.isRequired,
     handleTranslationHintChecked: PropTypes.func.isRequired,
     options: PropTypes.shape({
         translationShown: PropTypes.bool,
         soundEnabled: PropTypes.bool,
-        autoSoundEnabled: PropTypes,
+        autoSoundEnabled: PropTypes.bool,
     }).isRequired,
 };
 
