@@ -10,10 +10,12 @@ const createUser = async (user) => {
     let content = '';
     if (rawResponse.status === 200) {
         content = await rawResponse.json();
-    } else if (rawResponse.status === 422) {
+    } else if (rawResponse.status === 417) {
+        content = 'User with this e-mail exists';
+    } else if (rawResponse.status === 422 || rawResponse.status === 422) {
         content = 'Incorrect e-mail or password';
     } else {
-        throw new Error('');
+        throw new Error('Incorrect e-mail or password');
     }
     return content;
 };

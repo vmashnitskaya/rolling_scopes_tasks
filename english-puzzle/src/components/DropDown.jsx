@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 const DropDown = ({ className, name, label, value, level, options, onChange, passed }) => {
+    const handleChange = (event) => {
+        onChange(event.target.value);
+    };
     return (
         <div className="dropdown">
             <label htmlFor={name}>{label}</label>
@@ -12,7 +15,7 @@ const DropDown = ({ className, name, label, value, level, options, onChange, pas
                 id={name}
                 aria-label={label}
                 value={value}
-                onChange={onChange}
+                onChange={handleChange}
             >
                 {options.map((option) => {
                     return (
@@ -21,9 +24,13 @@ const DropDown = ({ className, name, label, value, level, options, onChange, pas
                             value={option.value}
                             className={clsx(
                                 className === 'page' &&
+                                    passed &&
                                     passed[level].includes(option.value) &&
                                     'passed',
-                                className === 'level' && passed.includes(option.value) && 'passed'
+                                className === 'level' &&
+                                    passed &&
+                                    passed.includes(option.value) &&
+                                    'passed'
                             )}
                         >
                             {option.text}

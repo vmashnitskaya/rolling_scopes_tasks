@@ -34,15 +34,21 @@ const GamePage = ({ onLogOut }) => {
     const [{ level, option }, setPagination] = useState(
         localStoragePagination || { level: 0, option: 0 }
     );
-    const [levelPassed, setLevelPassed] = useState([]);
-    const [optionsPassed, setOptionsPassed] = useState(optionsPassedObject);
+    const [levelPassed, setLevelPassed] = useState(
+        localStorage.getItem('levelPassed') ? JSON.parse(localStorage.getItem('levelPassed')) : []
+    );
+    const [optionsPassed, setOptionsPassed] = useState(
+        localStorage.getItem('optionsPassed')
+            ? JSON.parse(localStorage.getItem('optionsPassed'))
+            : optionsPassedObject
+    );
 
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const [currentLine, setCurrentLine] = useState(0);
     const [currentGuessedWords, setCurrentGuessedWords] = useState([]);
     const [guessedArrays, setGuessedArrays] = useState([]);
-    const [currentShuffledArray, setCurrentShuffledArray] = useState({});
+    const [currentShuffled, setCurrentShuffled] = useState({});
     const [currentOriginalArray, setCurrentOriginalArray] = useState([]);
     const [soundLink, setSoundLink] = useState('');
 
@@ -84,11 +90,13 @@ const GamePage = ({ onLogOut }) => {
         []
     );
 
-    const handleLevelChange = (event) =>
-        setPagination((prevState) => ({ ...prevState, level: Number(event.target.value) }));
+    const handleLevelChange = (value) => {
+        setPagination((prevState) => ({ ...prevState, level: Number(value) }));
+    };
 
-    const handleOptionChange = (event) =>
-        setPagination((prevState) => ({ ...prevState, option: Number(event.target.value) }));
+    const handleOptionChange = (value) => {
+        setPagination((prevState) => ({ ...prevState, option: Number(value) }));
+    };
 
     useEffect(() => {
         setLoading(true);
@@ -107,7 +115,7 @@ const GamePage = ({ onLogOut }) => {
             setReadyForContinue(false);
             setReadyForReview(false);
             setCurrentGuessedWords(data[currentLine].guessedArray);
-            setCurrentShuffledArray(data[currentLine].shuffledArray);
+            setCurrentShuffled(data[currentLine].shuffled);
             setDifferenceIndexes(undefined);
             setSoundLink(data[currentLine].pronunciation);
             setWrongResult(false);
@@ -130,15 +138,15 @@ const GamePage = ({ onLogOut }) => {
 
     const handleWordGuessed = (word, index) => {
         setCurrentGuessedWords((prevState) => [...prevState, word]);
-        setCurrentShuffledArray((prevState) => {
-            const state = [...prevState];
-            state.splice(index, 1);
-            return state;
+        setCurrentShuffled((prevState) => {
+            const array = [...prevState.array];
+            array.splice(index, 1);
+            return { ...prevState, array };
         });
     };
 
     const handleWordPassed = (word, index) => {
-        setCurrentShuffledArray((prevState) => [...prevState, word]);
+        setCurrentShuffled((prevState) => ({ ...prevState, array: [...prevState.array, word] }));
         setCurrentGuessedWords((prevState) => {
             const state = [...prevState];
             state.splice(index, 1);
@@ -183,13 +191,32 @@ const GamePage = ({ onLogOut }) => {
         setGameInProgress(false);
         setReadyForReview(false);
         setCurrentGuessedWords(currentOriginalArray);
-        setCurrentShuffledArray([]);
+        setCurrentShuffled((prevState) => {
+            return { ...prevState, array: [] };
+        });
     };
 
     const startNewLevel = () => {
         if (option < maxOption) {
+            setOptionsPassed((prevState) => ({
+                ...prevState,
+                [level]: [...prevState[level], option],
+            }));
             setPagination((prevState) => ({ ...prevState, option: prevState.option + 1 }));
         } else if (level < maxLevel) {
+            if (optionsPassed[level].length === maxOption) {
+                setOptionsPassed((prevState) => ({
+                    ...prevState,
+                    [level]: [...prevState[level], maxOption],
+                }));
+                setLevelPassed((prevState) => [...prevState, level]);
+            } else {
+                setOptionsPassed((prevState) => ({
+                    ...prevState,
+                    [level]: [...prevState[level], maxOption],
+                }));
+            }
+
             setPagination((prevState) => ({ option: 0, level: prevState.level + 1 }));
         } else {
             setPagination({ level: 0, option: 0 });
@@ -197,23 +224,13 @@ const GamePage = ({ onLogOut }) => {
     };
 
     useEffect(() => {
-        if (readyForContinue === true && optionsPassed[level - 1].length === maxOption) {
-            setOptionsPassed((prevState) => ({
-                ...prevState,
-                [level]: [...prevState[level], maxOption],
-            }));
-            setLevelPassed((prevState) => [...prevState, level - 1]);
-        }
-    }, [level, optionsPassed, levelPassed, readyForContinue]);
+        setCorrectResultEnabledOptions(false);
+    }, [level, option]);
 
     useEffect(() => {
-        if (readyForContinue === true) {
-            setOptionsPassed((prevState) => ({
-                ...prevState,
-                [level]: [...prevState[level], option - 1],
-            }));
-        }
-    }, [option, level, readyForContinue]);
+        localStorage.setItem('optionsPassed', JSON.stringify(optionsPassed));
+        localStorage.setItem('levelPassed', JSON.stringify(levelPassed));
+    }, [optionsPassed, levelPassed]);
 
     const continueGame = () => {
         if (currentLine < 9) {
@@ -319,7 +336,7 @@ const GamePage = ({ onLogOut }) => {
                             </div>
                             <div className="game__guess-area">
                                 <GameGuessArea
-                                    array={currentShuffledArray}
+                                    shuffled={currentShuffled}
                                     length={data[currentLine].sentenceLength}
                                     onClick={handleWordGuessed}
                                 />

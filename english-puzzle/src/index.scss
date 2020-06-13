@@ -283,7 +283,7 @@ body {
           width: 1em;
           height: 1em;
           position: absolute;
-          top: 0.7em;
+          top: 0.8em;
           right: -0.6em;
           -webkit-border-radius: 4em;
           -moz-border-radius: 4em;
@@ -295,7 +295,7 @@ body {
           width: 0.5em;
           height: 1em;
           position: absolute;
-          top: 0.7em;
+          top: 0.8em;
           left: -0.1em;
           -webkit-border-radius: 4em;
           -moz-border-radius: 4em;
@@ -344,7 +344,7 @@ body {
           width: 1em;
           height: 1em;
           position: absolute;
-          top: 0.7em;
+          top: 0.8em;
           right: -0.6em;
           -webkit-border-radius: 4em;
           -moz-border-radius: 4em;
@@ -352,15 +352,17 @@ body {
           border-right: 1px solid black;
         }
         .l {
-          width: 1em;
+          width: 0.5em;
           height: 1em;
           position: absolute;
-          top: 0.7em;
-          left: -0.6em;
+          top: 0.8em;
+          left: -0.1em;
           -webkit-border-radius: 4em;
           -moz-border-radius: 4em;
           border-radius: 4em;
           background-color: $main-color;
+          border-bottom-left-radius: 0;
+          border-top-left-radius: 0;
           border-right: 1px solid black;
         }
       }

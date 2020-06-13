@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Form from './Form';
 import authorization from '../authorization';
 import Message from './Message';
@@ -7,6 +7,7 @@ import Message from './Message';
 const SignupPage = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [infoMessage, setInfoMessage] = useState('');
+    const history = useHistory();
 
     useEffect(() => {
         document.querySelector('form').reset();
@@ -18,21 +19,34 @@ const SignupPage = () => {
             password: `${password}`,
         };
         try {
-            const loginInfo = await authorization.createUser(user);
-            if (typeof loginInfo === 'object') {
+            const signUpInfo = await authorization.createUser(user);
+
+            if (typeof signUpInfo === 'object') {
+                setErrorMessage('');
                 setInfoMessage(
-                    `User with e-mail ${loginInfo.email} was succesfully created. Please sign in.`
+                    `The user with e-mail ${email} was signed up. You are navigating to sign in page.`
                 );
             } else {
-                setErrorMessage('Incorrect e-mail or password');
+                setErrorMessage(signUpInfo);
             }
         } catch (e) {
-            setErrorMessage('Something went wrong, please try again later.');
+            setErrorMessage(
+                'Incorrect e-mail or password. Password should contain at least one upper and lower case symbol, numeric and special symbols.'
+            );
         }
     };
     const onFormError = (text) => {
         setErrorMessage(text);
     };
+
+    useEffect(() => {
+        if (infoMessage) {
+            setTimeout(() => {
+                history.push('/');
+            }, 2500);
+        }
+    }, [infoMessage, history]);
+
     return (
         <div className="signup-page">
             <h1>EnglishPuzzle</h1>

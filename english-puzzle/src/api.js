@@ -19,12 +19,11 @@ const getSentences = async (level, option) => {
         return {
             text: sentence,
             pronunciation: formatUrl(audioExample),
-            shuffledArray: shuffledArray.map((element, index) => ({
-                word: element,
-                order: index,
-                first: element === originalArray[0],
-                last: element === originalArray[sentenceLength - 1],
-            })),
+            shuffled: {
+                array: shuffledArray,
+                first: originalArray[0],
+                last: originalArray[sentenceLength - 1],
+            },
             originalArray,
             guessedArray: [],
             sentenceLength,

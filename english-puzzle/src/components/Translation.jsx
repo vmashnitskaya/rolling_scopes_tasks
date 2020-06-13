@@ -18,6 +18,8 @@ const Translation = ({ text, audio, options, correctResultEnabledOptions }) => {
     useEffect(() => {
         if (correctResultEnabledOptions) {
             handleClick();
+        } else {
+            hanlePlayedSound();
         }
     }, [correctResultEnabledOptions, handleClick]);
 
