@@ -29,7 +29,6 @@ const loginUser = async (user) => {
         },
         body: JSON.stringify(user),
     });
-    console.log(user);
     let content = '';
     if (rawResponse.status === 200) {
         content = await rawResponse.json();
