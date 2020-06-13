@@ -21,6 +21,7 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.1), rgb(0, 0, 0));
 }
 
 #root {
@@ -33,7 +34,8 @@ body {
 .start-page,
 .signin-page,
 .signup-page {
-  background: url("/img/bg.jpg") no-repeat;
+  background-image: url("/img/bg.jpg");
+  background-repeat: no-repeat;
   background-clip: border-box;
   background-size: cover;
   display: flex;
