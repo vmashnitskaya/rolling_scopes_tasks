@@ -1,0 +1,348 @@
+@media only screen and (max-width: 1300px) {
+    html {
+        font-size: 9px;
+    }
+    .container {
+        max-width: 1000px;
+    }
+
+    main {
+        .forecast {
+            .weather {
+                .day {
+                    display: flex;
+                    justify-content: flex-start;
+                    &__temperature {
+                        text-align: left;
+                        margin-right: 20px;
+                        margin-top: 20px;
+                        height: 270px;
+                        width: 290px;
+                    }
+                    &__info {
+                        &-animation {
+                            width: 180px;
+                            min-height: 140px;
+                            margin-top: -30px;
+                            margin-bottom: 10px;
+                            img {
+                                width: auto;
+                                height: 200px;
+                            }
+                        }
+                    }
+                }
+                .following-days {
+                    .following-day {
+                        margin-right: 10px;
+                    }
+                }
+            }
+            .map {
+                width: 90%;
+                max-width: 90%;
+                .map-wrapper {
+                    width: 450px;
+                    height: 405px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1050px) {
+    html {
+        font-size: 10px;
+    }
+    .container {
+        max-width: 100%;
+    }
+    header {
+        .navbar {
+            justify-content: space-around;
+            .error {
+                position: absolute;
+                color: #ffc04c;
+                font-size: 2rem;
+                margin-top: 10px;
+                left: 0;
+                top: 0;
+                bottom: unset;
+                text-align: center;
+            }
+        }
+    }
+
+    main {
+        .forecast {
+            flex-direction: column;
+            align-items: center;
+            .weather {
+                width: 100%;
+                max-width: 100%;
+                .location,
+                .time {
+                    text-align: center;
+                }
+                .day {
+                    display: flex;
+                    justify-content: center;
+                    &__temperature {
+                        text-align: left;
+                        margin-top: 30px;
+                        height: 300px;
+                        width: 300px;
+                    }
+                    &__info {
+                        margin-top: 10px;
+                        margin-left: 30px;
+                        &-animation {
+                            width: 250px;
+                            min-height: 150px;
+                            margin-top: -10px;
+                            margin-bottom: 10px;
+                            img {
+                                width: auto;
+                                height: 200px;
+                            }
+                        }
+                    }
+                }
+                .following-days {
+                    align-self: center;
+                    .following-day {
+                        margin-right: 0;
+                    }
+                }
+            }
+            .map {
+                margin-top: 20px;
+                width: 50%;
+                max-width: 50%;
+                justify-content: center;
+                align-items: center;
+                .map-wrapper {
+                    width: 450px;
+                    height: 405px;
+                }
+            }
+        }
+        .ticker-wrapper {
+            display: none;
+        }
+    }
+}
+
+@media only screen and (max-width: 740px) {
+    html {
+        font-size: 9px;
+    }
+    .container {
+        max-width: 90%;
+    }
+    body {
+        .background-image {
+            height: 100%;
+            max-width: 680px;
+        }
+    }
+    header {
+        .navbar {
+            flex-direction: column-reverse;
+            form.search-form {
+                width: 90%;
+                margin-top: 30px;
+                .input-field {
+                    width: 100%;
+                    min-width: 200px;
+                    max-width: 100%;
+                }
+            }
+        }
+        .following-days {
+            align-self: center;
+            .following-day {
+                margin-right: 10px;
+            }
+        }
+    }
+
+    main {
+        .forecast {
+            flex-direction: column;
+            align-items: center;
+            .weather {
+                width: 100%;
+                max-width: 100%;
+                .location,
+                .time {
+                    text-align: center;
+                }
+                .day {
+                    display: flex;
+                    justify-content: space-around;
+                    &__temperature {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        text-align: left;
+                        margin-right: 0;
+                        margin-top: 30px;
+                        height: 270px;
+                        min-width: 270px;
+                        font-size: 23rem;
+                    }
+                    &__info {
+                        margin-top: 10px;
+                        margin-left: 0;
+                        &-animation {
+                            width: 200px;
+                            min-height: 150px;
+                            margin-top: -10px;
+                            margin-bottom: 10px;
+                            img {
+                                width: auto;
+                                height: 200px;
+                            }
+                        }
+                    }
+                }
+                .following-days {
+                    max-width: 100%;
+                    align-self: center;
+                    justify-content: space-around;
+                    flex-wrap: wrap;
+                    .following-day {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 530px) {
+    .container {
+        max-width: 90%;
+    }
+    .error-page {
+        position: absolute;
+        height: 250px;
+        width: 250px;
+        .error-image {
+            width: 250px;
+            height: 250px;
+        }
+    }
+
+    header {
+        .navbar {
+            flex-direction: column-reverse;
+            align-items: center;
+            .error {
+                font-size: 1.6rem;
+            }
+            .controls {
+                justify-content: center;
+            }
+            form.search-form {
+                width: 90%;
+                min-width: 283px;
+                .input-field {
+                    width: 100%;
+                    min-width: 200px;
+                    max-width: 100%;
+                    input {
+                        &::placeholder {
+                            font-size: 1.6rem;
+                        }
+                    }
+                }
+                input[type="submit"] {
+                    width: 80px;
+                    height: 44px;
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                }
+            }
+        }
+        .following-days {
+            align-self: center;
+            .following-day {
+                margin-right: 0;
+            }
+        }
+    }
+
+    main {
+        .forecast {
+            flex-direction: column;
+            align-items: center;
+            .weather {
+                width: 100%;
+                max-width: 100%;
+                .time {
+                    text-align: center;
+                }
+                .location {
+                    font-size: 4rem;
+                    text-align: center;
+                }
+                .day {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                    &__temperature {
+                        height: 250px;
+                        min-width: 230px;
+                        font-size: 23rem;
+                        text-align: center;
+                        margin-top: 0;
+                    }
+                    &__info {
+                        flex-direction: row;
+                        font-size: 1.6rem;
+                        line-height: 2rem;
+                        &-animation {
+                            width: 140px;
+                            min-height: 110px;
+                            height: 120px;
+                            margin-top: 0;
+                            margin-bottom: 0;
+                            img {
+                                width: 140px;
+                                height: auto;
+                            }
+                        }
+                    }
+                }
+                .following-days {
+                    flex-direction: column;
+                    flex-wrap: nowrap;
+                    .following-day {
+                        &__day {
+                            text-align: center;
+                            margin-bottom: 10px;
+                        }
+                        &__weather {
+                            width: 200px;
+                            justify-content: space-between;
+                        }
+                    }
+                }
+            }
+            .map {
+                margin-top: 20px;
+                width: 90%;
+                max-width: 90%;
+                justify-content: center;
+                align-items: center;
+                .map-wrapper {
+                    width: 300px;
+                    height: 270px;
+                }
+            }
+        }
+    }
+}
